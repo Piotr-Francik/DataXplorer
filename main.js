@@ -7,11 +7,12 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
+import { depth } from 'three/tsl';
 
 // ThreeJS Boilerplate
 const overwater = new THREE.Scene();
 const underwater = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -22,12 +23,42 @@ document.body.append(renderer.domElement);
 const underwater_buffer = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight);
 const overwater_buffer = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight);
 
+underwater_buffer.depthBuffer = true;
+underwater_buffer.depthTexture = new THREE.DepthTexture();
+underwater_buffer.depthTexture.format = THREE.DepthFormat;
+underwater_buffer.depthTexture.type = THREE.UnsignedShortType;
+
+overwater_buffer.depthBuffer = true;
+overwater_buffer.depthTexture = new THREE.DepthTexture();
+overwater_buffer.depthTexture.format = THREE.DepthFormat;
+overwater_buffer.depthTexture.type = THREE.UnsignedShortType;
+
+const underwaterFogColor = new THREE.Color(0x72a09f);
+
+// Skybox
+const texture_loader = new THREE.TextureLoader();
+const texture = texture_loader.load(
+    'resources/images/clear_sky.png',
+    () => {
+        texture.mapping = THREE.EquirectangularReflectionMapping;
+        texture.colorSpace = THREE.SRGBColorSpace;
+        overwater.background = texture;
+        underwater.background = texture;
+    });
+
+renderer.setClearColor(0x72a09f, 1);
+
+// Shader
 
 const waterCompositeShader = {
     uniforms: {
         tDiffuse: { value: null },
         tAbove: { value: overwater_buffer.texture },
         tUnder: { value: underwater_buffer.texture },
+        tDepth: { value: null },
+        tDepthAbove: { value: null },
+        skybox: { value: texture },
+        underwaterColor: { value: underwaterFogColor },
         projectionMatrixInverse: { value: camera.projectionMatrixInverse },
         viewMatrixInverse: { value: camera.matrixWorld },
         time: { value: 0 }
@@ -42,8 +73,12 @@ const waterCompositeShader = {
     fragmentShader: `
     uniform sampler2D tAbove;
     uniform sampler2D tUnder;
+    uniform sampler2D tDepth;
+    uniform sampler2D tDepthAbove;
+    uniform sampler2D skybox;
     uniform mat4 projectionMatrixInverse;
     uniform mat4 viewMatrixInverse;
+    uniform vec3 underwaterColor;
     varying vec2 vUv;
 
     vec3 getNearPlanePosition(vec2 uv) {
@@ -62,14 +97,54 @@ const waterCompositeShader = {
         return worldPos.xyz;
     }
 
+    float getRadialDistance(vec2 uv, sampler2D depthSampler) {
+        float fragCoordZ = texture2D(depthSampler, uv).x;
+        
+        // NDC space
+        vec4 ndc = vec4(uv.x * 2.0 - 1.0, uv.y * 2.0 - 1.0, fragCoordZ * 2.0 - 1.0, 1.0);
+        
+        // Unproject to view space (camera-relative, not world space — no viewMatrixInverse needed)
+        vec4 viewPos = projectionMatrixInverse * ndc;
+        viewPos /= viewPos.w;
+        
+        return length(viewPos.xyz); // true 3D distance from camera origin
+    }
+
+    vec3 getWorldRayDir(vec2 uv) {
+        vec4 ndc = vec4(uv.x * 2.0 - 1.0, uv.y * 2.0 - 1.0, 1.0, 1.0); // far plane
+        vec4 viewPos = projectionMatrixInverse * ndc;
+        viewPos /= viewPos.w;
+        vec3 worldDir = mat3(viewMatrixInverse) * normalize(viewPos.xyz);
+        return normalize(worldDir);
+    }
+
+    const float PI = 3.1415;
+
+    vec2 equirectUv(vec3 dir) {
+        float u = atan(dir.z, dir.x) / (2.0 * PI) + 0.5;
+        float v = asin(clamp(dir.y, -1.0, 1.0)) / PI + 0.5;
+        return vec2(u, v);
+    }
+
     void main() {
       vec2 ndc = vUv * 2.0 - 1.0;
 
         if(getNearPlanePosition(vUv).y > 0.) {
-            gl_FragColor = vec4(texture2D(tAbove, vUv).rgb, 1.0);
+            vec3 rayDir = getWorldRayDir(vUv);
+            vec2 skyUv = equirectUv(rayDir);
+
+            vec2 ddx = dFdx(skyUv);
+            vec2 ddy = dFdy(skyUv);
+            ddx.x = fract(ddx.x + 0.5) - 0.5;
+
+            float depth = getRadialDistance(vUv, tDepthAbove);
+
+            gl_FragColor = vec4(mix(textureGrad(skybox, skyUv, ddx, ddy).rgb, texture2D(tAbove, vUv).rgb, clamp(2. - exp(depth * .0008), 0., 1.)), 1.);
         }
         else {
-            gl_FragColor = vec4(texture2D(tUnder, vUv).rgb, 1.0);
+            float depth = getRadialDistance(vUv, tDepth);
+
+            gl_FragColor = vec4(mix(underwaterColor.rgb, texture2D(tUnder, vUv).rgb, clamp(2. - exp(depth * .01), 0., 1.)), 1.);
         }
     }
   `
@@ -90,13 +165,6 @@ composer.addPass(compositePass);
 
 const outputPass = new OutputPass();
 composer.addPass(outputPass); // must be last
-
-// Load a Plane
-const plane_geometry = new THREE.BoxGeometry();
-const plane_material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-const plane = new THREE.Mesh(plane_geometry, plane_material);
-plane.position.y = 1;
-overwater.add(plane);
 
 // Add sun
 const sun = new THREE.DirectionalLight(0xffffff);
@@ -127,7 +195,7 @@ xplorer.scale.y = 10;
 xplorer.scale.z = 10;
 xplorer.position.y = -5
 overwater.add(xplorer);
-const sub_xplorer= xplorer.clone();
+const sub_xplorer = xplorer.clone();
 underwater.add(sub_xplorer);
 
 const rov = (await model_loader.loadAsync('resources/models/ROV.glb')).scene;
@@ -152,17 +220,14 @@ xplorer.add(ctd);
 const sub_ctd = ctd.clone();
 sub_xplorer.add(sub_ctd);
 
-// Skybox
-const texture_loader = new THREE.TextureLoader();
-const texture = texture_loader.load(
-    'resources/images/clear_sky.png',
-    () => {
-        texture.mapping = THREE.EquirectangularReflectionMapping;
-        texture.colorSpace = THREE.SRGBColorSpace;
-        overwater.background = texture;
-    });
-
-renderer.setClearColor(0x72a09f, 1);
+const man = (await model_loader.loadAsync('resources/models/Man.glb')).scene;
+man.scale.x = 1;
+man.scale.y = 1;
+man.scale.z = 1;
+man.position.x = 0;
+man.position.y = 0;
+man.position.z = 0;
+xplorer.add(man);
 
 // Camera
 camera.position.z = 25;
@@ -170,7 +235,8 @@ camera.position.y = 15;
 const controls = new OrbitControls(camera, renderer.domElement);
 
 // Fog
-underwater.fog = new THREE.FogExp2(0x72a09f, 0.01);
+//underwater.fog = new THREE.FogExp2(0x72a09f, 0.01);
+//overwater.fog = new THREE.Fog(0x9bb7d4, 0.01);
 
 // Water
 
@@ -190,8 +256,8 @@ var water = new Water(
         sunColor: 0xffffff,
         waterColor: 0x005e5f,
         distortionScale: 1,
-        fog: false,//scene.fog !== undefined,
-        alpha: 0.7
+        fog: overwater.fog !== undefined,
+        alpha: 0.7,
     }
 );
 water.rotation.x = - Math.PI / 2;
@@ -199,20 +265,20 @@ water.material.transparent = true
 overwater.add(water);
 
 let sub_water = new Water(
-  waterGeometry,
-  {
-    textureWidth: 512,
-    textureHeight: 512,
-    waterNormals: new THREE.TextureLoader().load('resources/images/waternormals.jpg', function (texture) {
-      texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-    }),
-    sunDirection: sun.position.clone().normalize(),
-    sunColor: 0xffffff,
-    waterColor: 0xffffff,
-    distortionScale: 10,
-    fog: true,
-    alpha: 0.7
-  }
+    waterGeometry,
+    {
+        textureWidth: 512,
+        textureHeight: 512,
+        waterNormals: new THREE.TextureLoader().load('resources/images/waternormals.jpg', function (texture) {
+            texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        }),
+        sunDirection: sun.position.clone().normalize(),
+        sunColor: 0xffffff,
+        waterColor: 0xffffff,
+        distortionScale: 10,
+        fog: true,
+        alpha: 0.7
+    }
 );
 
 sub_water.rotation.x = Math.PI / 2;
@@ -225,10 +291,13 @@ function animate() {
     requestAnimationFrame(animate);
 
     const r = Date.now() * 0.001;
+    
+    compositePass.uniforms.tDepth.value = underwater_buffer.depthTexture;
+    compositePass.uniforms.tDepthAbove.value = overwater_buffer.depthTexture;
 
     xplorer.rotation.y = Math.sin(r) * 0.005;
     xplorer.rotation.x = Math.sin(r) * 0.005;
-    xplorer.rotation.z = Math.cos(r*2) * 0.005;
+    xplorer.rotation.z = Math.cos(r * 2) * 0.005;
 
     water.material.uniforms['time'].value += 0.005
     sub_water.material.uniforms['time'].value += 0.005
