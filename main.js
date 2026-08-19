@@ -161,7 +161,7 @@ const waterCompositeShader = {
 
             float depth = getRadialDistance(vUv, tDepthAbove);
 
-            gl_FragColor = vec4(mix(textureGrad(skybox, skyUv, ddx, ddy).rgb, texture2D(tAbove, vUv).rgb, clamp(2. - exp(depth * .0008), 0., 1.)), 1.);
+            gl_FragColor = vec4(mix(textureGrad(skybox, skyUv, ddx, ddy).rgb, texture2D(tAbove, vUv).rgb, clamp(2. - exp((depth) * .0008), 0., 1.)), 1.);
         }
         else {
             float depth = getRadialDistance(vUv, tDepth);
