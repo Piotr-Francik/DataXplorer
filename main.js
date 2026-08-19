@@ -15,8 +15,11 @@ const overwater = new THREE.Scene();
 const underwater = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
 
-var scene = -1;
-document.getElementById("debug_button").onclick = function () { scene++; };
+var scene = 0;
+document.getElementById("start-btn").onclick = function () { 
+    scene++;
+    document.getElementById("start-btn").style.display = "none";
+ };
 var count;
 
 var last = Date.now();
