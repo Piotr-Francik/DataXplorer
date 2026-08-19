@@ -342,6 +342,7 @@ const listener = new THREE.AudioListener();
 camera.add(listener);
 // create a global audio source
 const sound = new THREE.Audio(listener);
+const sound2 = new THREE.Audio(listener);
 // load a sound and set it as the Audio object's buffer
 const audioLoader = new THREE.AudioLoader();
 audioLoader.load('resources/sounds/menu.mp3', function (buffer) {
@@ -349,6 +350,12 @@ audioLoader.load('resources/sounds/menu.mp3', function (buffer) {
     sound.setLoop(true);
     sound.setVolume(0.5);
     sound.play();
+});
+audioLoader.load('resources/sounds/menu_sub.mp3', function (buffer) {
+    sound2.setBuffer(buffer);
+    sound2.setLoop(true);
+    sound2.setVolume(0);
+    sound2.play();
 });
 
 // Animation Loop
@@ -406,13 +413,14 @@ function animate() {
             camera.position.x = 1000;
             if (count < 0) {
                 scene++;
-                bot.position.x = 20;
-                bot.position.z = 0;
-                bot.position.y = -10;
-                bot2.position.x = 17;
-                bot2.position.z = -2;
-                bot2.position.y = -20;
-                count = 7
+                overwater.add(ctd);
+                ctd.position.x = 20;
+                ctd.position.z = 0;
+                ctd.position.y = -5;
+                ctd.scale.x = 0.03;
+                ctd.scale.y = 0.03;
+                ctd.scale.z = 0.03;
+                count = 10
             }
             break;
         case 4:
@@ -423,21 +431,12 @@ function animate() {
             camera.position.z = 5;
             camera.lookAt(20, 0, 0);
 
-            bot.position.y += delta * Math.min(4, 3 * (0 - bot.position.y));
-            bot2.position.y += delta * Math.min(4, 3 * (0 - bot2.position.y));
-
-            bot.rotation.x = (Math.PI / 2) / (1 - bot.position.y * 5) + 0.1 * Math.sin(r);
-            bot.rotation.z = Math.cos(2 * r) * 0.1;
-            bot.rotation.y = Math.PI / 4 + Math.cos(1.14 * r) * 0.1;
-            bot2.rotation.z = (Math.PI / 2) / (1 - bot2.position.y * 5) + 0.1 * Math.sin(r);
-            bot2.rotation.x = Math.cos(2 * r) * 0.1;
-            bot2.rotation.y = Math.PI / 4 + Math.cos(1.14 * r) * 0.1;
+            ctd.position.y += delta;
 
             if (count < 0) {
                 scene++;
-                bot.position.x = 1000;
-                bot2.position.x = 1000;
                 count = 0;
+                ctd.position.x = 2000;
             }
             break;
         case 5:
@@ -484,6 +483,13 @@ function animate() {
     renderer.render(overwater, camera);
 
     composer.render();
+
+    sound.setVolume( Math.min(1, Math.max(0, camera.position.y)) * 0.5 );
+    sound2.setVolume( Math.min(1, Math.max(0, 1-camera.position.y)) * 0.3 );
+
+    if(listener.context.state == "suspended"){
+        listener.context.resume()
+    }
 
     last = r;
 }
