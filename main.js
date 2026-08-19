@@ -7,12 +7,17 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
-import { cos, depth } from 'three/tsl';
+import { atan, cos, depth, sin } from 'three/tsl';
+import { mx_bilerp_1 } from 'three/src/nodes/materialx/lib/mx_noise.js';
 
 // ThreeJS Boilerplate
 const overwater = new THREE.Scene();
 const underwater = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
+
+var scene = -1;
+document.getElementById("debug_button").onclick = function () { scene++; };
+var count;
 
 var last = Date.now();
 
@@ -128,6 +133,18 @@ const waterCompositeShader = {
         return vec2(u, v);
     }
 
+    vec3 applyVibrance(vec3 color, float amount) {
+        float luma = dot(color, vec3(0.299, 0.587, 0.114)); // perceptual luminance weights
+        float maxChannel = max(color.r, max(color.g, color.b));
+        float minChannel = min(color.r, min(color.g, color.b));
+        float saturation = maxChannel - minChannel;
+        
+        // Boost more where saturation is currently low
+        float boost = amount * (1.0 - saturation);
+        
+        return mix(vec3(luma), color, 1.0 + boost);
+    }
+
     void main() {
       vec2 ndc = vUv * 2.0 - 1.0;
 
@@ -146,8 +163,13 @@ const waterCompositeShader = {
         else {
             float depth = getRadialDistance(vUv, tDepth);
 
-            gl_FragColor = vec4(mix(underwaterColor.rgb / (1. - getNearPlanePosition(vUv).y / 100.), texture2D(tUnder, vUv).rgb, clamp(2. - exp(depth * .01), 0., 1.)), 1.);
+            gl_FragColor = vec4(mix(underwaterColor.rgb / (1. - getNearPlanePosition(vUv).y / 5.), texture2D(tUnder, vUv).rgb, clamp(2. - exp(depth * .07), 0., 1.)), 1.);
         }
+        
+        
+
+        //if(vUv.x > .5)
+            gl_FragColor = vec4(applyVibrance(gl_FragColor.rgb, 1.0).rgb, 1.);
     }
   `
 };
@@ -171,6 +193,7 @@ composer.addPass(outputPass); // must be last
 // Add sun
 const sun = new THREE.DirectionalLight(0xffffff);
 sun.position.set(0, 10, 0);
+sun.intensity = 1.3;
 sun.target.position.set(-5, -5, 5);
 overwater.add(sun)
 const sub_sun = new THREE.DirectionalLight(0xffffff);
@@ -191,16 +214,20 @@ overwater.add(lightHelper);
 // Load CTD model
 const model_loader = new GLTFLoader();
 
-const xplorer = (await model_loader.loadAsync('resources/models/OceanXplorer4.glb')).scene;
+const xplorer = (await model_loader.loadAsync('/resources/models/OceanXplorer5.glb')).scene;
 xplorer.scale.x = 10;
 xplorer.scale.y = 10;
 xplorer.scale.z = 10;
 xplorer.position.y = -5
-overwater.add(xplorer);
+
 const sub_xplorer = xplorer.clone();
+xplorer.getObjectByName("CTD_Door").rotation.z = 0;
+xplorer.getObjectByName("CTD_Arm").position.x = 0;
+
+overwater.add(xplorer);
 underwater.add(sub_xplorer);
 
-const rov = (await model_loader.loadAsync('resources/models/ROV.glb')).scene;
+const rov = (await model_loader.loadAsync('/resources/models/ROV.glb')).scene;
 rov.scale.x = 0.002;
 rov.scale.y = 0.002;
 rov.scale.z = 0.002;
@@ -211,18 +238,27 @@ const sub_rov = rov.clone();
 xplorer.add(rov);
 sub_xplorer.add(sub_rov);
 
-const ctd = (await model_loader.loadAsync('resources/models/CTD.glb')).scene;
-ctd.scale.x = 0.005;
-ctd.scale.y = 0.005;
-ctd.scale.z = 0.005;
-ctd.position.x = 1.42;
-ctd.position.y = 1.15;
-ctd.position.z = 2.44;
-xplorer.add(ctd);
+const ctd = (await model_loader.loadAsync('/resources/models/CTD.glb')).scene;
+ctd.scale.x = 0.003;
+ctd.scale.y = 0.003;
+ctd.scale.z = 0.003;
+ctd.position.x = 0;
+ctd.position.y = 0;
+ctd.position.z = 0;
+xplorer.getObjectByName("CTD_Arm").add(ctd);
 const sub_ctd = ctd.clone();
-sub_xplorer.add(sub_ctd);
+sub_xplorer.getObjectByName("CTD_Arm").add(sub_ctd);
 
-const helicopter = (await model_loader.loadAsync('resources/models/Helicopter.glb')).scene;
+
+const bot = (await model_loader.loadAsync('/resources/models/CTD_Bottle.glb')).scene;
+bot.scale.x = 0.03;
+bot.scale.y = 0.03;
+bot.scale.z = 0.03;
+const bot2 = bot.clone();
+overwater.add(bot);
+overwater.add(bot2);
+
+const helicopter = (await model_loader.loadAsync('/resources/models/Helicopter.glb')).scene;
 helicopter.scale.x = 0.07;
 helicopter.scale.y = 0.07;
 helicopter.scale.z = 0.07;
@@ -232,7 +268,7 @@ helicopter.position.y = 1.67;
 helicopter.position.z = -3.44;
 xplorer.add(helicopter);
 
-const man = (await model_loader.loadAsync('resources/models/Man.glb')).scene;
+const man = (await model_loader.loadAsync('/resources/models/Man.glb')).scene;
 man.scale.x = 1;
 man.scale.y = 1;
 man.scale.z = 1;
@@ -244,7 +280,7 @@ xplorer.add(man);
 // Camera
 camera.position.z = 25;
 camera.position.y = 15;
-//const controls = new OrbitControls(camera, renderer.domElement);
+const controls = new OrbitControls(camera, renderer.domElement);
 
 // Fog
 //underwater.fog = new THREE.FogExp2(0x72a09f, 0.01);
@@ -259,7 +295,7 @@ var water = new Water(
     {
         textureWidth: 512,
         textureHeight: 512,
-        waterNormals: new THREE.TextureLoader().load('resources/images/waternormals.jpg', function (texture) {
+        waterNormals: new THREE.TextureLoader().load('/resources/images/waternormals.jpg', function (texture) {
 
             texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
 
@@ -281,7 +317,7 @@ let sub_water = new Water(
     {
         textureWidth: 512,
         textureHeight: 512,
-        waterNormals: new THREE.TextureLoader().load('resources/images/waternormals.jpg', function (texture) {
+        waterNormals: new THREE.TextureLoader().load('/resources/images/waternormals.jpg', function (texture) {
             texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
         }),
         sunDirection: sun.position.clone().normalize(),
@@ -297,6 +333,21 @@ sub_water.rotation.x = Math.PI / 2;
 sub_water.material.transparent = true
 underwater.add(sub_water);
 
+// Sound
+
+const listener = new THREE.AudioListener();
+camera.add(listener);
+// create a global audio source
+const sound = new THREE.Audio(listener);
+// load a sound and set it as the Audio object's buffer
+const audioLoader = new THREE.AudioLoader();
+audioLoader.load('resources/sounds/menu.mp3', function (buffer) {
+    sound.setBuffer(buffer);
+    sound.setLoop(true);
+    sound.setVolume(0.5);
+    sound.play();
+});
+
 // Animation Loop
 
 function animate() {
@@ -305,13 +356,110 @@ function animate() {
     const r = Date.now() * 0.001;
     const delta = r - last;
 
-    const s = 0.2
-    const d = 60 + Math.cos(r * s) * 10
-    camera.position.x = Math.sin(r * s) * d;
-    camera.position.z = Math.cos(r * s) * d;
-    camera.position.y = 20 + Math.cos(r * s) * 10;
-    camera.lookAt(0, 10, 0);
-    
+    const arm = xplorer.getObjectByName("CTD_Arm");
+
+    switch (scene) {
+        case 0:
+            const s = 0.2
+            const d = 60 + Math.cos(r * s) * 10
+            camera.position.x = Math.sin(r * s) * d;
+            camera.position.z = Math.cos(r * s) * d;
+            camera.position.y = 20 + Math.cos(r * s) * 10;
+            camera.lookAt(0, 10, 0);
+            break;
+        case 1:
+            const rot = xplorer.getObjectByName("CTD_Door").rotation.z;
+            xplorer.getObjectByName("CTD_Door").rotation.z = rot + delta * Math.min(1, Math.PI / 2 - rot);
+
+            const x = xplorer.getObjectByName("CTD_Arm").position.x;
+            xplorer.getObjectByName("CTD_Arm").position.x = x + delta * Math.min(0.3, 1.2 - x);
+
+
+            camera.position.x = 15;
+            camera.position.y = 5;
+            camera.position.z = 15;
+            camera.lookAt((arm.position.x + ctd.position.x) * 10, (+ ctd.position.y + arm.position.y) * 10 - 6, (arm.position.z + ctd.position.x) * 10);
+
+            if (x > 1.19)
+                scene++;
+            break;
+        case 2:
+            camera.lookAt((arm.position.x + ctd.position.x) * 10, (+ ctd.position.y + arm.position.y) * 10 - 6, (arm.position.z + ctd.position.x) * 10);
+
+            const descent = 0.2 * Math.min(10, 0.1 - ctd.position.y)
+
+            ctd.position.y -= delta * descent;
+            sub_ctd.position.x = ctd.position.x;
+            sub_ctd.position.y = ctd.position.y;
+            sub_ctd.position.z = ctd.position.z;
+            camera.position.y = camera.position.y - delta * descent * 7;
+            if (ctd.position.y < -5)
+                scene++;
+            count = 5
+            break;
+        case 3:
+            count -= delta;
+            camera.position.y = camera.position.y - delta * 200;
+            camera.position.x = 1000;
+            if (count < 0) {
+                scene++;
+                bot.position.x = 20;
+                bot.position.z = 0;
+                bot.position.y = -10;
+                bot2.position.x = 17;
+                bot2.position.z = -2;
+                bot2.position.y = -20;
+                count = 7
+            }
+            break;
+        case 4:
+            count -= delta;
+
+            camera.position.x = 20;
+            camera.position.y = 2;
+            camera.position.z = 5;
+            camera.lookAt(20, 0, 0);
+
+            bot.position.y += delta * Math.min(4, 3 * (0 - bot.position.y));
+            bot2.position.y += delta * Math.min(4, 3 * (0 - bot2.position.y));
+
+            bot.rotation.x = (Math.PI / 2) / (1 - bot.position.y * 5) + 0.1 * Math.sin(r);
+            bot.rotation.z = Math.cos(2 * r) * 0.1;
+            bot.rotation.y = Math.PI / 4 + Math.cos(1.14 * r) * 0.1;
+            bot2.rotation.z = (Math.PI / 2) / (1 - bot2.position.y * 5) + 0.1 * Math.sin(r);
+            bot2.rotation.x = Math.cos(2 * r) * 0.1;
+            bot2.rotation.y = Math.PI / 4 + Math.cos(1.14 * r) * 0.1;
+
+            if (count < 0) {
+                scene++;
+                bot.position.x = 1000;
+                bot2.position.x = 1000;
+                count = 0;
+            }
+            break;
+        case 5:
+            overwater.add(rov);
+            rov.position.x = 20;
+            rov.position.y = -2;
+            rov.position.z = 0;
+            rov.scale.x = 0.01;
+            rov.scale.y = 0.01;
+            rov.scale.z = 0.01;
+
+            count += delta * 0.5;
+            console.log(count);
+            camera.position.x = 20 + Math.cos(-count) * (5 + 30 / (1 + 2 * count));
+            camera.position.z = 0 + Math.sin(-count) * (5 + 30 / (1 + 2 * count));
+            camera.position.y = Math.cos(count) * 3 + 10 / (1 + count);
+            rov.rotation.y = Math.sin(r) * 0.05;
+            rov.rotation.x = Math.sin(r) * 0.05;
+            rov.rotation.z = Math.cos(r * 2) * 0.05;
+            camera.lookAt(20,0,0);
+            break;
+        default:
+            controls.update();
+    }
+
     compositePass.uniforms.tDepth.value = underwater_buffer.depthTexture;
     compositePass.uniforms.tDepthAbove.value = overwater_buffer.depthTexture;
 
@@ -321,7 +469,7 @@ function animate() {
 
     water.material.uniforms['time'].value += 0.005
     sub_water.material.uniforms['time'].value += 0.005
-    //controls.update();
+
 
     renderer.setSize(window.innerWidth, window.innerHeight);
     camera.aspect = window.innerWidth / window.innerHeight
