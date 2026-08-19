@@ -7,12 +7,14 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
-import { depth } from 'three/tsl';
+import { cos, depth } from 'three/tsl';
 
 // ThreeJS Boilerplate
 const overwater = new THREE.Scene();
 const underwater = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
+
+var last = Date.now();
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -144,7 +146,7 @@ const waterCompositeShader = {
         else {
             float depth = getRadialDistance(vUv, tDepth);
 
-            gl_FragColor = vec4(mix(underwaterColor.rgb, texture2D(tUnder, vUv).rgb, clamp(2. - exp(depth * .01), 0., 1.)), 1.);
+            gl_FragColor = vec4(mix(underwaterColor.rgb / (1. - getNearPlanePosition(vUv).y / 100.), texture2D(tUnder, vUv).rgb, clamp(2. - exp(depth * .01), 0., 1.)), 1.);
         }
     }
   `
@@ -220,6 +222,16 @@ xplorer.add(ctd);
 const sub_ctd = ctd.clone();
 sub_xplorer.add(sub_ctd);
 
+const helicopter = (await model_loader.loadAsync('resources/models/Helicopter.glb')).scene;
+helicopter.scale.x = 0.07;
+helicopter.scale.y = 0.07;
+helicopter.scale.z = 0.07;
+helicopter.rotation.y = 90
+helicopter.position.x = 0;
+helicopter.position.y = 1.67;
+helicopter.position.z = -3.44;
+xplorer.add(helicopter);
+
 const man = (await model_loader.loadAsync('resources/models/Man.glb')).scene;
 man.scale.x = 1;
 man.scale.y = 1;
@@ -232,7 +244,7 @@ xplorer.add(man);
 // Camera
 camera.position.z = 25;
 camera.position.y = 15;
-const controls = new OrbitControls(camera, renderer.domElement);
+//const controls = new OrbitControls(camera, renderer.domElement);
 
 // Fog
 //underwater.fog = new THREE.FogExp2(0x72a09f, 0.01);
@@ -291,6 +303,14 @@ function animate() {
     requestAnimationFrame(animate);
 
     const r = Date.now() * 0.001;
+    const delta = r - last;
+
+    const s = 0.2
+    const d = 60 + Math.cos(r * s) * 10
+    camera.position.x = Math.sin(r * s) * d;
+    camera.position.z = Math.cos(r * s) * d;
+    camera.position.y = 20 + Math.cos(r * s) * 10;
+    camera.lookAt(0, 10, 0);
     
     compositePass.uniforms.tDepth.value = underwater_buffer.depthTexture;
     compositePass.uniforms.tDepthAbove.value = overwater_buffer.depthTexture;
@@ -301,7 +321,7 @@ function animate() {
 
     water.material.uniforms['time'].value += 0.005
     sub_water.material.uniforms['time'].value += 0.005
-    controls.update();
+    //controls.update();
 
     renderer.setSize(window.innerWidth, window.innerHeight);
     camera.aspect = window.innerWidth / window.innerHeight
@@ -313,6 +333,8 @@ function animate() {
     renderer.render(overwater, camera);
 
     composer.render();
+
+    last = r;
 }
 
 animate();
