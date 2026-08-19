@@ -39,17 +39,26 @@ parsing().then(data => {
     data: {
       labels: xValues,
       datasets: [{
+        label: "Tempurature",
         data: tempurature,
         borderColor: "red",
         fill: false
       },{
+        label: "Salinity",
         data: salinity,
         borderColor: "green",
         fill: false
       }]
     },
     options: {
-      legend: {display: false}
+      legend: {display: true},
+      elements: {
+        point: {
+          radius: 0,
+          hitRadius: 10,
+        }
+    }
+
     }
   });
 });
