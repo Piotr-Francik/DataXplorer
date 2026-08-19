@@ -221,7 +221,7 @@ const xplorer = (await model_loader.loadAsync('/resources/models/OceanXplorer5.g
 xplorer.scale.x = 10;
 xplorer.scale.y = 10;
 xplorer.scale.z = 10;
-xplorer.position.y = -5
+xplorer.position.y = -6
 
 const sub_xplorer = xplorer.clone();
 xplorer.getObjectByName("CTD_Door").rotation.z = 0;
@@ -308,7 +308,7 @@ var water = new Water(
         waterColor: 0x005e5f,
         distortionScale: 1,
         fog: overwater.fog !== undefined,
-        alpha: 0.7,
+        alpha: 0.95,
     }
 );
 water.rotation.x = - Math.PI / 2;
@@ -381,13 +381,13 @@ function animate() {
             camera.position.x = 15;
             camera.position.y = 5;
             camera.position.z = 15;
-            camera.lookAt((arm.position.x + ctd.position.x) * 10, (+ ctd.position.y + arm.position.y) * 10 - 6, (arm.position.z + ctd.position.x) * 10);
+            camera.lookAt((arm.position.x + ctd.position.x) * 10, (+ ctd.position.y + arm.position.y) * 10 - 7, (arm.position.z + ctd.position.x) * 10);
 
             if (x > 1.19)
                 scene++;
             break;
         case 2:
-            camera.lookAt((arm.position.x + ctd.position.x) * 10, (+ ctd.position.y + arm.position.y) * 10 - 6, (arm.position.z + ctd.position.x) * 10);
+            camera.lookAt((arm.position.x + ctd.position.x) * 10, (+ ctd.position.y + arm.position.y) * 10 - 7, (arm.position.z + ctd.position.x) * 10);
 
             const descent = 0.2 * Math.min(10, 0.1 - ctd.position.y)
 
@@ -453,7 +453,7 @@ function animate() {
             console.log(count);
             camera.position.x = 20 + Math.cos(-count) * (5 + 30 / (1 + 2 * count));
             camera.position.z = 0 + Math.sin(-count) * (5 + 30 / (1 + 2 * count));
-            camera.position.y = Math.cos(count) * 3 + 10 / (1 + count);
+            camera.position.y = Math.cos(count) * 3 + 10 / (1 + 3 * count);
             rov.rotation.y = Math.sin(r) * 0.05;
             rov.rotation.x = Math.sin(r) * 0.05;
             rov.rotation.z = Math.cos(r * 2) * 0.05;
