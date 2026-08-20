@@ -271,14 +271,14 @@ helicopter.position.y = 1.67;
 helicopter.position.z = -3.44;
 xplorer.add(helicopter);
 
-const man = (await model_loader.loadAsync('/resources/models/Man.glb')).scene;
+/*const man = (await model_loader.loadAsync('/resources/models/Man.glb')).scene;
 man.scale.x = 1;
 man.scale.y = 1;
 man.scale.z = 1;
 man.position.x = 0;
 man.position.y = 0;
 man.position.z = 0;
-xplorer.add(man);
+xplorer.add(man);*/
 
 // Camera
 camera.position.z = 25;
