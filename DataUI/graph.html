@@ -10,5 +10,12 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script src="./graph.js"></script>
-  </body>
+
+    <form onkeypress="return /[\d]/i.test(event.key)" name="temp" method="get"  style="position: relative; top:10px;width:300px;margin-left:100px;" > 
+    <label for="depth">Current Depth:</label>
+    <input type="text" id="depth" name="depth"><br><br>
+    </form>
+    <input type="button" value="Set Value" onclick="setValue()" /><br /> 
+
+    </body>
 </html>
