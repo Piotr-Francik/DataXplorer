@@ -369,13 +369,11 @@ audioLoader.load('resources/sounds/menu.mp3', function (buffer) {
     sound.setBuffer(buffer);
     sound.setLoop(true);
     sound.setVolume(0.5);
-    sound.play();
 });
 audioLoader.load('resources/sounds/menu_sub.mp3', function (buffer) {
     sound2.setBuffer(buffer);
     sound2.setLoop(true);
     sound2.setVolume(0);
-    sound2.play();
 });
 
 // Scene Control
@@ -387,6 +385,14 @@ export function setScene(scene_index) {
     scene = scene_index;
 
     switch (scene) {
+        case 0:
+            sound.play();
+            sound2.play();
+            break;
+        case 1:
+            sound.play();
+            sound2.play();
+            break;
         case 3:
             count = 5
         case 4:
@@ -646,10 +652,6 @@ function update() {
     if (scene == 6) {
         sound.setVolume(0);
         sound2.setVolume(0.3);
-    }
-
-    if (listener.context.state == "suspended") {
-        listener.context.resume()
     }
 
     last = r;
