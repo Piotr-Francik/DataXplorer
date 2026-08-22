@@ -16,11 +16,12 @@ const underwater = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
 
 var scene = 0;
-document.getElementById("start-btn").onclick = function () { 
-    scene++;
-    document.getElementById("start-btn").style.display = "none";
- };
-var count;
+var count = 0;
+var speed = 0;
+var keys = {};
+
+window.addEventListener('keydown', (e) => keys[e.code] = true);
+window.addEventListener('keyup', (e) => keys[e.code] = false);
 
 var last = Date.now();
 
@@ -54,6 +55,13 @@ const texture = texture_loader.load(
         texture.colorSpace = THREE.SRGBColorSpace;
         overwater.background = texture;
         underwater.background = texture;
+    });
+
+const evening = texture_loader.load(
+    'resources/images/evening.png',
+    () => {
+        texture.mapping = THREE.EquirectangularReflectionMapping;
+        texture.colorSpace = THREE.SRGBColorSpace;
     });
 
 renderer.setClearColor(0x72a09f, 1);
@@ -131,7 +139,7 @@ const waterCompositeShader = {
     const float PI = 3.1415;
 
     vec2 equirectUv(vec3 dir) {
-        float u = atan(dir.z, dir.x) / (2.0 * PI) + 0.5;
+        float u = atan(-dir.z, dir.x) / (2.0 * PI) + 0.5;
         float v = asin(clamp(dir.y, -1.0, 1.0)) / PI + 0.5;
         return vec2(u, v);
     }
@@ -153,7 +161,7 @@ const waterCompositeShader = {
 
         if(getNearPlanePosition(vUv).y > 0.) {
             vec3 rayDir = getWorldRayDir(vUv);
-            vec2 skyUv = equirectUv(rayDir);
+            vec2 skyUv = equirectUv(vec3(rayDir.zyx));
 
             vec2 ddx = dFdx(skyUv);
             vec2 ddy = dFdy(skyUv);
@@ -261,7 +269,7 @@ const bot2 = bot.clone();
 overwater.add(bot);
 overwater.add(bot2);
 
-const helicopter = (await model_loader.loadAsync('/resources/models/Helicopter.glb')).scene;
+const helicopter = (await model_loader.loadAsync('/resources/models/Helicopter2.glb')).scene;
 helicopter.scale.x = 0.07;
 helicopter.scale.y = 0.07;
 helicopter.scale.z = 0.07;
@@ -283,7 +291,7 @@ xplorer.add(man);*/
 // Camera
 camera.position.z = 25;
 camera.position.y = 15;
-const controls = new OrbitControls(camera, renderer.domElement);
+//const controls = new OrbitControls(camera, renderer.domElement);
 
 // Fog
 //underwater.fog = new THREE.FogExp2(0x72a09f, 0.01);
@@ -336,6 +344,18 @@ sub_water.rotation.x = Math.PI / 2;
 sub_water.material.transparent = true
 underwater.add(sub_water);
 
+// Sand
+
+const sand = texture_loader.load('/resources/images/sand.png');
+sand.wrapS = THREE.RepeatWrapping;
+sand.wrapT = THREE.RepeatWrapping;
+sand.repeat.set(10000, 10000);
+const material = new THREE.MeshStandardMaterial({ color: 0xffffff, map: sand });
+const cube = new THREE.Mesh(waterGeometry, material);
+underwater.add(cube);
+cube.position.y = -80;
+cube.rotation.x = -Math.PI / 2;
+
 // Sound
 
 const listener = new THREE.AudioListener();
@@ -358,17 +378,84 @@ audioLoader.load('resources/sounds/menu_sub.mp3', function (buffer) {
     sound2.play();
 });
 
-// Animation Loop
+// Scene Control
 
-function animate() {
-    requestAnimationFrame(animate);
+const listeners = new Set();
+const depth_listeners = new Set();
+
+export function setScene(scene_index) {
+    scene = scene_index;
+
+    switch (scene) {
+        case 3:
+            count = 5
+        case 4:
+            overwater.add(ctd);
+            ctd.position.x = 20;
+            ctd.position.z = 0;
+            ctd.position.y = -5;
+            ctd.scale.x = 0.03;
+            ctd.scale.y = 0.03;
+            ctd.scale.z = 0.03;
+            count = 10
+            break;
+        case 5:
+            overwater.add(rov);
+            count = 0;
+            ctd.position.x = 2000;
+            break;
+        case 6:
+            count = 0
+            camera.near = 0.1;
+            camera.far = 1000;
+            camera.updateMatrix();
+            rov.add(camera);
+            rov.position.x = 0;
+            rov.position.y = -5;
+            rov.position.z = 0;
+            rov.rotation.y = 0;
+            rov.rotation.x = 0;
+            rov.rotation.z = 0;
+            speed = 0;
+            break;
+        case 7:
+            xplorer.add(camera);
+            camera.position.z = -2.5;
+            camera.position.y = 1.8;
+            camera.position.x = 0.5;
+            camera.rotation.x = 0;
+            camera.rotation.y = 0;//Math.PI / 2;
+            camera.rotation.z = 0;
+            compositePass.uniforms.skybox.value = evening;
+            overwater.background = evening;
+            count = 0;
+            break;
+        case 8:
+            count = 0;
+            break;
+        default:
+            break;
+    }
+
+    listeners.forEach(fn => fn(scene));
+}
+
+export function onSceneChange(fn) { listeners.add(fn); }
+export function getDepth(fn) { depth_listeners.add(fn); }
+
+
+// Update Loop
+
+function update() {
+    requestAnimationFrame(update);
 
     const r = Date.now() * 0.001;
-    const delta = r - last;
+    const delta = Math.max(0, Math.min(0.5, r - last));
 
     const arm = xplorer.getObjectByName("CTD_Arm");
 
     switch (scene) {
+        // Menu Cutscene
         case 0:
             const s = 0.2
             const d = 60 + Math.cos(r * s) * 10
@@ -377,7 +464,9 @@ function animate() {
             camera.position.y = 20 + Math.cos(r * s) * 10;
             camera.lookAt(0, 10, 0);
             break;
+        // Opening Door
         case 1:
+            setScene(6);
             const rot = xplorer.getObjectByName("CTD_Door").rotation.z;
             xplorer.getObjectByName("CTD_Door").rotation.z = rot + delta * Math.min(1, Math.PI / 2 - rot);
 
@@ -391,38 +480,34 @@ function animate() {
             camera.lookAt((arm.position.x + ctd.position.x) * 10, (+ ctd.position.y + arm.position.y) * 10 - 7, (arm.position.z + ctd.position.x) * 10);
 
             if (x > 1.19)
-                scene++;
+                setScene(2);
             break;
+        // Lowering CTD
         case 2:
             camera.lookAt((arm.position.x + ctd.position.x) * 10, (+ ctd.position.y + arm.position.y) * 10 - 7, (arm.position.z + ctd.position.x) * 10);
 
             const descent = 0.2 * Math.min(10, 0.1 - ctd.position.y)
 
+            camera.position.x = 15;
             ctd.position.y -= delta * descent;
+            camera.position.z = 15;
             sub_ctd.position.x = ctd.position.x;
             sub_ctd.position.y = ctd.position.y;
             sub_ctd.position.z = ctd.position.z;
             camera.position.y = camera.position.y - delta * descent * 7;
             if (ctd.position.y < -5)
-                scene++;
-            count = 5
+                setScene(3);
             break;
+        // Fade to black
         case 3:
             count -= delta;
             camera.position.y = camera.position.y - delta * 200;
             camera.position.x = 1000;
             if (count < 0) {
-                scene++;
-                overwater.add(ctd);
-                ctd.position.x = 20;
-                ctd.position.z = 0;
-                ctd.position.y = -5;
-                ctd.scale.x = 0.03;
-                ctd.scale.y = 0.03;
-                ctd.scale.z = 0.03;
-                count = 10
+                setScene(4);
             }
             break;
+        // Raising CTD
         case 4:
             count -= delta;
 
@@ -434,13 +519,11 @@ function animate() {
             ctd.position.y += delta;
 
             if (count < 0) {
-                scene++;
-                count = 0;
-                ctd.position.x = 2000;
+                setScene(5);
             }
             break;
+        // ROV Orbit
         case 5:
-            overwater.add(rov);
             rov.position.x = 20;
             rov.position.y = -2;
             rov.position.z = 0;
@@ -449,17 +532,69 @@ function animate() {
             rov.scale.z = 0.01;
 
             count += delta * 0.5;
-            console.log(count);
             camera.position.x = 20 + Math.cos(-count) * (5 + 30 / (1 + 2 * count));
             camera.position.z = 0 + Math.sin(-count) * (5 + 30 / (1 + 2 * count));
             camera.position.y = Math.cos(count) * 3 + 10 / (1 + 3 * count);
             rov.rotation.y = Math.sin(r) * 0.05;
             rov.rotation.x = Math.sin(r) * 0.05;
             rov.rotation.z = Math.cos(r * 2) * 0.05;
-            camera.lookAt(20,0,0);
+            camera.lookAt(20, 0, 0);
+
+            break;
+        // ROV
+        case 6:
+            count += delta * 0.5;
+
+            camera.position.x = 0;//rov.position.x;
+            camera.position.y = 200;//rov.position.y + 1.2;
+            camera.position.z = 120;//rov.position.z + 0.6;
+            camera.rotation.x = Math.PI / 2.5;
+            camera.rotation.y = Math.PI;
+            camera.rotation.z = 0;
+
+            rov.position.y += speed * delta * 10;
+            if (rov.position.y > -5) {
+                speed = 0;
+                rov.position.y = -5;
+            }
+            if (rov.position.y < -80) {
+                speed = 0;
+                rov.position.y = -80;
+            }
+
+            depth_listeners.forEach(fn => fn(rov.position.y));
+
+            if (keys["ArrowDown"]) {
+                speed -= delta;
+            }
+            if (keys["ArrowUp"]) {
+                speed += delta;
+            }
+            speed = speed * (1 - delta);
+
+            sub_sun.intensity = 1.3 / -rov.position.y;
+
+            break;
+        // Conclusion
+        case 7:
+            count += delta * 0.5;
+            camera.lookAt(helicopter.position.x * 10, helicopter.position.y * 10 - 4, helicopter.position.z * 10);
+            helicopter.getObjectByName('HLC_BladesTop').rotation.y += delta * 30;
+            helicopter.getObjectByName('HLC_BladesBack').rotation.y += delta * 30;
+            break;
+        // Credits
+        case 8:
+            count += delta * 0.5;
+            camera.lookAt(helicopter.position.x * 10, helicopter.position.y * 10 - 4, helicopter.position.z * 10);
+            helicopter.position.y = 1.67 + (Math.atan(count - 2) + Math.atan(2));
+            helicopter.rotation.y = 90 + (Math.atan(count - 2) + Math.atan(2));
+            helicopter.position.x -= count * .1 * delta;
+            helicopter.getObjectByName('HLC_BladesTop').rotation.y += delta * 30;
+            helicopter.getObjectByName('HLC_BladesBack').rotation.y += delta * 30;
             break;
         default:
-            controls.update();
+            //controls.update();
+            break;
     }
 
     compositePass.uniforms.tDepth.value = underwater_buffer.depthTexture;
@@ -484,14 +619,19 @@ function animate() {
 
     composer.render();
 
-    sound.setVolume( Math.min(1, Math.max(0, camera.position.y)) * 0.5 );
-    sound2.setVolume( Math.min(1, Math.max(0, 1-camera.position.y)) * 0.3 );
+    sound.setVolume(Math.min(1, Math.max(0, camera.position.y)) * 0.5);
+    sound2.setVolume(Math.min(1, Math.max(0, 1 - camera.position.y)) * 0.3);
 
-    if(listener.context.state == "suspended"){
+    if (scene == 6) {
+        sound.setVolume(0);
+        sound2.setVolume(0.3);
+    }
+
+    if (listener.context.state == "suspended") {
         listener.context.resume()
     }
 
     last = r;
 }
 
-animate();
+update();
