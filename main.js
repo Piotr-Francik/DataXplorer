@@ -419,6 +419,10 @@ export function setScene(scene_index) {
             speed = 0;
             break;
         case 7:
+            rov.remove(camera);
+            overwater.add(camera);
+            break;
+        case 8:
             xplorer.add(camera);
             camera.position.z = -2.5;
             camera.position.y = 1.8;
@@ -430,7 +434,7 @@ export function setScene(scene_index) {
             overwater.background = evening;
             count = 0;
             break;
-        case 8:
+        case 9:
             count = 0;
             break;
         default:
@@ -466,7 +470,6 @@ function update() {
             break;
         // Opening Door
         case 1:
-            setScene(6);
             const rot = xplorer.getObjectByName("CTD_Door").rotation.z;
             xplorer.getObjectByName("CTD_Door").rotation.z = rot + delta * Math.min(1, Math.PI / 2 - rot);
 
@@ -575,15 +578,33 @@ function update() {
             sub_sun.intensity = 1.3 / -rov.position.y;
 
             break;
-        // Conclusion
+        // Post Mission
         case 7:
+            overwater.add(camera);
+            overwater.add(rov);
+            camera.lookAt(rov.position.x, rov.position.y + 3, rov.position.z);
+            rov.position.x = 20;
+            rov.position.y = -2;
+            rov.position.z = -40;
+            rov.scale.x = 0.01;
+            rov.scale.y = 0.01;
+            rov.scale.z = 0.01;
+            rov.rotation.y = Math.sin(r) * 0.05;
+            rov.rotation.x = Math.sin(r) * 0.05;
+            rov.rotation.z = Math.cos(r * 2) * 0.05;
+            camera.position.x = 25;
+            camera.position.y = 2;
+            camera.position.z = -45;
+            break;
+        // Conclusion
+        case 8:
             count += delta * 0.5;
             camera.lookAt(helicopter.position.x * 10, helicopter.position.y * 10 - 4, helicopter.position.z * 10);
             helicopter.getObjectByName('HLC_BladesTop').rotation.y += delta * 30;
             helicopter.getObjectByName('HLC_BladesBack').rotation.y += delta * 30;
             break;
         // Credits
-        case 8:
+        case 9:
             count += delta * 0.5;
             camera.lookAt(helicopter.position.x * 10, helicopter.position.y * 10 - 4, helicopter.position.z * 10);
             helicopter.position.y = 1.67 + (Math.atan(count - 2) + Math.atan(2));

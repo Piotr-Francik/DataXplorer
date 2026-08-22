@@ -10,7 +10,7 @@ document.getElementById("start-btn").onclick = function () {
 onSceneChange((scene_index) => {
     console.log(scene_index);
     scene = scene_index;
-    document.getElementById("start-btn").style.display = scene == 0 || scene == 5 || scene == 6 || scene == 7 ? "block" : "none";
+    document.getElementById("start-btn").style.display = scene == 0 || scene == 5 || scene == 6 || scene == 7 || scene == 8 ? "block" : "none";
 });
 
 // Runs each frame of game
