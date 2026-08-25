@@ -117,16 +117,23 @@ export function startGraph(){
           ],
           borderColor: "red",
           borderWidth: 2,
-          pointRadius: 0,
+          //pointRadius: 2,
           fill: false,
           lineTension: 0
           
         }]
       },
       options: {
+        tooltips: { enabled: false },
+        hover: { mode: null },
         responsive: true,
         maintainAspectRatio: false,
-        legend: {display: false},
+        legend: {
+          display: true,
+          labels: {
+            filter: (legendItem) => legendItem.datasetIndex !== 2
+          }
+        },
         scales: {
           xAxes: [{ //two different x axis scales for temp and salinity display set to false as a design choice
             display: false,

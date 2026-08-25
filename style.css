@@ -116,9 +116,9 @@ body {
 
 .chartContainer{
   width: 250px;
-  height: 250px;
+  height: 100%;
   position:absolute;
-  bottom: 0px;
+  top: 0px;
   right: 0px;
   /* color:black;
   background-color: black; */
