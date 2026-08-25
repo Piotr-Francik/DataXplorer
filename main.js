@@ -424,7 +424,6 @@ export function setScene(scene_index) {
             rov.rotation.x = 0;
             rov.rotation.z = 0;
             speed = 0;
-            console.log("pregraph");
             //document.querySelector(".chartContainer").style.backgroundColor = "black";            
             graph.startGraph();
             break;

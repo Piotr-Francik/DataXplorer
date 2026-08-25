@@ -11,7 +11,6 @@ export const tempurature = [] //temp data
 export const salinity = [] //salinity data
 
 function parsing(){
-  console.log("before running")
   return fetch("./DataUI/1974Data.csv")
     .then(response => {
       if (!response.ok) {
@@ -60,7 +59,6 @@ export function updateGraph(depth){
 
 
 export function startGraph(){
-  console.log("started the graph")
   parsing().then(data => {
 
 
@@ -69,15 +67,12 @@ export function startGraph(){
         continue
       }
 
-
       xValues.push(Number(data[i][1])) 
       tempurature.push(Number(data[i][2]))
       salinity.push(Number(data[i][3]))
       //parsing data into our 2d arrays
     }
-    console.log("-----")
-    console.log(data)
-    console.log("-----")
+
 
     const temperaturePoints = xValues.map((xValue, index) => ({
       x: tempurature[index],
@@ -91,10 +86,7 @@ export function startGraph(){
     //const currentDepth = currentDepth
     yMinimum = Math.min(...tempurature)
     yMaximum = Math.max(...tempurature)
-    console.log("------")
-    console.log(temperaturePoints)
-    console.log(salinityPoints)
-    console.log("------")
+
 
     CTD = new Chart("myChart", {
       // rotate:90,
@@ -118,7 +110,7 @@ export function startGraph(){
           lineTension: 0
         },{
 
-          xAxisID: "x-temperature",
+          xAxisID: "x-temperature", //line to display depth
           data: [
             {y: currentDepth, x: yMinimum},
             {y: currentDepth, x: yMaximum}
@@ -136,7 +128,7 @@ export function startGraph(){
         maintainAspectRatio: false,
         legend: {display: false},
         scales: {
-          xAxes: [{
+          xAxes: [{ //two different x axis scales for temp and salinity display set to false as a design choice
             display: false,
             id: "x-temperature",
             type: "linear",
