@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import * as graph from './DataUI/graph.js';
 
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -423,8 +424,14 @@ export function setScene(scene_index) {
             rov.rotation.x = 0;
             rov.rotation.z = 0;
             speed = 0;
+            console.log("pregraph");
+            //document.querySelector(".chartContainer").style.backgroundColor = "black";            
+            graph.startGraph();
             break;
         case 7:
+            //document.querySelector(".chartContainer").style.backgroundColor = "";
+            document.querySelector("canvas").style.display = "none";
+
             rov.remove(camera);
             overwater.add(camera);
             break;
@@ -582,6 +589,9 @@ function update() {
             speed = speed * (1 - delta);
 
             sub_sun.intensity = 1.3 / -rov.position.y;
+            console.log("speed:")
+            console.log(speed);
+            //graph.updateGraph(getDepth());
 
             break;
         // Post Mission
