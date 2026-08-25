@@ -175,6 +175,7 @@ const waterCompositeShader = {
             float depth = getRadialDistance(vUv, tDepth);
 
             gl_FragColor = vec4(mix(underwaterColor.rgb / (1. - getNearPlanePosition(vUv).y / 5.), texture2D(tUnder, vUv).rgb, clamp(2. - exp(depth * .07), 0., 1.)), 1.);
+            gl_FragColor = vec4(mix(underwaterColor.rgb * exp(getNearPlanePosition(vUv).y / 10.), texture2D(tUnder, vUv).rgb, clamp(2. - exp(depth * .07), 0., 1.)), 1.);
         }
         
         
@@ -278,6 +279,17 @@ helicopter.position.x = 0;
 helicopter.position.y = 1.67;
 helicopter.position.z = -3.44;
 xplorer.add(helicopter);
+
+//Spot light
+const color = 0xFFFFFF;
+const intensity = 2;
+const spotLight = new THREE.SpotLight(color, intensity);
+underwater.add(spotLight);
+underwater.add(spotLight.target);
+spotLight.angle = Math.PI / 5;
+spotLight.penumbra = 0.4;
+
+
 
 /*const man = (await model_loader.loadAsync('/resources/models/Man.glb')).scene;
 man.scale.x = 1;
@@ -406,7 +418,6 @@ export function setScene(scene_index) {
             sound.play();
             sound2.play();
             submerged.play();
-            //setScene(6);
             break;
         case 3:
             count = 4.5
@@ -441,6 +452,7 @@ export function setScene(scene_index) {
             rov.rotation.y = 0;
             rov.rotation.x = 0;
             rov.rotation.z = 0;
+
             speed = 0;
             break;
         case 7:
@@ -612,6 +624,15 @@ function update() {
             camera.rotation.y = Math.PI;
             camera.rotation.z = 0;
 
+
+            spotLight.position.set(rov.position.x, rov.position.y - 30, rov.position.z);
+            spotLight.position.x = rov.position.x;
+            spotLight.position.y = rov.position.y + 1;
+            spotLight.position.z = rov.position.z + 0.2;
+            spotLight.target.position.set(rov.position.x, rov.position.y - 100000, rov.position.z);
+
+            console.log(spotLight.position);
+
             rov.position.y += speed * delta * 10;
             if (rov.position.y > -5) {
                 speed = 0;
@@ -632,7 +653,8 @@ function update() {
             }
             speed = speed * (1 - delta);
 
-            sub_sun.intensity = 1.3 / -rov.position.y;
+            sub_sun.intensity = 1.3 * Math.exp(rov.position.y / 10);
+            sub_light.intensity = 1 * Math.exp(rov.position.y / 10);
 
             break;
         // Post Mission
