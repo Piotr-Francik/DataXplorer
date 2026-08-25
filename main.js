@@ -406,7 +406,7 @@ export function setScene(scene_index) {
             sound.play();
             sound2.play();
             submerged.play();
-            setScene(6);
+            //setScene(6);
             break;
         case 3:
             count = 4.5
