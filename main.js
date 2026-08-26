@@ -588,8 +588,7 @@ function update() {
             speed = speed * (1 - delta);
 
             sub_sun.intensity = 1.3 / -rov.position.y;
-            console.log("speed:")
-            console.log(speed);
+
             //graph.updateGraph(getDepth());
 
             break;

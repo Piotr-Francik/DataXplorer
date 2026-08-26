@@ -17,7 +17,9 @@ onSceneChange((scene_index) => {
 
 // Runs each frame of game
 getDepth((depth) => {
-    console.log(depth);
+    // console.log(depth);
     let graphDepth = depth*-6.52 - 30
     graph.updateGraph(graphDepth)
+    graph.drawTherm(graphDepth)
+
 });

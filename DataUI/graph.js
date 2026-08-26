@@ -1,14 +1,20 @@
 import { backgroundBlurriness } from "three/tsl"
 
-export let currentDepth = 40
+const canvas = document.getElementById("bars");
+const ctx = canvas.getContext("2d");export let currentDepth = 40
 export let CTD
 export var yMaximum 
 export var yMinimum
+var gradient
+var yIntercept
 export var widths = [2,4]
 export var index = 0
 export const xValues = [] //depth coordinate
-export const tempurature = [] //temp data
+export const temperature = [] //temp data
 export const salinity = [] //salinity data
+export var temperaturePoints
+export var salinityPoints
+
 
 function parsing(){
   return fetch("./DataUI/1974Data.csv")
@@ -30,7 +36,6 @@ function parsing(){
       console.error(error);
     });
   
-  console.log("after running")
 }
 
 function pulse(){
@@ -57,6 +62,17 @@ export function updateGraph(depth){
 
 }
 
+export function drawTherm(index){
+  //console.log("started drawing the rectangle")
+  ctx.clearRect(0,0,canvas.width,canvas.height)
+  ctx.beginPath()
+  console.log("height and width")
+  console.log(canvas.height,canvas.width)
+  let currentTemp = gradient*temperature[Math.floor(index)] + yIntercept
+  ctx.rect(0,100-currentTemp,20,currentTemp)
+  ctx.stroke()
+  
+}
 
 export function startGraph(){
   parsing().then(data => {
@@ -68,34 +84,35 @@ export function startGraph(){
       }
 
       xValues.push(Number(data[i][1])) 
-      tempurature.push(Number(data[i][2]))
+      temperature.push(Number(data[i][2]))
       salinity.push(Number(data[i][3]))
       //parsing data into our 2d arrays
     }
 
 
-    const temperaturePoints = xValues.map((xValue, index) => ({
-      x: tempurature[index],
+    temperaturePoints = xValues.map((xValue, index) => ({
+      x: temperature[index],
       y: xValue //coordinates for temp
     }))
-    const salinityPoints = xValues.map((xValue, index) => ({
+    salinityPoints = xValues.map((xValue, index) => ({
       x: salinity[index],
       y: xValue//coordinates for salinity
     }))
     
     //const currentDepth = currentDepth
-    yMinimum = Math.min(...tempurature)
-    yMaximum = Math.max(...tempurature)
-
-
+    yMinimum = Math.min(...temperature)
+    yMaximum = Math.max(...temperature)
+    console.log(yMaximum)
+    gradient = 90/(yMaximum-yMinimum)
+    yIntercept = 10-(yMinimum*gradient)
     CTD = new Chart("myChart", {
       // rotate:90,
       type: "line",
       data: {
-        //labels: tempurature,
+        //labels: temperature,
         yAxisID: "y",
         datasets: [{
-          label: "Tempurature",
+          label: "temperature",
           xAxisID: "x-temperature",
           data: temperaturePoints,
           borderColor: "#481FFF",
@@ -189,7 +206,7 @@ export function startGraph(){
       }
     });
   });
-
+  
   var timer = setInterval(pulse,800)
 }
 
