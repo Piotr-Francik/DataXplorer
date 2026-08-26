@@ -98,14 +98,14 @@ export function startGraph(){
           label: "Tempurature",
           xAxisID: "x-temperature",
           data: temperaturePoints,
-          borderColor: "blue",
+          borderColor: "#481FFF",
           fill: false,
           lineTension: 0
         },{
           label: "Salinity",
           xAxisID: "x-salinity",
           data: salinityPoints,
-          borderColor: "green",
+          borderColor: "#53FF1F",
           fill: false,
           lineTension: 0
         },{
@@ -130,7 +130,10 @@ export function startGraph(){
         maintainAspectRatio: false,
         legend: {
           display: true,
+          //color:"black",
+          
           labels: {
+            fontColor:"black",
             filter: (legendItem) => legendItem.datasetIndex !== 2
           }
         },

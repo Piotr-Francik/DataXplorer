@@ -12,6 +12,7 @@ body {
   position:absolute;
   top: 55%;
   left:80%;
+  border: 2px solid white;
 }
 
 .chartContainer canvas {
