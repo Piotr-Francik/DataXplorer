@@ -42,11 +42,38 @@ body {
   z-index: 0;
 }
 
-.scene4background {
+/* .scene4background {
   height: 100%;
   background: linear-gradient(180deg, #338583 0%, #358b89 100%);
   position: relative;
   z-index: 0;
+} */
+
+#scene-4-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: linear-gradient(180deg, #338583 0%, #358b89 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: auto;
+
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+}
+
+#scene-4-overlay.active {
+  opacity: 1;
+}
+
+.overlay-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  max-width: 90%;
 }
 
 .ship-container {
@@ -102,16 +129,22 @@ body {
   /* border: 2px solid #00ffff00; */
 }
 
-.text:nth-child(1) {
+.text:nth-of-type(1) {
   animation-delay: 1s;
 }
 
-.text:nth-child(2) {
+.text:nth-of-type(2) {
   animation-delay: 4s; 
 }
 
-.text:nth-child(3) {
+.text:nth-of-type(3) {
   animation-delay: 7s; 
+}
+
+#scene-4-next-btn {
+  opacity: 0;
+  animation: fadein 1s ease-in 9.5s both, pulse 1.8s infinite 10.5s;
+  margin-top: 20px;
 }
 
 @keyframes pulse {

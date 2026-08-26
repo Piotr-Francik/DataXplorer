@@ -410,6 +410,10 @@ export function setScene(scene_index) {
             count = 0;
             ctd.position.x = 2000;
             break;
+        
+        case 5.5:
+            break;
+
         case 6:
             count = 0
             camera.near = 0.1;
