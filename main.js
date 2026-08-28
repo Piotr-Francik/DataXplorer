@@ -352,6 +352,10 @@ let sub_water = new Water(
     }
 );
 
+function sawtooth(x) {
+    return 2 * (x - Math.floor(x + 0.5));
+}
+
 sub_water.rotation.x = Math.PI / 2;
 sub_water.material.transparent = true
 underwater.add(sub_water);
@@ -420,26 +424,32 @@ export function setScene(scene_index) {
             submerged.play();
             break;
         case 3:
-            count = 4.5
+            count = 1;
+            sub_light.intensity = 0;
+            sub_sun.intensity = 0;
+            break;
         case 4:
             overwater.add(ctd);
+            underwater.add(sub_ctd);
             ctd.position.x = 20;
             ctd.position.z = 0;
-            ctd.position.y = -5;
+            ctd.position.y = -75;
             ctd.scale.x = 0.03;
             ctd.scale.y = 0.03;
             ctd.scale.z = 0.03;
-            count = 10
+            sub_ctd.scale.x = 0.03;
+            sub_ctd.scale.y = 0.03;
+            sub_ctd.scale.z = 0.03;
+            count = 20
             break;
         case 5:
+            ctd.position.x = 2000;
+            sub_ctd.position.x = 2000;
             overwater.add(rov);
+            underwater.add(sub_ctd);
             count = 0;
             ctd.position.x = 2000;
             break;
-        
-        case 5.5:
-            break;
-
         case 6:
             overwater.add(rov);
             sound.setVolume(0);
@@ -535,15 +545,16 @@ function update() {
         case 2:
             camera.lookAt((arm.position.x + ctd.position.x) * 10, (+ ctd.position.y + arm.position.y) * 10 - 7, (arm.position.z + ctd.position.x) * 10);
 
-            const descent = 0.2 * Math.min(10, 0.1 - ctd.position.y)
+            const descent = 0.2 * Math.min(10, 0.1 - ctd.position.y) * 3;
 
             camera.position.x = 15;
-            ctd.position.y -= delta * descent;
             camera.position.z = 15;
             sub_ctd.position.x = ctd.position.x;
             sub_ctd.position.y = ctd.position.y;
             sub_ctd.position.z = ctd.position.z;
-            camera.position.y = camera.position.y - delta * descent * 7;
+
+            ctd.position.y -= Math.min(delta * 0.3, delta * descent);
+            camera.position.y -= Math.min(delta * 3 * 0.5, 5 * delta * descent);
 
             if (ctd.position.y < -.4 && ctd.position.y + delta * descent > -.4) {
                 const splash = new THREE.Audio(listener);
@@ -555,31 +566,57 @@ function update() {
                 });
             }
 
-            if (ctd.position.y < -5)
+            if (ctd.position.y < -3) {
                 setScene(3);
+                console.log("Test");
+            }
             break;
         // Fade to black
         case 3:
             count -= delta;
-            camera.position.y = camera.position.y - delta * 200;
+            camera.position.y = camera.position.y - delta * 50;
             camera.position.x = 1000;
             sound2.setVolume(Math.max(0, sound2.getVolume() - delta / 10));
+            //console.log(count);
             if (count < 0) {
                 setScene(4);
+                console.log("Test2");
             }
             break;
         // Raising CTD
         case 4:
             count -= delta;
 
-            camera.position.x = 20;
-            camera.position.y = 2;
-            camera.position.z = 5;
+            camera.position.x = 20 + Math.sin(count * 10);
+            camera.position.y = 2 + Math.sin(count * 10);
+            camera.position.z = 5 + Math.cos(count * 10);
             camera.lookAt(20, 0, 0);
 
-            ctd.position.y += delta * 1.5;
+            camera.position.x = 20 + Math.cos(count * 50) * 0.00;
+            camera.position.y = ctd.position.y + 2 + Math.sin(count * 50) * 0.00;
+            camera.position.z = 5;
 
-            if (ctd.position.y >= -1.6 && ctd.position.y - delta * 1.5 < -1.6) {
+            camera.lookAt(ctd.position.x + sawtooth(count) * 0.01, ctd.position.y + sawtooth(count) * 0.01, ctd.position.z);
+
+            let i = Math.max(0, Math.min(0.03, -camera.position.y * 0.1));
+            //i = 0.05;
+            console.log(i);
+
+
+            camera.lookAt(
+                ctd.position.x + (Math.random() - 0.5) * i,
+                ctd.position.y + (Math.random() - 0.5) * i,
+                ctd.position.z + (Math.random() - 0.5) * i
+            );
+
+            //camera.lookAt(ctd.position.x, ctd.position.y , ctd.position.z);
+            sub_ctd.position.x = ctd.position.x;
+            sub_ctd.position.y = ctd.position.y;
+            sub_ctd.position.z = ctd.position.z;
+
+            ctd.position.y += delta * 1.5 * (camera.position.y > 0 ? 1 : 2);
+
+            if (camera.position.y >= -1.6 * 0 && camera.position.y - delta * 1.5 * 2 < -1.6 * 0) {
                 const splash = new THREE.Audio(listener);
                 console.log("splash")
                 audioLoader.load('resources/sounds/raise.mp3', function (buffer) {
@@ -590,12 +627,19 @@ function update() {
                 });
             }
 
-            if (count < 0) {
+            if (ctd.position.y > 5) {
                 setScene(5);
             }
+
+            sub_sun.intensity = 1.3 * Math.exp(ctd.position.y / 10);
+            sub_light.intensity = 1 * Math.exp(ctd.position.y / 10);
+            spotLight.intensity = 0;
+
             break;
         // ROV Orbit
         case 5:
+            spotLight.intensity = 2;
+
             rov.position.x = 20;
             rov.position.y = -2;
             rov.position.z = 0;
@@ -634,8 +678,6 @@ function update() {
             spotLight.position.y = rov.position.y + 1;
             spotLight.position.z = rov.position.z + 0.2;
             spotLight.target.position.set(rov.position.x, rov.position.y - 100000, rov.position.z);
-
-            console.log(spotLight.position);
 
             rov.position.y += speed * delta * 10;
             if (rov.position.y > -5) {
