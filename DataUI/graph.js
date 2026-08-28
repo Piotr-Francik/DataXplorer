@@ -1,7 +1,10 @@
 import { backgroundBlurriness } from "three/tsl"
 
 const canvas = document.getElementById("bars");
-const ctx = canvas.getContext("2d");export let currentDepth = 40
+const ctx = canvas.getContext("2d");
+export let currentDepth = 40;
+const meter = new Image()
+meter.src = './DataUI/meter_empty.png'
 export let CTD
 export var yMaximum 
 export var yMinimum
@@ -50,12 +53,13 @@ function pulse(){
 
 export function updateGraph(depth){
   // var inputVal = document.getElementById('depth').value;
-  currentDepth = depth
+  index = depth
+
   if (CTD){
     const depth = CTD.data.datasets[2]
     depth.data = [
-          {y: currentDepth, x: yMinimum},
-          {y: currentDepth, x: yMaximum}
+          {y: xValues[index], x: yMinimum},
+          {y: xValues[index], x: yMaximum}
         ]
   }
   CTD.update();
@@ -66,10 +70,20 @@ export function drawTherm(index){
   //console.log("started drawing the rectangle")
   ctx.clearRect(0,0,canvas.width,canvas.height)
   ctx.beginPath()
-  console.log("height and width")
-  console.log(canvas.height,canvas.width)
+  ctx.fillStyle = "red" 
+  // console.log("height and width")
+  // console.log(canvas.height,canvas.width)
+
   let currentTemp = gradient*temperature[Math.floor(index)] + yIntercept
-  ctx.rect(0,100-currentTemp,20,currentTemp)
+  console.log("temperature")
+  console.log(currentTemp)
+  ctx.fillRect(2,72-currentTemp,15,currentTemp)
+  ctx.drawImage(meter,0,0)
+  // meter.onload = function(){
+  //   ctx.drawImage(meter,0,0)
+  // }
+
+  
   ctx.stroke()
   
 }
@@ -103,8 +117,8 @@ export function startGraph(){
     yMinimum = Math.min(...temperature)
     yMaximum = Math.max(...temperature)
     console.log(yMaximum)
-    gradient = 90/(yMaximum-yMinimum)
-    yIntercept = 10-(yMinimum*gradient)
+    gradient = 100/(30)
+    yIntercept = -28
     CTD = new Chart("myChart", {
       // rotate:90,
       type: "line",
@@ -115,7 +129,7 @@ export function startGraph(){
           label: "temperature",
           xAxisID: "x-temperature",
           data: temperaturePoints,
-          borderColor: "#481FFF",
+          borderColor: "red",
           fill: false,
           lineTension: 0
         },{
@@ -132,7 +146,7 @@ export function startGraph(){
             {y: currentDepth, x: yMinimum},
             {y: currentDepth, x: yMaximum}
           ],
-          borderColor: "red",
+          borderColor: "blue",
           borderWidth: 2,
           //pointRadius: 2,
           fill: false,
@@ -150,7 +164,7 @@ export function startGraph(){
           //color:"black",
           
           labels: {
-            fontColor:"black",
+            fontColor:"white",
             filter: (legendItem) => legendItem.datasetIndex !== 2
           }
         },

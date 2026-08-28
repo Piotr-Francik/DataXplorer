@@ -18,7 +18,16 @@ onSceneChange((scene_index) => {
 // Runs each frame of game
 getDepth((depth) => {
     // console.log(depth);
-    let graphDepth = depth*-6.52 - 30
+    let graphDepth = depth*-6.51 - 32.53
+    graphDepth = Math.floor(graphDepth)
+    if (graphDepth>488){
+        graphDepth = 488
+    }
+    else{if(graphDepth<1){
+        graphDepth = 1
+    }}
+    // console.log("graphDepth")
+    // console.log(graphDepth)
     graph.updateGraph(graphDepth)
     graph.drawTherm(graphDepth)
 
