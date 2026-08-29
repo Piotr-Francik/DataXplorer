@@ -15,7 +15,7 @@ const overwater = new THREE.Scene();
 const underwater = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
 
-var scene = 0;
+var scene = -1;
 var count = 0;
 var speed = 0;
 var keys = {};
@@ -380,6 +380,7 @@ camera.add(listener);
 const sound = new THREE.Audio(listener);
 const sound2 = new THREE.Audio(listener);
 const submerged = new THREE.Audio(listener);
+const sea = new THREE.Audio(listener);
 const rotors = new THREE.Audio(listener);
 // load a sound and set it as the Audio object's buffer
 const audioLoader = new THREE.AudioLoader();
@@ -403,6 +404,11 @@ audioLoader.load('resources/sounds/helicopter.mp3', function (buffer) {
     rotors.setLoop(true);
     rotors.setVolume(0);
 });
+audioLoader.load('resources/sounds/sea_sounds.mp3', function (buffer) {
+    sea.setBuffer(buffer);
+    sea.setLoop(true);
+    sea.setVolume(0);
+});
 
 // Scene Control
 
@@ -416,12 +422,13 @@ export function setScene(scene_index) {
         case 0:
             sound.play();
             sound2.play();
-            submerged.play();
             break;
         case 1:
-            sound.play();
-            sound2.play();
+            //sound.play();
+            //sound2.play();
             submerged.play();
+            sea.play();
+            console.log("PLAY");
             break;
         case 3:
             count = 1;
@@ -503,6 +510,8 @@ export function setScene(scene_index) {
 export function onSceneChange(fn) { listeners.add(fn); }
 export function getDepth(fn) { depth_listeners.add(fn); }
 
+let test = -1;
+setScene(0);
 
 // Update Loop
 
@@ -566,7 +575,7 @@ function update() {
                 });
             }
 
-            if (ctd.position.y < -3) {
+            if (ctd.position.y < -2) {
                 setScene(3);
                 console.log("Test");
             }
@@ -614,7 +623,6 @@ function update() {
             sub_ctd.position.y = ctd.position.y;
             sub_ctd.position.z = ctd.position.z;
 
-            ctd.position.y += delta * 1.5 * (camera.position.y > 0 ? 1 : 2);
 
             if (camera.position.y >= -1.6 * 0 && camera.position.y - delta * 1.5 * 2 < -1.6 * 0) {
                 const splash = new THREE.Audio(listener);
@@ -626,6 +634,8 @@ function update() {
                     splash.play();
                 });
             }
+
+            ctd.position.y += delta * 1.5 * (ctd.position.y > -1.6 ? 1 : 2);
 
             if (ctd.position.y > 5) {
                 setScene(5);
@@ -779,9 +789,17 @@ function update() {
         {
             sound2.setVolume(Math.min(1, Math.max(0, 1 - camera.position.y)) * 0.3);
         }
-        submerged.setVolume(Math.min(1, Math.max(0, 1 - camera.position.y)) * 0.5);
+        submerged.setVolume(Math.min(1, Math.max(0, 1 - camera.position.y)) * 1);
+        sea.setVolume(1 - Math.min(1, Math.max(0, 1 - camera.position.y)) * 1);
     }
     last = r;
+
+    if (test == 0) {
+        setScene(0);
+        test = 1;
+    }
+    if (test == -1)
+        test = 0;
 }
 
 update();

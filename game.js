@@ -10,10 +10,14 @@ document.getElementById("start-btn").onclick = function () {
     }
 };
 
+
+
+
 // Scene 4 Continue Button
 document.getElementById("scene-4-next-btn").onclick = function () {
     setScene(6);
 };
+
 
 // Runs on every scene change
 onSceneChange((scene_index) => {
@@ -24,15 +28,27 @@ onSceneChange((scene_index) => {
     const scene4Overlay = document.getElementById("scene-4-overlay");
     const canvasElement = document.querySelector("canvas");
 
-    if (scene === 5.5) {
-        // hide canvas
-        if (canvasElement) canvasElement.style.display = "none";
-        scene4Overlay.style.display = "flex";
-        scene4Overlay.classList.add("active");
-    } else {
-        // hestore canvas
-        if (canvasElement) canvasElement.style.display = "block";
-        scene4Overlay.style.display = "none";
+    switch (scene) {
+        case 0:
+            document.getElementById('loading-screen').classList.add('faded');
+            document.getElementById("play-button").innerHTML = `<h1>EMBARK</h1>`;
+            document.getElementById("play-button").classList.remove("loading");
+            document.getElementById("play-button").classList.add("loaded");
+            console.log(document.getElementById("play-button").classList);
+            document.getElementById("play-button").onclick = function () {
+                document.getElementById("loading-screen").style.display = "none";
+                setScene(0);
+            };
+            break;
+        case 5.5:
+            if (canvasElement) canvasElement.style.display = "none";
+            scene4Overlay.style.display = "flex";
+            scene4Overlay.classList.add("active");
+            break;
+        case 6:
+            if (canvasElement) canvasElement.style.display = "block";
+            scene4Overlay.style.display = "none";
+            break;
     }
 });
 
