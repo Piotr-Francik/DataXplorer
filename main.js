@@ -175,7 +175,7 @@ const waterCompositeShader = {
             float depth = getRadialDistance(vUv, tDepth);
 
             gl_FragColor = vec4(mix(underwaterColor.rgb / (1. - getNearPlanePosition(vUv).y / 5.), texture2D(tUnder, vUv).rgb, clamp(2. - exp(depth * .07), 0., 1.)), 1.);
-            gl_FragColor = vec4(mix(underwaterColor.rgb * exp(getNearPlanePosition(vUv).y / 10.), texture2D(tUnder, vUv).rgb, clamp(1. - pow(depth * 6.7, 20.), 0., 1.)), 1.);
+            gl_FragColor = vec4(mix(underwaterColor.rgb * exp(getNearPlanePosition(vUv).y / 10.), texture2D(tUnder, vUv).rgb, clamp(1. - pow(depth * 6.7, 15.), 0., 1.)), 1.);
         }
         
         
@@ -451,9 +451,6 @@ export function setScene(scene_index) {
 
     switch (scene) {
         case 0:
-            //sound.play();
-            //sound2.play();
-            console.log(test);
             if (test == 1) {
                 sea.play();
                 submerged.play();
@@ -466,6 +463,7 @@ export function setScene(scene_index) {
             sea.play();
             submerged.play();
             break;
+        case 7:
         case 2:
             xplorer.add(camera);
             break;
@@ -474,6 +472,7 @@ export function setScene(scene_index) {
             count = 1;
             break;
         case 4:
+            count = 0;
             break;
         case 5:
             count = 1;
@@ -496,7 +495,7 @@ export function setScene(scene_index) {
             sub_ctd.scale.z = 0.03;
             count = 20
             break;
-        case 7:
+        case 7.1:
             ctd.position.x = 2000;
             sub_ctd.position.x = 2000;
             overwater.add(rov);
@@ -523,7 +522,7 @@ export function setScene(scene_index) {
 
             speed = 0;
             break;
-        case 8:
+        case 8.1:
             submerged.stop();
             sound.stop();
             sound.play();
@@ -544,7 +543,7 @@ export function setScene(scene_index) {
             rotors.play();
             rotors.setVolume(0.1);
             break;
-        case 10:
+        case 9:
             count = 0;
             break;
         default:
@@ -593,7 +592,9 @@ function update() {
             camera.lookAt(xplorer.position.x, xplorer.position.y + 15, xplorer.position.z);
             break;
         // Talking
+        case 7:
         case 2:
+            setScene(7);
             camera.position.x = 0.3
             camera.position.y = 1.57
             camera.position.z = 2
@@ -624,6 +625,7 @@ function update() {
             break;
         // Lowering CTD
         case 4:
+            count += delta;
             camera.lookAt((arm.position.x + ctd.position.x) * 10, (+ ctd.position.y + arm.position.y) * 10 - 7, (arm.position.z + ctd.position.x) * 10);
 
             const descent = 0.2 * Math.min(10, 0.1 - ctd.position.y) * 3;
@@ -634,7 +636,7 @@ function update() {
             sub_ctd.position.y = ctd.position.y;
             sub_ctd.position.z = ctd.position.z;
 
-            ctd.position.y -= Math.min(delta * 0.3, delta * descent);
+            ctd.position.y -= Math.min(delta * 0.3, delta * descent) * Math.min(1, count);
             camera.position.y -= Math.min(delta * 3 * 0.5, 5 * delta * descent);
 
             if (ctd.position.y < -.4 && ctd.position.y + delta * descent > -.4) {
@@ -657,7 +659,6 @@ function update() {
             camera.position.y = camera.position.y - delta * 50;
             camera.position.x = 1000;
             sound2.setVolume(Math.max(0, sound2.getVolume() - delta / 10));
-            console.log(count);
             if (count < 0) {
                 setScene(6);
             }
@@ -666,15 +667,11 @@ function update() {
         case 6:
             count -= delta;
 
-            camera.position.x = 20 + Math.cos(count * 50) * 0.00;
-            camera.position.y = ctd.position.y + 2 + Math.sin(count * 50) * 0.00;
+            camera.position.x = 20;
+            camera.position.y = ctd.position.y + 2;
             camera.position.z = 5;
 
-            camera.lookAt(ctd.position.x + sawtooth(count) * 0.01, ctd.position.y + sawtooth(count) * 0.01, ctd.position.z);
-
             let i = Math.max(0, Math.min(0.03, -camera.position.y * 0.1));
-            //i = 0.05;
-
 
             camera.lookAt(
                 ctd.position.x + (Math.random() - 0.5) * i,
@@ -682,7 +679,6 @@ function update() {
                 ctd.position.z + (Math.random() - 0.5) * i
             );
 
-            //camera.lookAt(ctd.position.x, ctd.position.y , ctd.position.z);
             sub_ctd.position.x = ctd.position.x;
             sub_ctd.position.y = ctd.position.y;
             sub_ctd.position.z = ctd.position.z;
@@ -777,7 +773,7 @@ function update() {
 
             break;
         // Post Mission
-        case 7:
+        case 7.1:
             overwater.add(camera);
             overwater.add(rov);
             camera.lookAt(rov.position.x, rov.position.y + 3, rov.position.z);
@@ -807,7 +803,7 @@ function update() {
             count += delta * 0.5;
             camera.lookAt(helicopter.position.x * 10, helicopter.position.y * 10 - 4, helicopter.position.z * 10);
             helicopter.position.y = 1.67 + (Math.atan(count - 2) + Math.atan(2));
-            helicopter.rotation.y = 90 + (Math.atan(count - 2) + Math.atan(2));
+            helicopter.rotation.y = 90 + (Math.atan(count - 2) + Math.atan(2)) * Math.min(count, 1);
             helicopter.position.x -= count * .1 * delta;
             helicopter.getObjectByName('HLC_BladesTop').rotation.y += delta * 30;
             helicopter.getObjectByName('HLC_BladesBack').rotation.y += delta * 30;
