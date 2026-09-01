@@ -594,7 +594,6 @@ function update() {
         // Talking
         case 7:
         case 2:
-            setScene(7);
             camera.position.x = 0.3
             camera.position.y = 1.57
             camera.position.z = 2
