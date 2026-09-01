@@ -175,7 +175,7 @@ const waterCompositeShader = {
             float depth = getRadialDistance(vUv, tDepth);
 
             gl_FragColor = vec4(mix(underwaterColor.rgb / (1. - getNearPlanePosition(vUv).y / 5.), texture2D(tUnder, vUv).rgb, clamp(2. - exp(depth * .07), 0., 1.)), 1.);
-            gl_FragColor = vec4(mix(underwaterColor.rgb * exp(getNearPlanePosition(vUv).y / 10.), texture2D(tUnder, vUv).rgb, clamp(1. - pow(depth * 6.7, 15.), 0., 1.)), 1.);
+            gl_FragColor = vec4(mix(underwaterColor.rgb * exp(getNearPlanePosition(vUv).y / 10.), texture2D(tUnder, vUv).rgb, clamp(2. - pow(depth * 7., 1.), 0., 1.)), 1.);
         }
         
         
@@ -458,8 +458,6 @@ export function setScene(scene_index) {
             break;
         case 1:
             count = 0;
-
-
             sea.play();
             submerged.play();
             break;
@@ -480,8 +478,6 @@ export function setScene(scene_index) {
             sub_sun.intensity = 0;
             break;
         case 6:
-            //sub_light.intensity = 0;
-            //sub_sun.intensity = 0;
             overwater.add(ctd);
             underwater.add(sub_ctd);
             ctd.position.x = 20;
@@ -495,15 +491,7 @@ export function setScene(scene_index) {
             sub_ctd.scale.z = 0.03;
             count = 20
             break;
-        case 7.1:
-            ctd.position.x = 2000;
-            sub_ctd.position.x = 2000;
-            overwater.add(rov);
-            underwater.add(sub_ctd);
-            count = 0;
-            ctd.position.x = 2000;
-            break;
-        case 7.1:
+        case 8:
             overwater.add(rov);
             sound.setVolume(0);
             sound2.setVolume(0.3);
@@ -522,14 +510,7 @@ export function setScene(scene_index) {
 
             speed = 0;
             break;
-        case 8.1:
-            submerged.stop();
-            sound.stop();
-            sound.play();
-            rov.remove(camera);
-            overwater.add(camera);
-            break;
-        case 8:
+        case 9:
             xplorer.add(camera);
             camera.position.z = -2.5;
             camera.position.y = 1.8;
@@ -543,7 +524,7 @@ export function setScene(scene_index) {
             rotors.play();
             rotors.setVolume(0.1);
             break;
-        case 9:
+        case 10:
             count = 0;
             break;
         default:
@@ -704,29 +685,8 @@ function update() {
             spotLight.intensity = 0;
 
             break;
-        // ROV Orbit
-        case 5.1:
-            spotLight.intensity = 2;
-
-            rov.position.x = 20;
-            rov.position.y = -2;
-            rov.position.z = 0;
-            rov.scale.x = 0.01;
-            rov.scale.y = 0.01;
-            rov.scale.z = 0.01;
-
-            count += delta * 0.5;
-            camera.position.x = 20 + Math.cos(-count) * (5 + 30 / (1 + 2 * count));
-            camera.position.z = 0 + Math.sin(-count) * (5 + 30 / (1 + 2 * count));
-            camera.position.y = Math.cos(count) * 3 + 10 / (1 + 3 * count);
-            rov.rotation.y = Math.sin(r) * 0.05;
-            rov.rotation.x = Math.sin(r) * 0.05;
-            rov.rotation.z = Math.cos(r * 2) * 0.05;
-            camera.lookAt(20, 0, 0);
-
-            break;
         // ROV
-        case 6.1:
+        case 8:
             count += delta * 0.5;
 
             sound2.setVolume(Math.max(0, sound2.getVolume() - delta / 10));
@@ -771,26 +731,8 @@ function update() {
             sub_light.intensity = 1 * Math.exp(rov.position.y / 10);
 
             break;
-        // Post Mission
-        case 7.1:
-            overwater.add(camera);
-            overwater.add(rov);
-            camera.lookAt(rov.position.x, rov.position.y + 3, rov.position.z);
-            rov.position.x = 20;
-            rov.position.y = -2;
-            rov.position.z = -40;
-            rov.scale.x = 0.01;
-            rov.scale.y = 0.01;
-            rov.scale.z = 0.01;
-            rov.rotation.y = Math.sin(r) * 0.05;
-            rov.rotation.x = Math.sin(r) * 0.05;
-            rov.rotation.z = Math.cos(r * 2) * 0.05;
-            camera.position.x = 25;
-            camera.position.y = 2;
-            camera.position.z = -45;
-            break;
         // Conclusion
-        case 8:
+        case 9:
             sun.color = new THREE.Color(0xffbf72);
             count += delta * 0.5;
             camera.lookAt(helicopter.position.x * 10, helicopter.position.y * 10 - 4, helicopter.position.z * 10);
@@ -798,7 +740,7 @@ function update() {
             helicopter.getObjectByName('HLC_BladesBack').rotation.y += delta * 30;
             break;
         // Credits
-        case 9:
+        case 10:
             count += delta * 0.5;
             camera.lookAt(helicopter.position.x * 10, helicopter.position.y * 10 - 4, helicopter.position.z * 10);
             helicopter.position.y = 1.67 + (Math.atan(count - 2) + Math.atan(2));
