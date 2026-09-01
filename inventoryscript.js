@@ -24,9 +24,9 @@ document.querySelectorAll('.inventory-card').forEach(card => {
       popupImg.style.display = 'none';
     }
 
-    // Reset animation so it runs again on subsequent clicks
+    
     popupContent.classList.remove('pop-animation');
-    void popupContent.offsetWidth; // Force a reflow/repaint
+    void popupContent.offsetWidth;
     popupContent.classList.add('pop-animation');
 
     popup.style.display = 'flex';
