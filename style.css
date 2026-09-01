@@ -1,9 +1,15 @@
 body {
-    min-height: 100vh;
+    width: 100vw;
+    height: 100vh;
     margin: 0;
+    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+body > canvas {
+  display: block;
 }
 
 #bg-video {
@@ -134,8 +140,8 @@ body {
   height: auto;
   aspect-ratio: 220 / 277;
   position:absolute;
-  left:0px;
-  top: 0px;
+  left:90%;
+  top: 20px;
 
 }
 

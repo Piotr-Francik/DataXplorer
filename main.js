@@ -430,7 +430,7 @@ export function setScene(scene_index) {
         case 7:
             //document.querySelector(".chartContainer").style.backgroundColor = "";
             document.querySelector("canvas").style.display = "none";
-
+            document.querySelector("#bars").style.display = "none"
             rov.remove(camera);
             overwater.add(camera);
             break;

@@ -3,13 +3,20 @@ import { backgroundBlurriness } from "three/tsl"
 const canvas = document.getElementById("bars");
 const ctx = canvas.getContext("2d");
 export let currentDepth = 40;
-const meter = new Image()
-meter.src = './DataUI/meter_empty.png'
+const tempMeter = new Image()
+tempMeter.src = './DataUI/Meter_empty.png'
+const salMeter = new Image()
+salMeter.src = './DataUI/SalinityBar.png'
+
 export let CTD
-export var yMaximum 
-export var yMinimum
-var gradient
-var yIntercept
+export var tempMaximum 
+export var tempMinimum
+export var salinityMaximum
+export var salinityMinimum
+var tempGrad
+var tempIntercept
+var salGrad
+var salIntercept
 export var widths = [2,4]
 export var index = 0
 export const xValues = [] //depth coordinate
@@ -43,23 +50,25 @@ function parsing(){
 
 function pulse(){
   if (CTD){
+    console.log("Testing testing")
     const depth = CTD.data.datasets[2]
     depth.borderWidth = widths[index]
     index = (index+1)%2
+    console.log(index)
+    
     CTD.update()
   }
 }
 
 
-export function updateGraph(depth){
+export function updateGraph(pDepth){
   // var inputVal = document.getElementById('depth').value;
-  index = depth
 
   if (CTD){
     const depth = CTD.data.datasets[2]
     depth.data = [
-          {y: xValues[index], x: yMinimum},
-          {y: xValues[index], x: yMaximum}
+          {y: xValues[pDepth], x: tempMinimum},
+          {y: xValues[pDepth], x: tempMaximum}
         ]
   }
   CTD.update();
@@ -73,14 +82,20 @@ export function drawTherm(index){
   ctx.fillStyle = "red" 
   // console.log("height and width")
   // console.log(canvas.height,canvas.width)
+  const para = document.createElement("p");
+  const node = document.createTextNode("testing testing");
+  para.appendChild(node);
 
-  let currentTemp = gradient*temperature[Math.floor(index)] + yIntercept
-  console.log("temperature")
-  console.log(currentTemp)
+  let currentTemp = tempGrad*temperature[Math.floor(index)] + tempIntercept
+  let currentSalinity = salGrad*salinity[Math.floor(index)] + salIntercept
+
   ctx.fillRect(2,72-currentTemp,15,currentTemp)
-  ctx.drawImage(meter,0,0)
-  // meter.onload = function(){
-  //   ctx.drawImage(meter,0,0)
+  ctx.fillStyle = "#53FF1F"
+  ctx.fillRect(32,82.25-currentSalinity,15,currentSalinity)
+  ctx.drawImage(tempMeter,0,0)
+  ctx.drawImage(salMeter,30,0)
+  // tempMeterr.onload = function(){
+  //   ctx.drawImage(tempMeter,0,0)
   // }
 
   
@@ -114,11 +129,18 @@ export function startGraph(){
     }))
     
     //const currentDepth = currentDepth
-    yMinimum = Math.min(...temperature)
-    yMaximum = Math.max(...temperature)
-    console.log(yMaximum)
-    gradient = 100/(30)
-    yIntercept = -28
+    salinityMaximum = Math.max(...salinity)
+    salinityMinimum = Math.min(...salinity)
+    console.log(salinityMaximum)
+    console.log(salinityMinimum)
+    console.log("-------------------------")
+    salGrad = 50
+    salIntercept = -1742.75
+
+    tempMinimum = Math.min(...temperature)
+    tempMaximum = Math.max(...temperature)
+    tempGrad = 100/(30)
+    tempIntercept = -28
     CTD = new Chart("myChart", {
       // rotate:90,
       type: "line",
@@ -143,8 +165,8 @@ export function startGraph(){
 
           xAxisID: "x-temperature", //line to display depth
           data: [
-            {y: currentDepth, x: yMinimum},
-            {y: currentDepth, x: yMaximum}
+            {y: currentDepth, x: tempMinimum},
+            {y: currentDepth, x: tempMaximum}
           ],
           borderColor: "blue",
           borderWidth: 2,
