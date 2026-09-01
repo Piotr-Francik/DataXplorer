@@ -23,7 +23,7 @@ document.getElementById("scene-4-next-btn").onclick = function () {
 onSceneChange((scene_index) => {
     console.log(scene_index);
     scene = scene_index;
-    document.getElementById("start-btn").style.display = scene == 0 || scene == 5 || scene == 6 || scene == 7 || scene == 8 ? "block" : "none";
+    document.getElementById("start-btn").style.display = scene == 0 || scene == 1 || scene == 2 || scene == 5 || scene == 6 || scene == 7 || scene == 8 ? "block" : "none";
 
     const scene4Overlay = document.getElementById("scene-4-overlay");
     const canvasElement = document.querySelector("canvas");
@@ -37,7 +37,7 @@ onSceneChange((scene_index) => {
             console.log(document.getElementById("play-button").classList);
             document.getElementById("play-button").onclick = function () {
                 document.getElementById("loading-screen").style.display = "none";
-                setScene(0);
+                setScene(1);
             };
             break;
         case 5.5:

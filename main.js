@@ -13,7 +13,7 @@ import { mx_bilerp_1 } from 'three/src/nodes/materialx/lib/mx_noise.js';
 // ThreeJS Boilerplate
 const overwater = new THREE.Scene();
 const underwater = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
 var scene = -1;
 var count = 0;
@@ -25,7 +25,7 @@ window.addEventListener('keyup', (e) => keys[e.code] = false);
 
 var last = Date.now();
 
-const renderer = new THREE.WebGLRenderer();
+const renderer = new THREE.WebGLRenderer({ logarithmicDepthBuffer: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.append(renderer.domElement);
 
@@ -169,13 +169,13 @@ const waterCompositeShader = {
 
             float depth = getRadialDistance(vUv, tDepthAbove);
 
-            gl_FragColor = vec4(mix(textureGrad(skybox, skyUv, ddx, ddy).rgb, texture2D(tAbove, vUv).rgb, clamp(2. - exp((depth) * .0008), 0., 1.)), 1.);
+            gl_FragColor = vec4(mix(textureGrad(skybox, skyUv, ddx, ddy).rgb, texture2D(tAbove, vUv).rgb, clamp(2. - depth * 2.5, 0., 1.)), 1.);
         }
         else {
             float depth = getRadialDistance(vUv, tDepth);
 
             gl_FragColor = vec4(mix(underwaterColor.rgb / (1. - getNearPlanePosition(vUv).y / 5.), texture2D(tUnder, vUv).rgb, clamp(2. - exp(depth * .07), 0., 1.)), 1.);
-            gl_FragColor = vec4(mix(underwaterColor.rgb * exp(getNearPlanePosition(vUv).y / 10.), texture2D(tUnder, vUv).rgb, clamp(2. - exp(depth * .07), 0., 1.)), 1.);
+            gl_FragColor = vec4(mix(underwaterColor.rgb * exp(getNearPlanePosition(vUv).y / 10.), texture2D(tUnder, vUv).rgb, clamp(1. - pow(depth * 6.7, 20.), 0., 1.)), 1.);
         }
         
         
@@ -279,6 +279,37 @@ helicopter.position.x = 0;
 helicopter.position.y = 1.67;
 helicopter.position.z = -3.44;
 xplorer.add(helicopter);
+
+const gltf = await model_loader.loadAsync('/resources/models/Woman.glb');
+const person = gltf.scene;
+
+person.scale.x = 0.1;
+person.scale.y = 0.1;
+person.scale.z = 0.1;
+xplorer.add(person);
+
+const mixer = new THREE.AnimationMixer(person);
+
+const clip = gltf.animations[0];
+const action = mixer.clipAction(clip);
+action.play();
+
+person.traverse((child) => {
+  if (child.isMesh) {
+    const oldMat = child.material;
+
+    child.material = new THREE.MeshStandardMaterial({
+      map: oldMat.map,                 // diffuse/albedo texture
+      color: new THREE.Color(2,2,2),             // base color tint
+      transparent: oldMat.transparent,
+      opacity: oldMat.opacity,
+      alphaMap: oldMat.alphaMap,
+      skinning: child.isSkinnedMesh,   // IMPORTANT for your rigged model
+    });
+
+    oldMat.dispose(); // free the old material/GPU resources
+  }
+});
 
 //Spot light
 const color = 0xFFFFFF;
@@ -407,7 +438,7 @@ audioLoader.load('resources/sounds/helicopter.mp3', function (buffer) {
 audioLoader.load('resources/sounds/sea_sounds.mp3', function (buffer) {
     sea.setBuffer(buffer);
     sea.setLoop(true);
-    sea.setVolume(0);
+    sea.setVolume(1);
 });
 
 // Scene Control
@@ -420,22 +451,38 @@ export function setScene(scene_index) {
 
     switch (scene) {
         case 0:
-            sound.play();
-            sound2.play();
-            break;
-        case 1:
             //sound.play();
             //sound2.play();
-            submerged.play();
+            console.log(test);
+            if (test == 1) {
+                sea.play();
+                submerged.play();
+            }
+            break;
+        case 1:
+            count = 0;
+
+
             sea.play();
-            console.log("PLAY");
+            submerged.play();
+            break;
+        case 2:
+            xplorer.add(camera);
             break;
         case 3:
+            overwater.add(camera);
+            count = 1;
+            break;
+        case 4:
+            break;
+        case 5:
             count = 1;
             sub_light.intensity = 0;
             sub_sun.intensity = 0;
             break;
-        case 4:
+        case 6:
+            //sub_light.intensity = 0;
+            //sub_sun.intensity = 0;
             overwater.add(ctd);
             underwater.add(sub_ctd);
             ctd.position.x = 20;
@@ -449,7 +496,7 @@ export function setScene(scene_index) {
             sub_ctd.scale.z = 0.03;
             count = 20
             break;
-        case 5:
+        case 7:
             ctd.position.x = 2000;
             sub_ctd.position.x = 2000;
             overwater.add(rov);
@@ -457,7 +504,7 @@ export function setScene(scene_index) {
             count = 0;
             ctd.position.x = 2000;
             break;
-        case 6:
+        case 7.1:
             overwater.add(rov);
             sound.setVolume(0);
             sound2.setVolume(0.3);
@@ -476,7 +523,7 @@ export function setScene(scene_index) {
 
             speed = 0;
             break;
-        case 7:
+        case 8:
             submerged.stop();
             sound.stop();
             sound.play();
@@ -497,7 +544,7 @@ export function setScene(scene_index) {
             rotors.play();
             rotors.setVolume(0.1);
             break;
-        case 9:
+        case 10:
             count = 0;
             break;
         default:
@@ -521,20 +568,45 @@ function update() {
     const r = Date.now() * 0.001;
     const delta = Math.max(0, Math.min(0.5, r - last));
 
+    mixer.update(delta);
+
     const arm = xplorer.getObjectByName("CTD_Arm");
 
     switch (scene) {
         // Menu Cutscene
         case 0:
-            const s = 0.2
-            const d = 60 + Math.cos(r * s) * 10
+            const s = 0.2;
+            const d = 60 + Math.cos(r * s) * 10;
             camera.position.x = Math.sin(r * s) * d;
             camera.position.z = Math.cos(r * s) * d;
             camera.position.y = 20 + Math.cos(r * s) * 10;
             camera.lookAt(0, 10, 0);
             break;
-        // Opening Door
+        // Intro
         case 1:
+            count += delta;
+
+            camera.position.z = -50 + 50 / (count / 2 + 1);
+            camera.position.y = 25;
+            camera.position.x = 40 + 100 / (count / 2 + 1);
+
+            camera.lookAt(xplorer.position.x, xplorer.position.y + 15, xplorer.position.z);
+            break;
+        // Talking
+        case 2:
+            camera.position.x = 0.3
+            camera.position.y = 1.57
+            camera.position.z = 2
+            person.position.x = 0.3
+            person.position.y = 1.418
+            person.position.z = 2.1
+            person.rotation.y = Math.PI;
+            camera.rotation.x = 0;
+            camera.rotation.y = 2.8;
+            camera.rotation.z = 0;
+            break;
+        // Opening Door
+        case 3:
             const rot = xplorer.getObjectByName("CTD_Door").rotation.z;
             xplorer.getObjectByName("CTD_Door").rotation.z = rot + delta * Math.min(1, Math.PI / 2 - rot);
 
@@ -548,10 +620,10 @@ function update() {
             camera.lookAt((arm.position.x + ctd.position.x) * 10, (+ ctd.position.y + arm.position.y) * 10 - 7, (arm.position.z + ctd.position.x) * 10);
 
             if (x > 1.19)
-                setScene(2);
+                setScene(4);
             break;
         // Lowering CTD
-        case 2:
+        case 4:
             camera.lookAt((arm.position.x + ctd.position.x) * 10, (+ ctd.position.y + arm.position.y) * 10 - 7, (arm.position.z + ctd.position.x) * 10);
 
             const descent = 0.2 * Math.min(10, 0.1 - ctd.position.y) * 3;
@@ -576,30 +648,23 @@ function update() {
             }
 
             if (ctd.position.y < -2) {
-                setScene(3);
-                console.log("Test");
+                setScene(5);
             }
             break;
         // Fade to black
-        case 3:
+        case 5:
             count -= delta;
             camera.position.y = camera.position.y - delta * 50;
             camera.position.x = 1000;
             sound2.setVolume(Math.max(0, sound2.getVolume() - delta / 10));
-            //console.log(count);
+            console.log(count);
             if (count < 0) {
-                setScene(4);
-                console.log("Test2");
+                setScene(6);
             }
             break;
         // Raising CTD
-        case 4:
+        case 6:
             count -= delta;
-
-            camera.position.x = 20 + Math.sin(count * 10);
-            camera.position.y = 2 + Math.sin(count * 10);
-            camera.position.z = 5 + Math.cos(count * 10);
-            camera.lookAt(20, 0, 0);
 
             camera.position.x = 20 + Math.cos(count * 50) * 0.00;
             camera.position.y = ctd.position.y + 2 + Math.sin(count * 50) * 0.00;
@@ -609,7 +674,6 @@ function update() {
 
             let i = Math.max(0, Math.min(0.03, -camera.position.y * 0.1));
             //i = 0.05;
-            console.log(i);
 
 
             camera.lookAt(
@@ -626,7 +690,6 @@ function update() {
 
             if (camera.position.y >= -1.6 * 0 && camera.position.y - delta * 1.5 * 2 < -1.6 * 0) {
                 const splash = new THREE.Audio(listener);
-                console.log("splash")
                 audioLoader.load('resources/sounds/raise.mp3', function (buffer) {
                     splash.setBuffer(buffer);
                     splash.setLoop(false);
@@ -638,7 +701,7 @@ function update() {
             ctd.position.y += delta * 1.5 * (ctd.position.y > -1.6 ? 1 : 2);
 
             if (ctd.position.y > 5) {
-                setScene(5);
+                setScene(7);
             }
 
             sub_sun.intensity = 1.3 * Math.exp(ctd.position.y / 10);
@@ -647,7 +710,7 @@ function update() {
 
             break;
         // ROV Orbit
-        case 5:
+        case 5.1:
             spotLight.intensity = 2;
 
             rov.position.x = 20;
@@ -668,7 +731,7 @@ function update() {
 
             break;
         // ROV
-        case 6:
+        case 6.1:
             count += delta * 0.5;
 
             sound2.setVolume(Math.max(0, sound2.getVolume() - delta / 10));

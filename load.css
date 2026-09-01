@@ -35,7 +35,11 @@
 
 
 #play-button:hover {
-    background-color: rgba(255, 255, 255, 0.222);
+    background-color: rgba(255, 255, 255, 0);
+}
+
+#play-button.loaded:hover {
+    background-color: rgba(255, 255, 255, 0.222) !important;
 }
 
 #play-button.loaded {
