@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="load.css">
     <title>Data Xplorer</title>
 </head>
 
@@ -14,20 +15,54 @@
             margin: 0px;
         }
     </style>
-    <script type="module" src="main.js"></script>
     <script type="module" src="game.js"></script>
+    <script type="module" src="main.js"></script>
     <!--<button style="position: absolute;" id="debug_button">Next Scene</button>-->
 
 
-  <div class="ui-layer">
-    <button class="start-btn" id="start-btn">Click here to Proceed</button>
-</div>
+    <div class="ui-layer">
+        <button class="start-btn" id="start-btn">Click here to Proceed</button>
+    </div>
+
+    <link rel="stylesheet" href="loading-screen.css">
+
+    <div id="loading-screen">
+
+        <div class="logo-bar">
+            <img src="/public/resources/brand/OceanX.avif">
+            <div class="logo-divider"></div>
+            <img src="/public/resources/brand/UOB.webp">
+        </div>
+
+        <div
+            style="margin-bottom: 20px; display:flex; align-items:center; font-family:'Century Gothic','Avenir Next',Futura,'Segoe UI',sans-serif; font-weight:600; font-size:110px; line-height:1; color:#0a2540; letter-spacing:2px; user-select:none; -webkit-text-stroke: 2px #0a2540; text-shadow: 0 0 12px rgba(10,37,64,0.25);">
+
+            <span style="letter-spacing:1px;">DATA</span>
+
+            <span style="scale: 180% 150%;">&nbsp;&nbsp;X&nbsp;</span>
+
+            <span>PLORER</span>
+
+        </div>
+
+        <div class="preview-row">
+            <img src="public/resources/images/img-1.avif">
+            <img src="public/resources/images/img-3.png">
+            <img src="public/resources/images/img-4.jpeg">
+        </div>
+
+        <button id="play-button" class="loading">
+            <h1>LOADING</h1>
+        </button>
+
+    </div>
 
     <div id="scene-4-overlay" style="display: none;">
         <div class="overlay-content">
             <div class="text">You are now going down into the water column.</div>
             <div class="text">Use the CTD data to explore points of interest.</div>
-            <div class="text">Keep an eye out for changes in the conditions or any curious life forms you might see.</div>
+            <div class="text">Keep an eye out for changes in the conditions or any curious life forms you might see.
+            </div>
             <button id="scene-4-next-btn" class="start-btn">Continue</button>
         </div>
     </div>

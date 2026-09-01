@@ -1,0 +1,108 @@
+#loading-screen {
+    position: fixed;
+    background: radial-gradient(ellipse at top, rgba(120, 220, 210, 0.5) 0%, rgba(20, 110, 130, 0.75) 45%, rgba(6, 46, 66, 0.85) 100%), rgb(20, 130, 140);
+
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Courier New', monospace;
+    box-sizing: border-box;
+    transition: background-color 1.2s ease;
+}
+
+#loading-screen.faded {
+    background: rgba(20, 130, 140, 0.15);
+
+}
+
+#play-button {
+    border: none;
+    transition: background-color 0.2s ease;
+    color: white;
+    background: rgba(20, 130, 140, 0.15);
+    border-radius: 3ch;
+    padding-left: 100px;
+    padding-right: 100px;
+}
+
+#play-button.loading {
+    animation: pulse 1.8s infinite;
+}
+
+
+#play-button:hover {
+    background-color: rgba(255, 255, 255, 0);
+}
+
+#play-button.loaded:hover {
+    background-color: rgba(255, 255, 255, 0.222) !important;
+}
+
+#play-button.loaded {
+    color: white;
+    border: solid 3px;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+.logo-bar {
+    position: absolute;
+    top: 24px;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.logo-bar img {
+    height: 48px;
+}
+
+.logo-divider {
+    width: 1px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.title {
+    color: #f0fffb;
+    font-size: 3.2rem;
+    font-weight: 300;
+    letter-spacing: 4px;
+    margin: 0 0 32px 0;
+    text-shadow: 0 0 30px rgba(120, 240, 220, 0.6);
+}
+
+.preview-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    margin-bottom: 40px;
+}
+
+.preview-row img {
+    height: 340px;
+    width: 480px;
+    object-fit: cover;
+    border-radius: 24px;
+    box-shadow: 0 0 40px rgba(120, 240, 220, 0.25);
+}
