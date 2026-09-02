@@ -174,7 +174,7 @@ const waterCompositeShader = {
         else {
             float depth = getRadialDistance(vUv, tDepth);
 
-            gl_FragColor = vec4(mix(underwaterColor.rgb / (1. - getNearPlanePosition(vUv).y / 5.), texture2D(tUnder, vUv).rgb, clamp(2. - exp(depth * .07), 0., 1.)), 1.);
+            gl_FragColor = vec4(mix(underwaterColor.rgb / (1. - getNearPlanePosition(vUv).y / 5.), texture2D(tUnder, vUv).rgb, clamp(2. - exp(depth * .7), 0., 1.)), 1.);
             gl_FragColor = vec4(mix(underwaterColor.rgb * exp(getNearPlanePosition(vUv).y / 10.), texture2D(tUnder, vUv).rgb, clamp(2. - pow(depth * 7., 1.), 0., 1.)), 1.);
         }
         
@@ -295,20 +295,20 @@ const action = mixer.clipAction(clip);
 action.play();
 
 person.traverse((child) => {
-  if (child.isMesh) {
-    const oldMat = child.material;
+    if (child.isMesh) {
+        const oldMat = child.material;
 
-    child.material = new THREE.MeshStandardMaterial({
-      map: oldMat.map,                 // diffuse/albedo texture
-      color: new THREE.Color(2,2,2),             // base color tint
-      transparent: oldMat.transparent,
-      opacity: oldMat.opacity,
-      alphaMap: oldMat.alphaMap,
-      skinning: child.isSkinnedMesh,   // IMPORTANT for your rigged model
-    });
+        child.material = new THREE.MeshStandardMaterial({
+            map: oldMat.map,                 // diffuse/albedo texture
+            color: new THREE.Color(2, 2, 2),             // base color tint
+            transparent: oldMat.transparent,
+            opacity: oldMat.opacity,
+            alphaMap: oldMat.alphaMap,
+            skinning: child.isSkinnedMesh,   // IMPORTANT for your rigged model
+        });
 
-    oldMat.dispose(); // free the old material/GPU resources
-  }
+        oldMat.dispose(); // free the old material/GPU resources
+    }
 });
 
 //Spot light
@@ -688,6 +688,7 @@ function update() {
         // ROV
         case 8:
             count += delta * 0.5;
+            spotLight.intensity = 1;
 
             sound2.setVolume(Math.max(0, sound2.getVolume() - delta / 10));
             sound.setVolume(Math.max(0, sound.getVolume() - delta / 10));
@@ -717,15 +718,17 @@ function update() {
                 rov.position.y = -80;
             }
 
+            rov.position.y = -80;
+
             depth_listeners.forEach(fn => fn(rov.position.y));
 
-            if (keys["ArrowDown"]) {
+            /*if (keys["ArrowDown"]) {
                 speed -= delta;
             }
             if (keys["ArrowUp"]) {
                 speed += delta;
             }
-            speed = speed * (1 - delta);
+            speed = speed * (1 - delta);*/
 
             sub_sun.intensity = 1.3 * Math.exp(rov.position.y / 10);
             sub_light.intensity = 1 * Math.exp(rov.position.y / 10);
@@ -743,7 +746,7 @@ function update() {
         case 10:
             count += delta * 0.5;
             camera.lookAt(helicopter.position.x * 10, helicopter.position.y * 10 - 4, helicopter.position.z * 10);
-            helicopter.position.y = 1.67 + (Math.atan(count - 2) + Math.atan(2));
+            helicopter.position.y = 1.67 + (Math.atan(count - 2) + Math.atan(2)) * Math.min(count, 1);
             helicopter.rotation.y = 90 + (Math.atan(count - 2) + Math.atan(2)) * Math.min(count, 1);
             helicopter.position.x -= count * .1 * delta;
             helicopter.getObjectByName('HLC_BladesTop').rotation.y += delta * 30;

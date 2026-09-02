@@ -1,9 +1,10 @@
 body {
-    min-height: 100vh;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 }
 
 #bg-video {
@@ -12,8 +13,8 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover; 
-  z-index: 1; 
+  object-fit: cover;
+  z-index: 1;
 }
 
 
@@ -86,8 +87,15 @@ body {
 }
 
 @keyframes float {
-  0%, 100% { transform: translate(-50%, 0px) rotate(0deg); }
-  50% { transform: translate(-50%, -10px) rotate(1deg); }
+
+  0%,
+  100% {
+    transform: translate(-50%, 0px) rotate(0deg);
+  }
+
+  50% {
+    transform: translate(-50%, -10px) rotate(1deg);
+  }
 }
 
 .ui-layer {
@@ -134,11 +142,11 @@ body {
 }
 
 .text:nth-of-type(2) {
-  animation-delay: 4s; 
+  animation-delay: 4s;
 }
 
 .text:nth-of-type(3) {
-  animation-delay: 7s; 
+  animation-delay: 7s;
 }
 
 #scene-4-next-btn {
@@ -148,8 +156,17 @@ body {
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0; transform: scale(0.98); }
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0;
+    transform: scale(0.98);
+  }
 }
 
 @keyframes fadein {
@@ -157,6 +174,7 @@ body {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -166,11 +184,11 @@ body {
 /* inventory ------------------------------------------------------------------------------------------- */
 .inventory-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 24px;
-  
-  width: 90vw; 
-  min-height: 80vh; 
+
+  width: 90vw;
+  min-height: 80vh;
   margin: 0 auto;
   padding: 32px;
   box-sizing: border-box;
@@ -190,20 +208,20 @@ body {
 
 .inventory-card:hover {
   border-color: rgb(141, 255, 255);
-  transform: scale(1.02); 
+  transform: scale(1.02);
   cursor: pointer;
-  z-index: 10; 
+  z-index: 10;
   box-shadow: 0 0px 15px 0px rgba(42, 255, 251, 0.4);
 }
 
 .image-wrapper {
   width: 100%;
-  flex: 1;   
-  min-height: 150px; 
+  flex: 1;
+  min-height: 150px;
   border: 1px transparent;
   border-radius: 8px;
   margin-bottom: 12px;
-  display: flex; 
+  display: flex;
   justify-content: center;
   align-items: center;
 }
@@ -211,7 +229,7 @@ body {
 .image-wrapper img {
   width: 100%;
   height: 100%;
-  object-fit: cover;  
+  object-fit: cover;
 }
 
 .placeholder-icon {
@@ -245,7 +263,7 @@ body {
 
 .inventory-header-strip {
   width: 100%;
-  background: rgb(31, 75, 126); 
+  background: rgb(31, 75, 126);
   padding: 15px 0;
   margin-bottom: 24px;
   box-shadow: 0 4px 20px rgba(0, 63, 74, 0.671);
@@ -253,14 +271,12 @@ body {
   justify-content: center;
   align-items: center;
 
-  background: radial-gradient(
-    140% 120% at 50% -20%, 
-    #095c77 0%, 
-    #095c77 66%, 
-    #004a62 66.5%, 
-    #004a62 100%
-  );
-  
+  background: radial-gradient(140% 120% at 50% -20%,
+      #095c77 0%,
+      #095c77 66%,
+      #004a62 66.5%,
+      #004a62 100%);
+
 }
 
 .inventoryheader {
@@ -285,7 +301,7 @@ body {
 
 /* popup box ------------------------------------------------------------------------------------------ */
 .popup {
-  display: none;   
+  display: none;
   position: fixed;
   inset: 0;
   background: rgba(255, 255, 255, 0);
@@ -298,7 +314,7 @@ body {
 .popup-content {
   background: rgba(0, 40, 67, 0.341);
   color: white;
-  padding: 0; 
+  padding: 0;
   /* border: 1px solid #000; */
   max-width: 750px;
   border-radius: 8px;
@@ -355,7 +371,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  
+
   font-family: 'HP Simplified Light', sans-serif;
   font-weight: bold;
   font-size: 1.4rem;
@@ -405,10 +421,12 @@ body {
     transform: scale(0.6);
     opacity: 0;
   }
+
   70% {
     transform: scale(1.05);
     opacity: 1;
   }
+
   100% {
     transform: scale(1);
   }
@@ -416,4 +434,26 @@ body {
 
 .popup-content.pop-animation {
   animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+#proceed {
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+  font-size: large;
+  border-radius: 15px;
+  font-weight: 600;
+  padding: 10px 40px 10px 40px;
+  color: white;
+  border-style: solid;
+  border-width: 5px;
+  background-color: rgb(87, 215, 121);
+  border-color: green;
+  box-shadow: 0 0 12px rgba(6, 70, 3, 0.6);
+  
+    transition: all 0.3s ease;
+}
+
+#proceed:hover {
+  scale: 1.05;
 }
