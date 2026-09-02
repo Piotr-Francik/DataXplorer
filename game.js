@@ -18,6 +18,9 @@ document.getElementById("scene-4-next-btn").onclick = function () {
     setScene(6);
 };
 
+document.getElementById("inventory-preview").onclick = function () {
+    window.location.href = "inventory.html";
+};
 
 // Runs on every scene change
 onSceneChange((scene_index) => {

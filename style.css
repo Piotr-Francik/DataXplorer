@@ -428,12 +428,10 @@ body {
     object-fit: cover;
     border-radius: 24px;
     box-shadow: 0 0 40px rgba(120, 240, 220, 0.25);
-    /* Smooth transition for hover effects */
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
     cursor: pointer;
 }
 
-/* Hover state matching your inventory card style */
 .preview-row img:hover {
     transform: scale(1.03);
     box-shadow: 0 0 25px rgba(42, 255, 251, 0.6);
