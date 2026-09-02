@@ -26,6 +26,9 @@ document.getElementById("start-dialogue").onclick = function () {
     setScene(2);
 };
 
+document.getElementById("inventory-preview").onclick = function () {
+    window.location.href = "inventory.html";
+};
 
 // Runs on every scene change
 onSceneChange((scene_index) => {

@@ -522,7 +522,7 @@ export function setScene(scene_index) {
             overwater.background = evening;
             count = 0;
             rotors.play();
-            rotors.setVolume(0.1);
+            rotors.setVolume(1);
             break;
         case 10:
             count = 0;
