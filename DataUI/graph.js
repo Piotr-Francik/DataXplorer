@@ -1,23 +1,14 @@
 import { backgroundBlurriness } from "three/tsl"
 
-const canvas = document.getElementById("bars");
-const ctx = canvas.getContext("2d");
-let currentDepth = 40;
-const tempMeter = new Image()
-tempMeter.src = './DataUI/Meter_empty.png'
-const salMeter = new Image()
-salMeter.src = './DataUI/SalinityBar.png'
-
+console.log("before any variables")
 let CTD
 var tempMaximum 
 var tempMinimum
-var salinityMaximum
-var salinityMinimum
+
 var tempGrad
 var tempIntercept
 var salGrad
 var salIntercept
-var animationIndex = 0
 var widths = [2,4]
 var index = 0
 const xValues = [] //depth coordinate
@@ -27,6 +18,7 @@ var temperaturePoints
 var salinityPoints
 
 
+console.log("before any functions")
 function parsing(){
   return fetch("./DataUI/Dataset2.csv")
     .then(response => {
@@ -49,73 +41,74 @@ function parsing(){
   
 }
 
-function pulse(){
-  if (CTD){
-    console.log("Testing testing")
-    const depth = CTD.data.datasets[2]
-    depth.borderWidth = widths[index]
-    index = (index+1)%2
-    console.log(index)
+// function pulse(){
+//   if (CTD){
+//     console.log("Testing testing")
+//     const depth = CTD.data.datasets[2]
+//     depth.borderWidth = widths[index]
+//     index = (index+1)%2
+//     console.log(index)
     
-    CTD.update()
-  }
-}
+//     CTD.update()
+//   }
+// }
 
 
-function updateGraph(pDepth){
-  // var inputVal = document.getElementById('depth').value;
+// function updateGraph(pDepth){
+//   // var inputVal = document.getElementById('depth').value;
 
-  if (CTD){
-    const depth = CTD.data.datasets[2]
-    depth.data = [
-          {y: xValues[pDepth], x: tempMinimum},
-          {y: xValues[pDepth], x: tempMaximum}
-        ]
-  }
-  CTD.update();
+//   if (CTD){
+//     const depth = CTD.data.datasets[2]
+//     depth.data = [
+//           {y: xValues[pDepth], x: tempMinimum},
+//           {y: xValues[pDepth], x: tempMaximum}
+//         ]
+//   }
+//   CTD.update();
 
-}
+// }
 
-function drawTherm(index){
-  //console.log("started drawing the rectangle")
-  ctx.clearRect(0,0,canvas.width,canvas.height)
-  ctx.beginPath()
-  ctx.fillStyle = "red" 
-  // console.log("height and width")
-  // console.log(canvas.height,canvas.width)
-  const para = document.createElement("p");
-  const node = document.createTextNode("testing testing");
-  para.appendChild(node);
+// function drawTherm(index){
+//   //console.log("started drawing the rectangle")
+//   ctx.clearRect(0,0,canvas.width,canvas.height)
+//   ctx.beginPath()
+//   ctx.fillStyle = "red" 
+//   // console.log("height and width")
+//   // console.log(canvas.height,canvas.width)
+//   const para = document.createElement("p");
+//   const node = document.createTextNode("testing testing");
+//   para.appendChild(node);
 
-  let currentTemp = tempGrad*temperature[Math.floor(index)] + tempIntercept
-  let currentSalinity = salGrad*salinity[Math.floor(index)] + salIntercept
+//   let currentTemp = tempGrad*temperature[Math.floor(index)] + tempIntercept
+//   let currentSalinity = salGrad*salinity[Math.floor(index)] + salIntercept
 
-  ctx.fillRect(2,72-currentTemp,15,currentTemp)
-  ctx.fillStyle = "#53FF1F"
-  ctx.fillRect(32,82.25-currentSalinity,15,currentSalinity)
-  ctx.drawImage(tempMeter,0,0)
-  ctx.drawImage(salMeter,30,0)
-  // tempMeterr.onload = function(){
-  //   ctx.drawImage(tempMeter,0,0)
-  // }
+//   ctx.fillRect(2,72-currentTemp,15,currentTemp)
+//   ctx.fillStyle = "#53FF1F"
+//   ctx.fillRect(32,82.25-currentSalinity,15,currentSalinity)
+//   ctx.drawImage(tempMeter,0,0)
+//   ctx.drawImage(salMeter,30,0)
+//   // tempMeterr.onload = function(){
+//   //   ctx.drawImage(tempMeter,0,0)
+//   // }
 
   
-  ctx.stroke()
+//   ctx.stroke()
   
-}
+// }
 
-function animateGraph(){
-  if (CTD){
-    // console.log("testing")
-    // console.log(animationIndex)
-    // //CTD.data.datasets[0].data = temperaturePoints.slice(0,20+animationIndex)
-    // //CTD.data.datasets[1].data = salinityPoints.slice(0,20+animationIndex)
-    // animationIndex = animationIndex+1
-    // CTD.update()
-  }
-}
+// function animateGraph(){
+//   if (CTD){
+//     // console.log("testing")
+//     // console.log(animationIndex)
+//     // //CTD.data.datasets[0].data = temperaturePoints.slice(0,20+animationIndex)
+//     // //CTD.data.datasets[1].data = salinityPoints.slice(0,20+animationIndex)
+//     // animationIndex = animationIndex+1
+//     // CTD.update()
+//   }
+// }
 
 function startGraph(){
+  console.log("test")
   parsing().then(data => {
     console.log("test")
     for(let i = 0; i < data.length; i++){
@@ -246,5 +239,6 @@ function startGraph(){
   
 }
 
+console.log("testing testing testing")
 startGraph()
 //startGraph();
