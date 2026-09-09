@@ -52,8 +52,8 @@ function animateGraph(pName,index,length,pTemp,pSal){
     if (pName){
   
         var currentData = pName.data.datasets[0].data
-        pName.data.datasets[0].data = pTemp.slice(0,Math.min(length,currentData.length+2))
-        pName.data.datasets[1].data = pSal.slice(0,Math.min(length,currentData.length+2))
+        pName.data.datasets[0].data = pTemp.slice(Math.min(0,-(currentData.length+2)),pTemp.length)
+        pName.data.datasets[1].data = pSal.slice(Math.min(0,-(currentData.length+2)),pSal.length)
         index = index+8
         pName.update()
     }
@@ -78,14 +78,14 @@ function startGraph(offsetT,offsetS,name,yValues,temperature,salinity){
         labels: yValues,
         datasets: [{
             label: "temperature",
-            data: temperaturePoints.slice(0,index),
+            data: temperaturePoints.slice(-index,temperaturePoints.length),
             borderColor: "red",
             xAxisID: "x-temperature",
             fill: false,
             lineTension: 0
         },{
             label: "Salinity",
-            data: salinityPoints.slice(0,index),
+            data: salinityPoints.slice(-index,salinityPoints.length),
             xAxisID: "x-salinity",
             borderColor: "#53FF1F",
             fill: false,
