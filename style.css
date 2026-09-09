@@ -476,3 +476,70 @@ body {
 #proceed:hover {
   scale: 1.05;
 }
+
+/* CTD graphs ------------------------------------------------------------------------------------------ */
+
+
+.container {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  grid-template-rows: 300px 300px;
+  justify-content: center;
+  align-content: center;
+  gap: 16px;
+  padding: 10px;
+  z-index: 9;
+  /* background: rgba(0, 20, 30, 0.72); */
+  overflow: auto;
+}
+
+
+.container .chartContainer{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 2.5px solid transparent;
+  border-radius: 8px;
+  padding: 16px;
+  background: rgba(108, 255, 255, 0.312);
+  transition: border-color 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  aspect-ratio: 1 / 1;
+  z-index: 10;
+  width: 250px;
+  height: 220px;
+
+}
+canvas{
+  top: 0px;
+}
+
+.container .chartContainer:hover{
+  border-color: rgb(141, 255, 255);
+  transform: scale(1.02);
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 0px 15px 0px rgba(42, 255, 251, 0.4);
+
+}
+
+.chart2Container{
+  width: 250px;
+  height: 250px;
+  position:absolute;
+
+}
+
+.chartContainer.is-correct {
+  background: #0d3d2c;
+  border-color: var(--correct);
+  box-shadow: 0 0 0 2px #1dbb7540, 0 10px 24px #00000044;
+}
+
+.chartContainer.is-incorrect {
+  background: #4a2027;
+  border-color: var(--incorrect);
+  box-shadow: 0 0 0 2px #e0525240, 0 10px 24px #00000044;
+}

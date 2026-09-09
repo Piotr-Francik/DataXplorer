@@ -28,7 +28,7 @@ setupGraphButtons()
 
 async function parsing(){
   console.log("before running")
-  return fetch("./Data2.csv")
+  return fetch("./DataUI/Data2.csv")
     .then(response => {
       if (!response.ok) {
         throw new Error(`Could not load CSV: ${response.status} ${response.statusText}`);
@@ -48,7 +48,6 @@ async function parsing(){
     });
   
 }
-
 
 function startGraph(offsetT,offsetS,name,yValues,temperature,salinity){
     temperaturePoints = yValues.map((yValue, index) => ({
@@ -147,7 +146,7 @@ function startGraph(offsetT,offsetS,name,yValues,temperature,salinity){
     });
 }
 
-function main(data){
+function draw(data){
     const yValues = []
     const temperature = []
     const salinity = []
@@ -165,12 +164,15 @@ function main(data){
     startGraph(3,0.5,"myChart4",yValues,temperature,salinity)
     startGraph(-3,-0.8,"myChart5",yValues,temperature,salinity) //real Enallopsammia rostrata
     startGraph(-2,0.4,"myChart6",yValues,temperature,salinity)
-    startGraph(-3,-0.8,"myChart7",yValues,temperature,salinity) //real Enallopsammia rostrata
+    startGraph(-3,-0.8,"myChart7",yValues,temperature,salinity) 
     startGraph(-2,0.4,"myChart8",yValues,temperature,salinity)
 
 }
 
-parsing().then(data =>{
-    main(data)
-})
+export function main(){
+    parsing().then(data =>{
+        draw(data)
+    })
+}
 
+//main()
