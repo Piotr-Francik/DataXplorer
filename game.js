@@ -2,6 +2,43 @@ import { setScene, onSceneChange, getDepth } from './main.js';
 
 var scene = 0;
 
+var i = 0;
+var txt = 'Vessel:- Ocean Xplorer/Location:- Carpo Verde, 400 Miles of the African West Coast/Mission:- Studying life and coral reefs in the area---';
+var speed = 40;
+
+function typeWriter() {
+    if (i < txt.length) {
+        if (txt.charAt(i) == '/') {
+            document.getElementById("typed_text").innerHTML += "<br>";
+            setTimeout(typeWriter, speed * 5);
+        }
+        else if (txt.charAt(i) == '-') {
+            setTimeout(typeWriter, speed * 5);
+        }
+        else {
+            document.getElementById("typed_text").innerHTML += txt.charAt(i);
+            setTimeout(typeWriter, speed);
+        }
+        i++;
+    }
+    else {
+        document.getElementById("start-dialogue").style.display = "block";
+    }
+}
+
+function blackout(f) {
+    document.getElementById("blackout").classList.add("shade");
+    console.log("BLACKOUT!!!")
+    setTimeout(f, 250);
+    setTimeout(unblack, 500);
+}
+
+function unblack() {
+    document.getElementById("blackout").classList.remove("shade");
+}
+
+
+
 document.getElementById("start-btn").onclick = function () {
     if (scene === 5) {
         setScene(5.5);
@@ -23,7 +60,7 @@ document.getElementById("proceed").onclick = function () {
 };
 
 document.getElementById("start-dialogue").onclick = function () {
-    setScene(2);
+    blackout(() => setScene(2));
 };
 
 document.getElementById("inventory-preview").onclick = function () {
@@ -34,7 +71,7 @@ document.getElementById("inventory-preview").onclick = function () {
 onSceneChange((scene_index) => {
     console.log(scene_index);
     scene = scene_index;
-    document.getElementById("start-btn").style.display = scene == 0 || scene == 1 || scene == 8 || scene == 9 ? "block" : "none";
+    document.getElementById("start-btn").style.display = scene == 8 || scene == 9 ? "block" : "none";
 
     const scene4Overlay = document.getElementById("scene-4-overlay");
     const canvasElement = document.querySelector("canvas");
@@ -42,7 +79,11 @@ onSceneChange((scene_index) => {
     document.getElementById("inventory").style.display = "none";
     document.getElementById("dialogue").style.display = "none";
     document.getElementById("start-dialogue").style.display = "none";
-    document.getElementById("text").style.display = "none";
+    document.getElementById("typed_text").style.display = "none";
+
+    if (scene == 1) {
+        typeWriter();
+    }
 
     switch (scene) {
         case 0:
@@ -56,8 +97,7 @@ onSceneChange((scene_index) => {
             };
             break;
         case 1:
-            document.getElementById("start-dialogue").style.display = "block";
-            document.getElementById("text").style.display = "block";
+            document.getElementById("typed_text").style.display = "block";
             break;
         case 5.5:
             if (canvasElement) canvasElement.style.display = "none";

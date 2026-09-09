@@ -86,6 +86,16 @@ body {
   animation: float 3s ease-in-out infinite;
 }
 
+#start-dialogue {
+  animation: pulse 3s ease-in-out infinite;
+  transition: all 0.3s;
+}
+
+#start-dialogue:hover {
+  text-shadow: 0 0 10px #fff;
+  font-size: xx-large;
+}
+
 @keyframes float {
 
   0%,
@@ -188,8 +198,8 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 24px;
-  
-  width: 90vw; 
+
+  width: 90vw;
   /* min-height: 80vh;  */
   margin: 0 auto;
   padding: 32px;
@@ -219,8 +229,8 @@ body {
 
 .image-wrapper {
   width: 100%;
-  flex: 1;   
-  min-height: 0; 
+  flex: 1;
+  min-height: 0;
   border: 1px transparent;
   border-radius: 8px;
   margin-bottom: 12px;
@@ -441,18 +451,18 @@ body {
 }
 
 .preview-row img {
-    height: 340px;
-    width: 480px;
-    object-fit: cover;
-    border-radius: 24px;
-    box-shadow: 0 0 40px rgba(120, 240, 220, 0.25);
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-    cursor: pointer;
+  height: 340px;
+  width: 480px;
+  object-fit: cover;
+  border-radius: 24px;
+  box-shadow: 0 0 40px rgba(120, 240, 220, 0.25);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  cursor: pointer;
 }
 
 .preview-row img:hover {
-    transform: scale(1.03);
-    box-shadow: 0 0 25px rgba(42, 255, 251, 0.6);
+  transform: scale(1.03);
+  box-shadow: 0 0 25px rgba(42, 255, 251, 0.6);
 }
 
 #proceed {
@@ -469,10 +479,24 @@ body {
   background-color: rgb(87, 215, 121);
   border-color: green;
   box-shadow: 0 0 12px rgba(6, 70, 3, 0.6);
-  
-    transition: all 0.3s ease;
+
+  transition: all 0.3s ease;
 }
 
 #proceed:hover {
   scale: 1.05;
+}
+
+#blackout {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  z-index: 1000;
+  background-color: transparent;
+  pointer-events: none;
+  transition: 0.5s;
+}
+
+#blackout.shade {
+  background-color: black;
 }
