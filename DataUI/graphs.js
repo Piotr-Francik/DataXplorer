@@ -1,5 +1,4 @@
-var temperaturePoints
-var salinityPoints
+
 
 const correctGraphs = new Set(["1", "5"])
 
@@ -49,30 +48,44 @@ async function parsing(){
   
 }
 
+function animateGraph(pName,index,length,pTemp,pSal){
+    if (pName){
+  
+        var currentData = pName.data.datasets[0].data
+        pName.data.datasets[0].data = pTemp.slice(0,Math.min(length,currentData.length+2))
+        pName.data.datasets[1].data = pSal.slice(0,Math.min(length,currentData.length+2))
+        index = index+8
+        pName.update()
+    }
+    return index
+}
+
 function startGraph(offsetT,offsetS,name,yValues,temperature,salinity){
-    temperaturePoints = yValues.map((yValue, index) => ({
+    var index = 80
+    
+    var temperaturePoints = yValues.map((yValue, index) => ({
         x: temperature[index]+offsetT,
         y: yValue //coordinates for temp
     }))
-    salinityPoints = yValues.map((yValue, index) => ({
+    var salinityPoints = yValues.map((yValue, index) => ({
         x: salinity[index]+offsetS,
         y: yValue//coordinates for salinity
     }))
 
-    new Chart(name, {
+    var CTD = new Chart(name, {
     type: "line",
         data: {
         labels: yValues,
         datasets: [{
             label: "temperature",
-            data: temperaturePoints,
+            data: temperaturePoints.slice(0,index),
             borderColor: "red",
             xAxisID: "x-temperature",
             fill: false,
             lineTension: 0
         },{
             label: "Salinity",
-            data: salinityPoints,
+            data: salinityPoints.slice(0,index),
             xAxisID: "x-salinity",
             borderColor: "#53FF1F",
             fill: false,
@@ -141,9 +154,10 @@ function startGraph(offsetT,offsetS,name,yValues,temperature,salinity){
             hitRadius: 10,
             }
         }
-
         }
     });
+    index = setInterval(animateGraph, 10,CTD,index,temperaturePoints.length,temperaturePoints, salinityPoints)
+
 }
 
 function draw(data){
@@ -170,6 +184,7 @@ function draw(data){
 }
 
 export function main(){
+
     parsing().then(data =>{
         draw(data)
     })
