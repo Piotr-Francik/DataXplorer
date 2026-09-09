@@ -87,14 +87,29 @@ body {
 }
 
 #start-dialogue {
-  animation: pulse 3s ease-in-out infinite;
+  animation: partial_pulse 3s ease-in-out infinite;
   transition: all 0.3s;
 }
 
 #start-dialogue:hover {
   text-shadow: 0 0 10px #fff;
-  font-size: xx-large;
+  font-size: 35px !important;
 }
+
+@keyframes partial_pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.1;
+    transform: scale(0.98);
+  }
+}
+
 
 @keyframes float {
 
