@@ -1,5 +1,4 @@
-var temperaturePoints
-var salinityPoints
+
 
 const correctGraphs = new Set(["1", "5"])
 
@@ -28,7 +27,7 @@ setupGraphButtons()
 
 async function parsing(){
   console.log("before running")
-  return fetch("./Data2.csv")
+  return fetch("./DataUI/Data2.csv")
     .then(response => {
       if (!response.ok) {
         throw new Error(`Could not load CSV: ${response.status} ${response.statusText}`);
@@ -49,31 +48,44 @@ async function parsing(){
   
 }
 
+function animateGraph(pName,index,length,pTemp,pSal){
+    if (pName){
+  
+        var currentData = pName.data.datasets[0].data
+        pName.data.datasets[0].data = pTemp.slice(Math.min(0,-(currentData.length+2)),pTemp.length)
+        pName.data.datasets[1].data = pSal.slice(Math.min(0,-(currentData.length+2)),pSal.length)
+        index = index+8
+        pName.update()
+    }
+    return index
+}
 
 function startGraph(offsetT,offsetS,name,yValues,temperature,salinity){
-    temperaturePoints = yValues.map((yValue, index) => ({
+    var index = 80
+    
+    var temperaturePoints = yValues.map((yValue, index) => ({
         x: temperature[index]+offsetT,
         y: yValue //coordinates for temp
     }))
-    salinityPoints = yValues.map((yValue, index) => ({
+    var salinityPoints = yValues.map((yValue, index) => ({
         x: salinity[index]+offsetS,
         y: yValue//coordinates for salinity
     }))
 
-    new Chart(name, {
+    var CTD = new Chart(name, {
     type: "line",
         data: {
         labels: yValues,
         datasets: [{
             label: "temperature",
-            data: temperaturePoints,
+            data: temperaturePoints.slice(-index,temperaturePoints.length),
             borderColor: "red",
             xAxisID: "x-temperature",
             fill: false,
             lineTension: 0
         },{
             label: "Salinity",
-            data: salinityPoints,
+            data: salinityPoints.slice(-index,salinityPoints.length),
             xAxisID: "x-salinity",
             borderColor: "#53FF1F",
             fill: false,
@@ -142,12 +154,13 @@ function startGraph(offsetT,offsetS,name,yValues,temperature,salinity){
             hitRadius: 10,
             }
         }
-
         }
     });
+    index = setInterval(animateGraph, 10,CTD,index,temperaturePoints.length,temperaturePoints, salinityPoints)
+
 }
 
-function main(data){
+function draw(data){
     const yValues = []
     const temperature = []
     const salinity = []
@@ -165,12 +178,16 @@ function main(data){
     startGraph(3,0.5,"myChart4",yValues,temperature,salinity)
     startGraph(-3,-0.8,"myChart5",yValues,temperature,salinity) //real Enallopsammia rostrata
     startGraph(-2,0.4,"myChart6",yValues,temperature,salinity)
-    startGraph(-3,-0.8,"myChart7",yValues,temperature,salinity) //real Enallopsammia rostrata
+    startGraph(-3,-0.8,"myChart7",yValues,temperature,salinity) 
     startGraph(-2,0.4,"myChart8",yValues,temperature,salinity)
 
 }
 
-parsing().then(data =>{
-    main(data)
-})
+export function main(){
 
+    parsing().then(data =>{
+        draw(data)
+    })
+}
+
+//main()

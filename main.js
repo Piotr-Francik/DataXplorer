@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-
+import * as graphs from './DataUI/graphs.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { Water } from 'three/addons/objects/Water.js';
@@ -462,12 +462,15 @@ export function setScene(scene_index) {
             submerged.play();
             break;
         case 7:
+            document.querySelector(".container").style.display = "none";
+
         case 2:
             xplorer.add(camera);
             break;
         case 3:
             overwater.add(camera);
             count = 1;
+
             break;
         case 4:
             count = 0;
@@ -476,6 +479,7 @@ export function setScene(scene_index) {
             count = 1;
             sub_light.intensity = 0;
             sub_sun.intensity = 0;
+
             break;
         case 6:
             overwater.add(ctd);
@@ -490,6 +494,10 @@ export function setScene(scene_index) {
             sub_ctd.scale.y = 0.03;
             sub_ctd.scale.z = 0.03;
             count = 20
+            console.log("displaying stuff")
+            document.querySelector(".container").style.display = "grid";
+            graphs.main()
+
             break;
         case 8:
             overwater.add(rov);

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="load.css">
+
     <title>Data Xplorer</title>
 </head>
 
@@ -15,6 +16,7 @@
             margin: 0px;
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script type="module" src="game.js"></script>
     <script type="module" src="main.js"></script>
     <!--<button style="position: absolute;" id="debug_button">Next Scene</button>-->
@@ -22,7 +24,10 @@
 
     <div class="ui-layer">
         <button class="start-btn" id="start-btn">Click here to Proceed</button>
+        
     </div>
+
+
 
     <link rel="stylesheet" href="loading-screen.css">
 
@@ -84,6 +89,34 @@
 
     <button id="start-dialogue" style="display: none; position: absolute; bottom: 10px; right: 10px;color: white; font-weight: 600; z-index: 100; font-size: xx-large;
     font-family: 'Courier New', Courier, 'Lucida Console', Monaco, monospace; background:none; border: none;">Click to Proceed</button>
+    
+    <div class="container" aria-label="Choose the correct graphs" style = "display: none">
+        <div class="chartContainer" data-graph="1" role="button" tabindex="0" aria-label="Graph 1">
+            <canvas id="myChart"></canvas>
+        </div>
+        <div class="chartContainer" data-graph="2" role="button" tabindex="0" aria-label="Graph 2">
+            <canvas id="myChart2"></canvas>
+        </div>
+        <div class="chartContainer" data-graph="3" role="button" tabindex="0" aria-label="Graph 3">
+            <canvas id="myChart3"></canvas>
+        </div>
+        <div class="chartContainer" data-graph="4" role="button" tabindex="0" aria-label="Graph 4">
+            <canvas id="myChart4"></canvas>
+        </div>
+        <div class="chartContainer" data-graph="5" role="button" tabindex="0" aria-label="Graph 5">
+            <canvas id="myChart5"></canvas>
+        </div>
+        <div class="chartContainer" data-graph="6" role="button" tabindex="0" aria-label="Graph 5">
+            <canvas id="myChart6"></canvas>
+        </div>
+            <div class="chartContainer" data-graph="7" role="button" tabindex="0" aria-label="Graph 5">
+            <canvas id="myChart7"></canvas>
+        </div>
+        <div class="chartContainer" data-graph="8" role="button" tabindex="0" aria-label="Graph 5">
+            <canvas id="myChart8"></canvas>
+        </div>
+    </div>
+    
 
     <div id="blackout"></div>
 
