@@ -465,7 +465,6 @@ export function setScene(scene_index) {
             document.querySelector(".container").style.display = "none";
 
         case 2:
-            setScene(7);
             xplorer.add(camera);
             break;
         case 3:
