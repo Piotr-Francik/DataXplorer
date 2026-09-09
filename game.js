@@ -67,16 +67,30 @@ document.getElementById("inventory-preview").onclick = function () {
     window.location.href = "inventory.html";
 };
 
+document.getElementById("inventory-btn").onclick = function () {
+    window.location.href = "inventory.html";
+};
+
 // Runs on every scene change
 onSceneChange((scene_index) => {
     console.log(scene_index);
     scene = scene_index;
     document.getElementById("start-btn").style.display = scene == 8 || scene == 9 ? "block" : "none";
 
+    const inventoryBtn = document.getElementById("inventory-btn");
+    if (inventoryBtn) {
+        inventoryBtn.onclick = function () {
+            window.location.href = "inventory.html";
+        };
+    }
+    document.getElementById("dialogue").style.display = "none";
+    document.getElementById("start-dialogue").style.display = "none";
+    document.getElementById("typed_text").style.display = "none";
+
     const scene4Overlay = document.getElementById("scene-4-overlay");
     const canvasElement = document.querySelector("canvas");
 
-    document.getElementById("inventory").style.display = "none";
+    // document.getElementById("inventory").style.display = "none";
     document.getElementById("dialogue").style.display = "none";
     document.getElementById("start-dialogue").style.display = "none";
     document.getElementById("typed_text").style.display = "none";
@@ -109,7 +123,7 @@ onSceneChange((scene_index) => {
             scene4Overlay.style.display = "none";
             break;
         case 8:
-            document.getElementById("inventory").style.display = "block";
+            document.getElementById("inventory-btn").style.display = "block";
             break;
         case 2:
         case 7:
