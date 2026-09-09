@@ -175,7 +175,7 @@ const waterCompositeShader = {
             float depth = getRadialDistance(vUv, tDepth);
 
             gl_FragColor = vec4(mix(underwaterColor.rgb / (1. - getNearPlanePosition(vUv).y / 5.), texture2D(tUnder, vUv).rgb, clamp(2. - exp(depth * .7), 0., 1.)), 1.);
-            gl_FragColor = vec4(mix(underwaterColor.rgb * exp(getNearPlanePosition(vUv).y / 10.), texture2D(tUnder, vUv).rgb, clamp(2. - pow(depth * 7., 1.), 0., 1.)), 1.);
+            gl_FragColor = vec4(mix(underwaterColor.rgb * exp(getNearPlanePosition(vUv).y / 10.), texture2D(tUnder, vUv).rgb, clamp(2. - pow(depth * 13., 1.), 0., 1.)), 1.);
         }
         
         
@@ -465,6 +465,7 @@ export function setScene(scene_index) {
             document.querySelector(".container").style.display = "none";
 
         case 2:
+            setScene(7);
             xplorer.add(camera);
             break;
         case 3:
@@ -500,6 +501,7 @@ export function setScene(scene_index) {
 
             break;
         case 8:
+            document.querySelector(".container").style.display = "none";
             overwater.add(rov);
             sound.setVolume(0);
             sound2.setVolume(0.3);
@@ -685,7 +687,8 @@ function update() {
             ctd.position.y += delta * 1.5 * (ctd.position.y > -1.6 ? 1 : 2);
 
             if (ctd.position.y > 5) {
-                setScene(7);
+                //setScene(7);
+                ctd.position.y = 5;
             }
 
             sub_sun.intensity = 1.3 * Math.exp(ctd.position.y / 10);
@@ -726,7 +729,7 @@ function update() {
                 rov.position.y = -80;
             }
 
-            rov.position.y = -80;
+            rov.position.y = -80 + 20 / count;
 
             depth_listeners.forEach(fn => fn(rov.position.y));
 

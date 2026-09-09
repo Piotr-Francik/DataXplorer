@@ -475,10 +475,10 @@ body {
   cursor: pointer;
 }
 
-.preview-row img:hover {
+/*.preview-row img:hover {
   transform: scale(1.03);
   box-shadow: 0 0 25px rgba(42, 255, 251, 0.6);
-}
+}*/
 
 #proceed {
   position: absolute;

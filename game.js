@@ -3,7 +3,7 @@ import { setScene, onSceneChange, getDepth } from './main.js';
 var scene = 0;
 
 var i = 0;
-var txt = 'Vessel:- Ocean Xplorer/Location:- Carpo Verde, 400 Miles of the African West Coast/Mission:- Studying life and coral reefs in the area---';
+var txt = 'Vessel:- OceanXplorer/Location:- Cape Verde, 400 Miles of the African West Coast/Mission:- Studying life and coral reefs in the area---';
 var speed = 40;
 
 function typeWriter() {
@@ -28,7 +28,6 @@ function typeWriter() {
 
 function blackout(f) {
     document.getElementById("blackout").classList.add("shade");
-    console.log("BLACKOUT!!!")
     setTimeout(f, 250);
     setTimeout(unblack, 500);
 }
@@ -63,9 +62,9 @@ document.getElementById("start-dialogue").onclick = function () {
     blackout(() => setScene(2));
 };
 
-document.getElementById("inventory-preview").onclick = function () {
+/*document.getElementById("inventory-preview").onclick = function () {
     window.location.href = "inventory.html";
-};
+};*/
 
 document.getElementById("inventory-btn").onclick = function () {
     window.location.href = "inventory.html";
