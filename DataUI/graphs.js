@@ -1,6 +1,29 @@
 var temperaturePoints
 var salinityPoints
 
+const correctGraphs = new Set(["1", "5"])
+
+function setupGraphButtons(){
+    document.querySelectorAll(".chartContainer").forEach(container => {
+        const selectGraph = () => {
+            const isCorrect = correctGraphs.has(container.dataset.graph)
+            container.classList.toggle("is-correct", isCorrect)
+            container.classList.toggle("is-incorrect", !isCorrect)
+            container.setAttribute("aria-pressed", "true")
+        }
+
+        container.addEventListener("click", selectGraph)
+        container.addEventListener("keydown", event => {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault()
+                selectGraph()
+            }
+        })
+    })
+}
+
+setupGraphButtons()
+
 
 
 async function parsing(){
@@ -64,7 +87,6 @@ function startGraph(offsetT,offsetS,name,yValues,temperature,salinity){
         maintainAspectRatio: false,
         legend: {
             display: false,
-            //color:"black",
             
             labels: {
             fontColor:"black",
@@ -137,11 +159,14 @@ function main(data){
             salinity.push(Number(data[i][2].replace(/\r/,"")))
     }
 
-    startGraph(0,0,"myChart",yValues,temperature,salinity)
+    startGraph(0,0,"myChart",yValues,temperature,salinity) //real Lophelia pertusa
     startGraph(3,0,"myChart2",yValues,temperature,salinity)
     startGraph(0,0.5,"myChart3",yValues,temperature,salinity)
     startGraph(3,0.5,"myChart4",yValues,temperature,salinity)
-    startGraph(-3,-0.8,"myChart5",yValues,temperature,salinity)
+    startGraph(-3,-0.8,"myChart5",yValues,temperature,salinity) //real Enallopsammia rostrata
+    startGraph(-2,0.4,"myChart6",yValues,temperature,salinity)
+    startGraph(-3,-0.8,"myChart7",yValues,temperature,salinity) //real Enallopsammia rostrata
+    startGraph(-2,0.4,"myChart8",yValues,temperature,salinity)
 
 }
 
