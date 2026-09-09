@@ -35,7 +35,6 @@ function setupGraphButtons() {
 setupGraphButtons()
 
 
-
 async function parsing() {
     console.log("before running")
     return fetch("./DataUI/Data2.csv")
@@ -59,16 +58,14 @@ async function parsing() {
 
 }
 
-function animateGraph(pName, index, length, pTemp, pSal) {
+function animateGraph(pName, length,pTemp,pSal) {
     if (pName) {
-
+        
         var currentData = pName.data.datasets[0].data
-        pName.data.datasets[0].data = pTemp.slice(Math.min(0, -(currentData.length + 2)), pTemp.length)
-        pName.data.datasets[1].data = pSal.slice(Math.min(0, -(currentData.length + 2)), pSal.length)
-        index = index + 8
+        pName.data.datasets[0].data = pTemp.slice(Math.min(0, -(currentData.length + 6)), length)
+        pName.data.datasets[1].data = pSal.slice(Math.min(0, -(currentData.length + 6)), length)
         pName.update()
     }
-    return index
 }
 
 function startGraph(offsetT, offsetS, name, yValues, temperature, salinity) {
@@ -167,7 +164,7 @@ function startGraph(offsetT, offsetS, name, yValues, temperature, salinity) {
             }
         }
     });
-    index = setInterval(animateGraph, 10, CTD, index, temperaturePoints.length, temperaturePoints, salinityPoints)
+    index = setInterval(animateGraph, 100, CTD, temperaturePoints.length,temperaturePoints,salinityPoints)
 
 }
 
