@@ -10,7 +10,7 @@ function unblack() {
     document.getElementById("blackout").classList.remove("shade");
 }
 
-const correctGraphs = new Set(["1", "5"])
+const correctGraphs = new Set(["1", "4","5","7"])
 
 function setupGraphButtons() {
     document.querySelectorAll(".chartContainer").forEach(container => {
@@ -183,14 +183,14 @@ function draw(data) {
         salinity.push(Number(data[i][2].replace(/\r/, "")))
     }
 
-    startGraph(0, 0, "myChart", yValues, temperature, salinity) //real Lophelia pertusa
-    startGraph(3, 0, "myChart2", yValues, temperature, salinity)
-    startGraph(0, 0.5, "myChart3", yValues, temperature, salinity)
-    startGraph(3, 0.5, "myChart4", yValues, temperature, salinity)
-    startGraph(-3, -0.8, "myChart5", yValues, temperature, salinity) //real Enallopsammia rostrata
-    startGraph(-2, 0.4, "myChart6", yValues, temperature, salinity)
-    startGraph(-3, -0.8, "myChart7", yValues, temperature, salinity)
-    startGraph(-2, 0.4, "myChart8", yValues, temperature, salinity)
+    startGraph(0,0,"myChart",yValues,temperature,salinity) //real Lophelia pertusa Original Data
+    startGraph(3,0,"myChart2",yValues,temperature,salinity)
+    startGraph(0,0.5,"myChart3",yValues,temperature,salinity) //plausible dud
+    startGraph(-1,0.2,"myChart4",yValues,temperature,salinity) //real Lophelia pertusa 
+    startGraph(-3,-0.8,"myChart5",yValues,temperature,salinity) //real Enallopsammia rostrata
+    startGraph(-2,0.4,"myChart6",yValues,temperature,salinity) //plausible dud
+    startGraph(-5,-0.9,"myChart7",yValues,temperature,salinity) //real Enallopsammia rostrata
+    startGraph(-2,0.4,"myChart8",yValues,temperature,salinity)
 
 }
 
