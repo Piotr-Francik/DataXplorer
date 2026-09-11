@@ -480,6 +480,27 @@ body {
   box-shadow: 0 0 25px rgba(42, 255, 251, 0.6);
 }*/
 
+#recover {
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  font-size: xx-large;
+  background: none;
+  border: none;
+  transition: all 0.1s;
+  color: white;
+  outline-color: white;
+  outline: solid;
+  outline-width: 0px;
+  display: none;
+}
+
+#recover:hover {
+  outline-width: 3px;
+}
+
 #proceed {
   position: absolute;
   right: 15px;
@@ -581,4 +602,24 @@ canvas{
 
 #blackout.shade {
   background-color: black;
+}
+
+#show{
+  z-index: 150;
+  font-size: xx-large;
+  font-family: 'HP Simplified Light' !important;
+  font-weight: bold;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  text-align: center;
+  transition: all 8s;
+}
+
+#show:hover {
+  transform: translate(0%, 0%);
+  left: 10px;
+  top: 0%;
 }

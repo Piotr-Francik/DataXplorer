@@ -6,6 +6,8 @@ var i = 0;
 var txt = 'Vessel:- OceanXplorer/Location:- Cape Verde, 400 Miles of the African West Coast/Mission:- Studying life and coral reefs in the area---';
 var speed = 40;
 
+var unlocked = [false, false, false, false, false, false, false, false];
+
 function typeWriter() {
     if (i < txt.length) {
         if (txt.charAt(i) == '/') {
@@ -46,6 +48,9 @@ document.getElementById("start-btn").onclick = function () {
     }
 };
 
+document.getElementById("recover").onclick = function () {
+    setScene(9);
+};
 
 
 
@@ -74,7 +79,7 @@ document.getElementById("inventory-btn").onclick = function () {
 onSceneChange((scene_index) => {
     console.log(scene_index);
     scene = scene_index;
-    document.getElementById("start-btn").style.display = scene == 8 || scene == 9 ? "block" : "none";
+    document.getElementById("start-btn").style.display = scene == 9 ? "block" : "none";
 
     const inventoryBtn = document.getElementById("inventory-btn");
     if (inventoryBtn) {
@@ -93,6 +98,7 @@ onSceneChange((scene_index) => {
     document.getElementById("dialogue").style.display = "none";
     document.getElementById("start-dialogue").style.display = "none";
     document.getElementById("typed_text").style.display = "none";
+    document.getElementById("recover").style.display = "none";
 
     if (scene == 1) {
         typeWriter();
@@ -123,6 +129,7 @@ onSceneChange((scene_index) => {
             break;
         case 8:
             document.getElementById("inventory-btn").style.display = "block";
+            document.getElementById("recover").style.display = "block";
             break;
         case 2:
         case 7:

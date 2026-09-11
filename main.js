@@ -465,6 +465,7 @@ export function setScene(scene_index) {
             document.querySelector(".container").style.display = "none";
 
         case 2:
+            //setScene(8);
             xplorer.add(camera);
             break;
         case 3:
@@ -728,7 +729,7 @@ function update() {
                 rov.position.y = -80;
             }
 
-            rov.position.y = -80 + 20 / count;
+            rov.position.y = -80 + 20 / (count * 10 + 1);
 
             depth_listeners.forEach(fn => fn(rov.position.y));
 
