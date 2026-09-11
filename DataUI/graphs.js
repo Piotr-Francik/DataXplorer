@@ -58,15 +58,6 @@ async function parsing() {
 
 }
 
-function animateGraph(pName, length,pTemp,pSal) {
-    if (pName) {
-        
-        var currentData = pName.data.datasets[0].data
-        pName.data.datasets[0].data = pTemp.slice(Math.min(0, -(currentData.length + 6)), length)
-        pName.data.datasets[1].data = pSal.slice(Math.min(0, -(currentData.length + 6)), length)
-        pName.update()
-    }
-}
 
 function startGraph(offsetT, offsetS, name, yValues, temperature, salinity) {
     var index = 80
@@ -79,6 +70,7 @@ function startGraph(offsetT, offsetS, name, yValues, temperature, salinity) {
         x: salinity[index] + offsetS,
         y: yValue//coordinates for salinity
     }))
+    const length = temperaturePoints.length
 
     var CTD = new Chart(name, {
         type: "line",
@@ -164,8 +156,17 @@ function startGraph(offsetT, offsetS, name, yValues, temperature, salinity) {
             }
         }
     });
-    index = setInterval(animateGraph, 100, CTD, temperaturePoints.length,temperaturePoints,salinityPoints)
-
+    const interval = setInterval(function(){
+        if (CTD) {
+            var currentData = CTD.data.datasets[0].data
+            CTD.data.datasets[0].data = temperaturePoints.slice(Math.min(0, -(currentData.length + 10)), length)
+            CTD.data.datasets[1].data = salinityPoints.slice(Math.min(0, -(currentData.length + 10)), length)
+            CTD.update()
+        if (currentData.length >= length){
+            clearInterval(interval)
+        }
+    }
+    },200)
 }
 
 function draw(data) {
