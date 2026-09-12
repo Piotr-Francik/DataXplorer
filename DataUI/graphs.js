@@ -37,7 +37,6 @@ setupGraphButtons()
 
 
 async function parsing() {
-    console.log("before running")
     return fetch("./DataUI/Data2.csv")
         .then(response => {
             if (!response.ok) {

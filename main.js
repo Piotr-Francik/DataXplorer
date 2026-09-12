@@ -496,6 +496,8 @@ export function setScene(scene_index) {
             graphs.main()
 
             break;
+        case 7:
+            break;
         case 8:
             document.querySelector(".container").style.display = "none";
             overwater.add(rov);

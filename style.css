@@ -89,6 +89,7 @@ body {
 #start-dialogue {
   animation: partial_pulse 3s ease-in-out infinite;
   transition: all 0.3s;
+  cursor: pointer;
 }
 
 #start-dialogue:hover {
@@ -465,14 +466,20 @@ body {
   animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
+.preview-row {
+  width: 90vw !important;
+  max-width: 1600px;
+  height: 20vw !important;
+  max-height: 356px;
+}
+
 .preview-row img {
-  height: 340px;
-  width: 480px;
+  width: 30% !important;
+  height: 100% !important;
   object-fit: cover;
   border-radius: 24px;
   box-shadow: 0 0 40px rgba(120, 240, 220, 0.25);
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-  cursor: pointer;
 }
 
 /*.preview-row img:hover {
@@ -617,6 +624,11 @@ canvas{
   text-align: center;
   transition: all 1s;
   display: none;
+  opacity: 0;
+}
+
+#show.show {
+  opacity: 1;
 }
 
 #show.game {
@@ -630,4 +642,9 @@ canvas{
   text-align: left !important;
   vertical-align: middle;
   font-family: 'Courier New', Courier, monospace;
+  overflow: auto;
+  height: 100% !important;
+}
+
+#dialogue {
 }

@@ -21,7 +21,7 @@ var dialogue = [
     `If the presence of fauna seems probable, we will send down the <font color="yellow">Remote Operated Vehichle</font> to inspect it visually. 
     This is where you come in.
     <br><br>
-    You will be presented with the data from 8 sites, and it is up to you to decide whether or not we will deploy the ROV`,
+    You will be presented with 8 possible sites, and using the data collected, you will decide where we deploy the ROV.`,
 
     `Our focus today is on 2 types of coral: <font color="yellow">Enallopsammia Rostrata</font> and <font color="yellow">
     Lophelia Pertusa</font>. <br><br>
@@ -33,11 +33,29 @@ var dialogue = [
 
     `We are also looking for 6 additional fauna - can you find them all?
     <br><br>
-    Don't feel disheartened if a site looks promising, but has nothing in it. Deep sea exploration is a stab in the dark - if we 
-    knew what to expect, there'd be no reason to go down!`,
-    
-    `Ok, when you're ready, deploy the CTD rosette!`
+    As you discover new species, they will appear in your inventory - open it up to find out more about each one!
+    <br><br>
+    Also, if a site looked promising but nothing was there, don't feel disheartened - deep sea exploration is a stab in the dark.
+    If we knew what was down there, there'd be no reason to go!`,
 
+    `Ok, when you're ready, deploy the rosette!`
+
+];
+
+var site_dialogue = [
+    `Lophelia Pertusa - nice find!`,
+    `Nice try, but unfortunately that site was empty. The data did show signs of coral, we were just unlucky.`,
+    ``,
+    `Lophelia Pertusa - nice find!`,
+    `Enallopsammia Rostrata - nice find!`,
+    `Nice try, but unfortunately that site was empty. The data did show signs of coral, we were just unlucky.`,
+    `Enallopsammia Rostrata - nice find!`,
+    `Nice try, but unfortunately that site was empty. The data did show signs of coral, we were just unlucky.`,
+    `Congratulations, you have found all 8 species of fauna we were searching for today! You should be very proud of yourself!
+    <br><br>
+    That concludes your voyage for today. I hope you enjoyed your adventure.
+    <br><br>
+    I do have one more suprise for you - a great data explorer such as yourself deserves to disembark in style...`
 ];
 
 var speed = 20;
@@ -112,7 +130,26 @@ document.getElementById("scene-4-next-btn").onclick = function () {
 };
 
 document.getElementById("proceed").onclick = function () {
-    setScene(scene + 0.1);
+    console.log(scene);
+    if (scene > 6) {
+        if (Math.round(scene * 10) == 79) {
+            setScene(9);
+        }
+        else {
+            if (fauna_discovered.length == 8)
+                setScene(7.9);
+            else {
+                document.querySelector(".container").style.display = "grid";
+                document.getElementById("dialogue").style.display = "none";
+            }
+        }
+    }
+    else if (scene * 10 - 19 > dialogue.length) {
+        setScene(Math.ceil(scene))
+    }
+    else {
+        setScene(scene + 0.1);
+    }
 };
 
 document.getElementById("start-dialogue").onclick = function () {
@@ -184,23 +221,34 @@ onSceneChange((scene_index) => {
             break;
         case 8:
             document.getElementById("inventory-btn").style.display = "block";
-            document.getElementById("recover").style.display = "block";
             document.getElementById("show").style.display = "block";
 
-            console.log(fauna_list[Math.round((scene - 8) * 10 - 1)].length);
+            setTimeout(() => { document.getElementById("show").classList.add("show") }, 3000);
+
             if (fauna_list[Math.round((scene - 8) * 10 - 1)].length == 0) {
                 document.getElementById("show").innerHTML = `<font color="red">No fauna at this spot!</font>`
+                setTimeout(() => { document.getElementById("recover").style.display = "block"; }, 5000);
             }
             else {
                 document.getElementById("show").innerHTML = `Fauna Discovered: ${0} / ${fauna_list[Math.round((scene - 8) * 10 - 1)].length}`
                 setTimeout(() => { document.getElementById("show").classList.add("game") }, 5000);
             }
 
+            console.log(Math.round((scene - 8) * 10));
+            if (Math.round((scene - 8) * 10) == 8) {
+                fauna_discovered = [0, 0, 0, 0, 0, 0, 0, 0];
+            }
+
             break;
         case 2:
             document.getElementById("speech").innerHTML = dialogue[Math.floor(scene * 10 - 20)];
+            document.getElementById("dialogue").style.display = "block";
+            break;
         case 7:
             document.getElementById("dialogue").style.display = "block";
+            document.getElementById("show").classList.remove("show");
+            document.getElementById("show").classList.remove("game");
+            document.getElementById("speech").innerHTML = site_dialogue[Math.floor(scene * 10 - 71)];
             break;
 
     }
