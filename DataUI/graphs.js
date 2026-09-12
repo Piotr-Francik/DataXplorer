@@ -10,12 +10,13 @@ function unblack() {
     document.getElementById("blackout").classList.remove("shade");
 }
 
-const correctGraphs = new Set(["1", "4","5","7"])
+const correctGraphs = new Set(["1", "4", "5", "7"])
 
 function setupGraphButtons() {
     document.querySelectorAll(".chartContainer").forEach(container => {
         const selectGraph = () => {
-            blackout(() => setScene(8));
+            console.log(container.dataset.graph);
+            blackout(() => setScene(8 + container.dataset.graph / 10));
             const isCorrect = correctGraphs.has(container.dataset.graph)
             container.classList.toggle("is-correct", isCorrect)
             container.classList.toggle("is-incorrect", !isCorrect)
@@ -156,17 +157,17 @@ function startGraph(offsetT, offsetS, name, yValues, temperature, salinity) {
             }
         }
     });
-    const interval = setInterval(function(){
+    const interval = setInterval(function () {
         if (CTD) {
             var currentData = CTD.data.datasets[0].data
             CTD.data.datasets[0].data = temperaturePoints.slice(Math.min(0, -(currentData.length + 10)), length)
             CTD.data.datasets[1].data = salinityPoints.slice(Math.min(0, -(currentData.length + 10)), length)
             CTD.update()
-        if (currentData.length >= length){
-            clearInterval(interval)
+            if (currentData.length >= length) {
+                clearInterval(interval)
+            }
         }
-    }
-    },200)
+    }, 200)
 }
 
 function draw(data) {
@@ -181,14 +182,14 @@ function draw(data) {
         salinity.push(Number(data[i][2].replace(/\r/, "")))
     }
 
-    startGraph(0,0,"myChart",yValues,temperature,salinity) //real Lophelia pertusa Original Data
-    startGraph(3,0,"myChart2",yValues,temperature,salinity)
-    startGraph(0,0.5,"myChart3",yValues,temperature,salinity) //plausible dud
-    startGraph(-1,0.2,"myChart4",yValues,temperature,salinity) //real Lophelia pertusa 
-    startGraph(-3,-0.8,"myChart5",yValues,temperature,salinity) //real Enallopsammia rostrata
-    startGraph(-2,0.4,"myChart6",yValues,temperature,salinity) //plausible dud
-    startGraph(-5,-0.9,"myChart7",yValues,temperature,salinity) //real Enallopsammia rostrata
-    startGraph(-2,0.4,"myChart8",yValues,temperature,salinity)
+    startGraph(0, 0, "myChart", yValues, temperature, salinity) //real Lophelia pertusa Original Data
+    startGraph(3, 0, "myChart2", yValues, temperature, salinity)
+    startGraph(0, 0.5, "myChart3", yValues, temperature, salinity) //plausible dud
+    startGraph(-1, 0.2, "myChart4", yValues, temperature, salinity) //real Lophelia pertusa 
+    startGraph(-3, -0.8, "myChart5", yValues, temperature, salinity) //real Enallopsammia rostrata
+    startGraph(-2, 0.4, "myChart6", yValues, temperature, salinity) //plausible dud
+    startGraph(-5, -0.9, "myChart7", yValues, temperature, salinity) //real Enallopsammia rostrata
+    startGraph(-2, 0.4, "myChart8", yValues, temperature, salinity)
 
 }
 

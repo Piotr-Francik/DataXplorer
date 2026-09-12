@@ -304,7 +304,6 @@ person.traverse((child) => {
             transparent: oldMat.transparent,
             opacity: oldMat.opacity,
             alphaMap: oldMat.alphaMap,
-            skinning: child.isSkinnedMesh,   // IMPORTANT for your rigged model
         });
 
         oldMat.dispose(); // free the old material/GPU resources
@@ -449,15 +448,12 @@ const depth_listeners = new Set();
 export function setScene(scene_index) {
     scene = scene_index;
 
-    switch (scene) {
+    switch (Math.floor(scene)) {
         case 0:
-            if (test == 1) {
-                sea.play();
-                submerged.play();
-            }
             break;
         case 1:
             count = 0;
+            console.log("Start")
             sea.play();
             submerged.play();
             break;
@@ -469,8 +465,9 @@ export function setScene(scene_index) {
             xplorer.add(camera);
             break;
         case 3:
+            xplorer.getObjectByName("CTD_Door").rotation.z = 1;
             overwater.add(camera);
-            count = 1;
+            count = 0;
 
             break;
         case 4:
@@ -495,7 +492,6 @@ export function setScene(scene_index) {
             sub_ctd.scale.y = 0.03;
             sub_ctd.scale.z = 0.03;
             count = 20
-            console.log("displaying stuff")
             document.querySelector(".container").style.display = "grid";
             graphs.main()
 
@@ -557,12 +553,13 @@ function update() {
 
     const r = Date.now() * 0.001;
     const delta = Math.max(0, Math.min(0.5, r - last));
+    document.getElementById("fps").innerHTML = Math.floor(1 / delta);
 
     mixer.update(delta);
 
     const arm = xplorer.getObjectByName("CTD_Arm");
 
-    switch (scene) {
+    switch (Math.floor(scene)) {
         // Menu Cutscene
         case 0:
             const s = 0.2;
@@ -598,11 +595,12 @@ function update() {
             break;
         // Opening Door
         case 3:
+            count += delta;
             const rot = xplorer.getObjectByName("CTD_Door").rotation.z;
             xplorer.getObjectByName("CTD_Door").rotation.z = rot + delta * Math.min(1, Math.PI / 2 - rot);
 
             const x = xplorer.getObjectByName("CTD_Arm").position.x;
-            xplorer.getObjectByName("CTD_Arm").position.x = x + delta * Math.min(0.3, 1.2 - x);
+            xplorer.getObjectByName("CTD_Arm").position.x = Math.sin(count / 2) * 1.2;// x + delta * Math.min(0.3, 1.2 - x);
 
 
             camera.position.x = 15;
@@ -610,7 +608,7 @@ function update() {
             camera.position.z = 15;
             camera.lookAt((arm.position.x + ctd.position.x) * 10, (+ ctd.position.y + arm.position.y) * 10 - 7, (arm.position.z + ctd.position.x) * 10);
 
-            if (x > 1.19)
+            if (count > Math.PI)
                 setScene(4);
             break;
         // Lowering CTD
@@ -631,7 +629,7 @@ function update() {
 
             if (ctd.position.y < -.4 && ctd.position.y + delta * descent > -.4) {
                 const splash = new THREE.Audio(listener);
-                audioLoader.load('resources/sounds/submerge.mp3', function (buffer) {
+                audioLoader.load('resources/sounds/big_explosion.ogg', function (buffer) {
                     splash.setBuffer(buffer);
                     splash.setLoop(false);
                     splash.setVolume(0.5);

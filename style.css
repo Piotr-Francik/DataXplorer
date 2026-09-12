@@ -615,11 +615,19 @@ canvas{
   transform: translate(-50%, -50%);
   color: white;
   text-align: center;
-  transition: all 8s;
+  transition: all 1s;
+  display: none;
 }
 
-#show:hover {
+#show.game {
   transform: translate(0%, 0%);
   left: 10px;
   top: 0%;
+}
+
+#speech {
+  height: 100px !important;
+  text-align: left !important;
+  vertical-align: middle;
+  font-family: 'Courier New', Courier, monospace;
 }
