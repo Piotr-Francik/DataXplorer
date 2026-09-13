@@ -2,3 +2,5 @@ Skybox: https://opengameart.org/content/clear-sky-panoramic-texture
 Water: https://github.com/mrdoob/three.js/blob/master/examples/webgl_shaders_ocean.html
 Music: https://pixabay.com/music/search/ocean/
 Map: https://earthref.org/cgi-bin/sc-s3-download.cgi?database_name=sc&search_start=main&smnt_id=2751&file_id=5752&action=map
+Coffin Fish: https://sketchfab.com/3d-models/cc0-chaunax-abei-e9594462c7944bc9b205d6e36653c744
+Lophelia pertusa: https://sketchfab.com/squireM

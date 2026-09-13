@@ -589,12 +589,14 @@ canvas{
   background: #0d3d2c;
   border-color: var(--correct);
   box-shadow: 0 0 0 2px #1dbb7540, 0 10px 24px #00000044;
+  pointer-events: none;
 }
 
 .chartContainer.is-incorrect {
   background: #4a2027;
   border-color: var(--incorrect);
   box-shadow: 0 0 0 2px #e0525240, 0 10px 24px #00000044;
+  pointer-events: none;
 }
 
 #blackout {

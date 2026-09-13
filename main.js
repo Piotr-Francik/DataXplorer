@@ -262,6 +262,43 @@ const sub_ctd = ctd.clone();
 sub_xplorer.getObjectByName("CTD_Arm").add(sub_ctd);
 
 
+const coral = (await model_loader.loadAsync('/resources/models/LopheliaPertusa.glb')).scene;
+coral.scale.x = 2;
+coral.scale.y = 2;
+coral.scale.z = 2;
+coral.position.x = 0;
+coral.position.y = -80;
+coral.position.z = 0.5;
+underwater.add(coral);
+
+
+const coffin = (await model_loader.loadAsync('/resources/models/coffin.glb')).scene;
+coffin.scale.x = 0.01;
+coffin.scale.y = 0.01;
+coffin.scale.z = 0.01;
+coffin.position.x = 0;
+coffin.position.y = -79.7;
+coffin.position.z = 0.5;
+underwater.add(coffin);
+
+const raycaster = new THREE.Raycaster();
+const pointer = new THREE.Vector2();
+
+window.addEventListener('click', (event) => {
+    pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+    pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+    raycaster.setFromCamera(pointer, camera);
+
+    const intersects = raycaster.intersectObject(coral, true);
+    if (intersects.length > 0) fauna_listeners.forEach(fn => fn("Lophelia_pertusa"));
+
+    const intersects2 = raycaster.intersectObject(coffin, true);
+    if (intersects2.length > 0) fauna_listeners.forEach(fn => fn("Coffin_Fish"));
+
+});
+
+
 const bot = (await model_loader.loadAsync('/resources/models/CTD_Bottle.glb')).scene;
 bot.scale.x = 0.03;
 bot.scale.y = 0.03;
@@ -444,6 +481,7 @@ audioLoader.load('resources/sounds/sea_sounds.mp3', function (buffer) {
 
 const listeners = new Set();
 const depth_listeners = new Set();
+const fauna_listeners = new Set();
 
 export function setScene(scene_index) {
     scene = scene_index;
@@ -544,6 +582,7 @@ export function setScene(scene_index) {
 
 export function onSceneChange(fn) { listeners.add(fn); }
 export function getDepth(fn) { depth_listeners.add(fn); }
+export function faunaFound(fn) { fauna_listeners.add(fn); }
 
 let test = -1;
 setScene(0);
@@ -701,6 +740,9 @@ function update() {
             count += delta * 0.5;
             spotLight.intensity = 1;
 
+            rov.position.x = 0;
+            rov.position.z = 0;
+
             sound2.setVolume(Math.max(0, sound2.getVolume() - delta / 10));
             sound.setVolume(Math.max(0, sound.getVolume() - delta / 10));
             submerged.setVolume(Math.min(1, submerged.getVolume() + delta / 3));
@@ -730,6 +772,7 @@ function update() {
             }
 
             rov.position.y = -80 + 20 / (count * 10 + 1);
+
 
             depth_listeners.forEach(fn => fn(rov.position.y));
 

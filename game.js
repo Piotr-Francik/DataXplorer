@@ -1,4 +1,4 @@
-import { setScene, onSceneChange, getDepth } from './main.js';
+import { setScene, onSceneChange, getDepth, faunaFound } from './main.js';
 
 var scene = 0;
 var audio;
@@ -31,7 +31,7 @@ var dialogue = [
     <font color="yellow">Lophelia Pertusa</font> is found at depths of <font color="red">500m-1000m</font>, temperatures of 
     <font color="red">4&#176;C-15&#176;C</font> and salinity of <font color="red">34-37</font>.`,
 
-    `We are also looking for 6 additional fauna - can you find them all?
+    `We are also looking for 4 additional fauna - can you find them all?
     <br><br>
     As you discover new species, they will appear in your inventory - open it up to find out more about each one!
     <br><br>
@@ -61,10 +61,10 @@ var site_dialogue = [
 var speed = 20;
 
 var fauna_list = [
-    ["Test"],
+    ["Lophelia_pertusa"],
     [],
     [],
-    ["Test"],
+    ["Lophelia_pertusa"],
     ["Test"],
     [],
     ["Test"],
@@ -130,7 +130,6 @@ document.getElementById("scene-4-next-btn").onclick = function () {
 };
 
 document.getElementById("proceed").onclick = function () {
-    console.log(scene);
     if (scene > 6) {
         if (Math.round(scene * 10) == 79) {
             setScene(9);
@@ -234,7 +233,6 @@ onSceneChange((scene_index) => {
                 setTimeout(() => { document.getElementById("show").classList.add("game") }, 5000);
             }
 
-            console.log(Math.round((scene - 8) * 10));
             if (Math.round((scene - 8) * 10) == 8) {
                 fauna_discovered = [0, 0, 0, 0, 0, 0, 0, 0];
             }
@@ -257,4 +255,30 @@ onSceneChange((scene_index) => {
 // Runs each frame of game
 getDepth((depth) => {
     //console.log(depth);
+});
+
+faunaFound((fauna) => {
+    if (fauna_discovered.indexOf(fauna) == -1) {
+        fauna_discovered.push(fauna);
+    }
+
+    var pass = 0;
+
+    fauna_list[Math.round(scene * 10 - 81)].forEach(element => {
+        console.log(element);
+        if (fauna_discovered.indexOf(element) != -1) {
+            pass += 1;
+        }
+    });
+
+
+    document.getElementById("show").innerHTML = `Fauna Discovered: ${pass} / ${fauna_list[Math.round(scene * 10 - 81)].length}`
+
+    console.log(fauna_list[Math.round(scene * 10 - 81)]);
+    console.log(fauna_discovered);
+    console.log(pass);
+
+    if (pass == fauna_list[Math.round((scene - 8) * 10 - 1)].length) {
+        setTimeout(() => { document.getElementById("recover").style.display = "block"; }, 2000);
+    }
 });
