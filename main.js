@@ -725,7 +725,6 @@ function update() {
         // Lowering CTD
         case 4:
             count += delta * 3;
-            camera.lookAt((arm.position.x + ctd.position.x) * 10, (+ ctd.position.y + arm.position.y) * 10 - 7, (arm.position.z + ctd.position.x) * 10);
 
             const descent = 0.2 * Math.min(10, 0.1 - ctd.position.y) * 3;
 
@@ -735,8 +734,10 @@ function update() {
             sub_ctd.position.y = ctd.position.y;
             sub_ctd.position.z = ctd.position.z;
 
-            ctd.position.y -= Math.min(delta * 0.3, delta * descent) * Math.min(1, count);
-            camera.position.y -= Math.min(delta * 3 * 0.5, 5 * delta * descent);
+            camera.lookAt((arm.position.x + ctd.position.x) * 10, (+ ctd.position.y + arm.position.y) * 10 - 7, (arm.position.z + ctd.position.x) * 10);
+
+            ctd.position.y -=  Math.min(delta * 0.3, delta * descent) * Math.min(1, count);
+            camera.position.y -=  Math.min(delta * 3 * 0.5, 5 * delta * descent);
 
             if (ctd.position.y < -.4 && ctd.position.y + delta * descent > -.4) {
                 const splash = new THREE.Audio(listener);
@@ -767,14 +768,16 @@ function update() {
             count -= delta * 4;
 
             camera.position.x = 20;
-            camera.position.y = ctd.position.y + 2;
-            camera.position.z = 5;
+            camera.position.y = ctd.position.y - 1;
+            camera.position.z = 3;
 
-            let i = Math.max(0, Math.min(0.03, -camera.position.y * 0.1));
+            camera.position.y -= Math.max(0, ctd.position.y + 4);
+
+            let i = Math.max(0, Math.min(0.03, -camera.position.y * 0.4));
 
             camera.lookAt(
                 ctd.position.x + (Math.random() - 0.5) * i,
-                ctd.position.y + (Math.random() - 0.5) * i,
+                ctd.position.y + (Math.random() - 0.5) * i - 1,
                 ctd.position.z + (Math.random() - 0.5) * i
             );
 
@@ -793,7 +796,7 @@ function update() {
                 });
             }
 
-            ctd.position.y += delta * 1.5 * (ctd.position.y > -1.6 ? 1 : 2);
+            ctd.position.y += delta * 1.5 * (ctd.position.y > -1.6 ? 1 : 2) * 2 * Math.min(1, (5 - ctd.position.y) * 0.4);
 
             if (ctd.position.y > 5) {
                 //setScene(7);
