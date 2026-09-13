@@ -61,13 +61,13 @@ var site_dialogue = [
 var speed = 20;
 
 var fauna_list = [
-    ["Lophelia_pertusa"],
+    ["Lophelia_Pertusa", "Coffin_Fish"],
     [],
     [],
-    ["Lophelia_pertusa"],
-    ["Test"],
+    ["Lophelia_Pertusa", "Moray"],
+    ["Enallopsammia_Rostrata", "Grenadier"],
     [],
-    ["Test"],
+    ["Enallopsammia_Rostrata", "Sea_Star"],
     []
 ];
 
@@ -135,7 +135,7 @@ document.getElementById("proceed").onclick = function () {
             setScene(9);
         }
         else {
-            if (fauna_discovered.length == 6)
+            if (fauna_discovered.length > 5)
                 setScene(7.9);
             else {
                 document.querySelector(".container").style.display = "grid";
@@ -231,10 +231,6 @@ onSceneChange((scene_index) => {
             else {
                 document.getElementById("show").innerHTML = `Fauna Discovered: ${0} / ${fauna_list[Math.round((scene - 8) * 10 - 1)].length}`
                 setTimeout(() => { document.getElementById("show").classList.add("game") }, 5000);
-            }
-
-            if (Math.round((scene - 8) * 10) == 8) {
-                fauna_discovered = [0, 0, 0, 0, 0, 0, 0, 0];
             }
 
             break;

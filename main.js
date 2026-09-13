@@ -1,14 +1,10 @@
 import * as THREE from 'three';
-import * as graphs from './DataUI/graphs.js';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import * as graphs from './public/DataUI/graphs.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { Water } from 'three/addons/objects/Water.js';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
-import { atan, cos, depth, sin } from 'three/tsl';
-import { mx_bilerp_1 } from 'three/src/nodes/materialx/lib/mx_noise.js';
 
 // ThreeJS Boilerplate
 const overwater = new THREE.Scene();
@@ -271,6 +267,15 @@ coral.position.y = -80;
 coral.position.z = 0.5;
 underwater.add(coral);
 
+const coral2 = (await model_loader.loadAsync('/resources/models/Coral.glb')).scene;
+coral2.scale.x = 0.04;
+coral2.scale.y = 0.04;
+coral2.scale.z = 0.04;
+coral2.position.x = 0;
+coral2.position.y = -80;
+coral2.position.z = 0.5;
+underwater.add(coral2);
+
 
 const coffin = (await model_loader.loadAsync('/resources/models/coffin.glb')).scene;
 coffin.scale.x = 0.01;
@@ -281,14 +286,14 @@ coffin.position.y = -79.7;
 coffin.position.z = 0.5;
 underwater.add(coffin);
 
-const grenedier = (await model_loader.loadAsync('/resources/models/Grenedier.glb')).scene;
-grenedier.scale.x = 0.01;
-grenedier.scale.y = 0.01;
-grenedier.scale.z = 0.01;
-grenedier.position.x = 0.1;
-grenedier.position.y = -79.7;
-grenedier.position.z = 0.5;
-underwater.add(grenedier);
+const grenadier = (await model_loader.loadAsync('/resources/models/Grenedier.glb')).scene;
+grenadier.scale.x = 0.01;
+grenadier.scale.y = 0.01;
+grenadier.scale.z = 0.01;
+grenadier.position.x = 0.1;
+grenadier.position.y = -79.7;
+grenadier.position.z = 0.5;
+underwater.add(grenadier);
 
 const moray = (await model_loader.loadAsync('/resources/models/Moray.glb')).scene;
 moray.scale.x = 0.01;
@@ -318,19 +323,22 @@ window.addEventListener('click', (event) => {
     raycaster.setFromCamera(pointer, camera);
 
     const intersects = raycaster.intersectObject(coral, true);
-    if (intersects.length > 0) fauna_listeners.forEach(fn => fn("Lophelia_pertusa"));
+    if (intersects.length > 0) fauna_listeners.forEach(fn => fn("Lophelia_Pertusa"));
 
     const intersects2 = raycaster.intersectObject(coffin, true);
     if (intersects2.length > 0) fauna_listeners.forEach(fn => fn("Coffin_Fish"));
 
-    const intersects3 = raycaster.intersectObject(grenedier, true);
-    if (intersects3.length > 0) fauna_listeners.forEach(fn => fn("Grenedier"));
+    const intersects3 = raycaster.intersectObject(grenadier, true);
+    if (intersects3.length > 0) fauna_listeners.forEach(fn => fn("Grenadier"));
 
     const intersects4 = raycaster.intersectObject(moray, true);
     if (intersects4.length > 0) fauna_listeners.forEach(fn => fn("Moray"));
 
     const intersects5 = raycaster.intersectObject(seastar, true);
     if (intersects5.length > 0) fauna_listeners.forEach(fn => fn("Sea_Star"));
+
+    const intersects6 = raycaster.intersectObject(coral, true);
+    if (intersects6.length > 0) fauna_listeners.forEach(fn => fn("Enallopsammia_Rostrata"));
 
 });
 
@@ -590,6 +598,32 @@ export function setScene(scene_index) {
             rov.rotation.x = 0;
             rov.rotation.z = 0;
 
+            underwater.remove(coral);
+            underwater.remove(coral2);
+            underwater.remove(coffin);
+            underwater.remove(seastar);
+            underwater.remove(grenadier);
+            underwater.remove(moray);
+
+            switch(scene * 10 - 80){
+                case 1:
+                    underwater.add(coral);
+                    underwater.add(coffin);
+                    break;
+                case 4:
+                    underwater.add(coral);
+                    underwater.add(moray);
+                    break;
+                case 5:
+                    underwater.add(coral2);
+                    underwater.add(grenadier);
+                    break;
+                case 7:
+                    underwater.add(coral2);
+                    underwater.add(seastar);
+                    break;
+            }
+
             speed = 0;
             break;
         case 9:
@@ -690,7 +724,7 @@ function update() {
             break;
         // Lowering CTD
         case 4:
-            count += delta;
+            count += delta * 2;
             camera.lookAt((arm.position.x + ctd.position.x) * 10, (+ ctd.position.y + arm.position.y) * 10 - 7, (arm.position.z + ctd.position.x) * 10);
 
             const descent = 0.2 * Math.min(10, 0.1 - ctd.position.y) * 3;

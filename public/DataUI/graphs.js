@@ -1,4 +1,4 @@
-import { setScene, onSceneChange, getDepth } from '../main.js';
+import { setScene, onSceneChange, getDepth } from '../../main.js';
 
 function blackout(f) {
     document.getElementById("blackout").classList.add("shade");
