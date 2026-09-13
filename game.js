@@ -43,15 +43,24 @@ var dialogue = [
 ];
 
 var site_dialogue = [
-    `Lophelia Pertusa - nice find!`,
-    `Nice try, but unfortunately that site was empty. The data did show signs of coral, we were just unlucky.`,
-    ``,
-    `Lophelia Pertusa - nice find!`,
-    `Enallopsammia Rostrata - nice find!`,
-    `Nice try, but unfortunately that site was empty. The data did show signs of coral, we were just unlucky.`,
-    `Enallopsammia Rostrata - nice find!`,
-    `Nice try, but unfortunately that site was empty. The data did show signs of coral, we were just unlucky.`,
-    `Congratulations, you have found all 8 species of fauna we were searching for today! You should be very proud of yourself!
+    `Wow, a coffin fish! They belong to the family Chaunacidae, or sea toads. I don't see the relation though. Their biological name Chaunax
+    means "one who gapes"...`,
+
+    `That site was completely baron. Good attempt though, the data was promising.`,
+
+    `I didn't expect much from that one. Try going for the graphs that match the ranges for the corals we're trying to find.`,
+
+    `A moray eel, what a weird creature - I certainly wouldn't want to be a tiny fish on the recieving end of all thsoe teeth!`,
+
+    `Attention! The Grenadier, a great find! One of the most populous deep sea fish, found all over the world!`,
+
+    `Hmm, the graph for that site wasn't very promising. Have another look at the ranges in which we expect to find coral, and try again.`,
+
+    `Oh cool, a sea star! There's about 400 billion stars in our galaxy. I wonder how that compares to the number in our oceans...`,
+
+    `Unlucky, but you can't find something every time. Lets go again.`,
+
+    `Congratulations, you have found all 6 species of fauna we were searching for today! You should be very proud of yourself!
     <br><br>
     That concludes your voyage for today. I hope you enjoyed your adventure.
     <br><br>
