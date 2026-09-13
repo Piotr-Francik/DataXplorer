@@ -59,14 +59,14 @@ async function parsing() {
 }
 
 
-function startGraph(offsetT, offsetS, name, yValues, temperature, salinity) {
-    var index = 80
+function startGraph(offsetT, offsetS, name, yValues, temperature, salinity, size) {
+    var index = 1
 
-    var temperaturePoints = yValues.map((yValue, index) => ({
+    var temperaturePoints = yValues.slice(0,size).map((yValue, index) => ({
         x: temperature[index] + offsetT,
         y: yValue //coordinates for temp
     }))
-    var salinityPoints = yValues.map((yValue, index) => ({
+    var salinityPoints = yValues.slice(0,size).map((yValue, index) => ({
         x: salinity[index] + offsetS,
         y: yValue//coordinates for salinity
     }))
@@ -156,11 +156,29 @@ function startGraph(offsetT, offsetS, name, yValues, temperature, salinity) {
             }
         }
     });
+
+    var run = false 
+    var callsR = Math.floor(size/5)
+    var callsT = 595/5
+    var callN = 0
+
     const interval = setInterval(function(){
-        if (CTD) {
+        //jump by 5
+        //size divided by 5
+        //number of calls required
+        //total number of calls full
+        //number the calls if number of call + number of calls required = total number of calls
+        //set run flag to be true
+
+        callN += 1
+        if (callsR+callN >= callsT){
+            run = true
+        }
+
+        if (CTD && run) {
             var currentData = CTD.data.datasets[0].data
-            CTD.data.datasets[0].data = temperaturePoints.slice(Math.min(0, -(currentData.length + 10)), length)
-            CTD.data.datasets[1].data = salinityPoints.slice(Math.min(0, -(currentData.length + 10)), length)
+            CTD.data.datasets[0].data = temperaturePoints.slice(Math.min(0, -(currentData.length + 6)), length)
+            CTD.data.datasets[1].data = salinityPoints.slice(Math.min(0, -(currentData.length + 6)), length)
             CTD.update()
         if (currentData.length >= length){
             clearInterval(interval)
@@ -181,14 +199,14 @@ function draw(data) {
         salinity.push(Number(data[i][2].replace(/\r/, "")))
     }
 
-    startGraph(0,0,"myChart",yValues,temperature,salinity) //real Lophelia pertusa Original Data
-    startGraph(3,0,"myChart2",yValues,temperature,salinity)
-    startGraph(0,0.5,"myChart3",yValues,temperature,salinity) //plausible dud
-    startGraph(-1,0.2,"myChart4",yValues,temperature,salinity) //real Lophelia pertusa 
-    startGraph(-3,-0.8,"myChart5",yValues,temperature,salinity) //real Enallopsammia rostrata
-    startGraph(-2,0.4,"myChart6",yValues,temperature,salinity) //plausible dud
-    startGraph(-5,-0.9,"myChart7",yValues,temperature,salinity) //real Enallopsammia rostrata
-    startGraph(-2,0.4,"myChart8",yValues,temperature,salinity)
+    startGraph(0,0,"myChart",yValues,temperature,salinity,309) //real Lophelia pertusa Original Data (depth 675)
+    startGraph(3,0,"myChart2",yValues,temperature,salinity,522) //depth 1201
+    startGraph(0,0.5,"myChart3",yValues,temperature,salinity,444) //plausible dud (depth 1017)
+    startGraph(-1,0.2,"myChart4",yValues,temperature,salinity,371) //real Lophelia pertusa  (depth 835)
+    startGraph(-3,-0.8,"myChart5",yValues,temperature,salinity,266) //real Enallopsammia rostrata (depth 578)
+    startGraph(-2,0.4,"myChart6",yValues,temperature,salinity,245) //plausible dud (depth 501)
+    startGraph(-5,-0.9,"myChart7",yValues,temperature,salinity,338) //real Enallopsammia rostrata (depth 738)
+    startGraph(-2,0.4,"myChart8",yValues,temperature,salinity,595) //depth 1381
 
 }
 
