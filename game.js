@@ -135,7 +135,7 @@ document.getElementById("proceed").onclick = function () {
             setScene(9);
         }
         else {
-            if (fauna_discovered.length == 8)
+            if (fauna_discovered.length == 6)
                 setScene(7.9);
             else {
                 document.querySelector(".container").style.display = "grid";

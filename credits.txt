@@ -4,3 +4,6 @@ Music: https://pixabay.com/music/search/ocean/
 Map: https://earthref.org/cgi-bin/sc-s3-download.cgi?database_name=sc&search_start=main&smnt_id=2751&file_id=5752&action=map
 Coffin Fish: https://sketchfab.com/3d-models/cc0-chaunax-abei-e9594462c7944bc9b205d6e36653c744
 Lophelia pertusa: https://sketchfab.com/squireM
+Grenedier: https://sketchfab.com/3d-models/cc0-amami-grenadier-c-marginatus-608ceff39222456fbbcd9f0237e67ac7#download
+Moray: https://sketchfab.com/3d-models/cc0-brutal-moray-gymnothorax-kidako-f7b2e7e06e454392bf7d7ab739658d57#download
+Star Fish: https://sketchfab.com/3d-models/asteroid-starfish-or-seastar-32de6a92ad104e20aaa841c8e3eef93f

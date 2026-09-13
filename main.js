@@ -281,6 +281,33 @@ coffin.position.y = -79.7;
 coffin.position.z = 0.5;
 underwater.add(coffin);
 
+const grenedier = (await model_loader.loadAsync('/resources/models/Grenedier.glb')).scene;
+grenedier.scale.x = 0.01;
+grenedier.scale.y = 0.01;
+grenedier.scale.z = 0.01;
+grenedier.position.x = 0.1;
+grenedier.position.y = -79.7;
+grenedier.position.z = 0.5;
+underwater.add(grenedier);
+
+const moray = (await model_loader.loadAsync('/resources/models/Moray.glb')).scene;
+moray.scale.x = 0.01;
+moray.scale.y = 0.01;
+moray.scale.z = 0.01;
+moray.position.x = -0.1;
+moray.position.y = -79.7;
+moray.position.z = 0.5;
+underwater.add(moray);
+
+const seastar = (await model_loader.loadAsync('/resources/models/Seastar.glb')).scene;
+seastar.scale.x = 0.01;
+seastar.scale.y = 0.01;
+seastar.scale.z = 0.01;
+seastar.position.x = -0.3;
+seastar.position.y = -80;
+seastar.position.z = 0.5;
+underwater.add(seastar);
+
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 
@@ -295,6 +322,15 @@ window.addEventListener('click', (event) => {
 
     const intersects2 = raycaster.intersectObject(coffin, true);
     if (intersects2.length > 0) fauna_listeners.forEach(fn => fn("Coffin_Fish"));
+
+    const intersects3 = raycaster.intersectObject(grenedier, true);
+    if (intersects3.length > 0) fauna_listeners.forEach(fn => fn("Grenedier"));
+
+    const intersects4 = raycaster.intersectObject(moray, true);
+    if (intersects4.length > 0) fauna_listeners.forEach(fn => fn("Moray"));
+
+    const intersects5 = raycaster.intersectObject(seastar, true);
+    if (intersects5.length > 0) fauna_listeners.forEach(fn => fn("Sea_Star"));
 
 });
 
