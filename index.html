@@ -24,7 +24,7 @@
 
     <div class="ui-layer">
         <button class="start-btn" id="start-btn">Click here to Proceed</button>
-        
+
     </div>
 
 
@@ -69,7 +69,8 @@
         </div>
     </div>
 
-    <button id="inventory-btn" style="display: none; position: absolute; bottom: 20px; right: 20px; z-index: 200; padding: 12px 24px; background: rgba(10, 37, 64, 0.85); color: #00ffff; border: 2px solid #00ffff; border-radius: 12px; font-weight: bold; font-size: 1.2rem; cursor: pointer; box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);">
+    <button id="inventory-btn"
+        style="display: none; position: absolute; bottom: 20px; right: 20px; z-index: 200; padding: 12px 24px; background: rgba(10, 37, 64, 0.85); color: #00ffff; border: 2px solid #00ffff; border-radius: 12px; font-weight: bold; font-size: 1.2rem; cursor: pointer; box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);">
         Inventory
     </button>
 
@@ -85,9 +86,10 @@
     </div>
 
     <button id="start-dialogue" style="display: none; position: absolute; bottom: 10px; right: 10px;color: white; font-weight: 600; z-index: 100; font-size: xx-large;
-    font-family: 'Courier New', Courier, 'Lucida Console', Monaco, monospace; background:none; border: none;">Click to Proceed</button>
-    
-    <div class="container" aria-label="Choose the correct graphs" style = "display: none">
+    font-family: 'Courier New', Courier, 'Lucida Console', Monaco, monospace; background:none; border: none;">Click to
+        Proceed</button>
+
+    <div class="container" aria-label="Choose the correct graphs" style="display: none">
         <div class="chartContainer" data-graph="1" role="button" tabindex="0" aria-label="Graph 1">
             <canvas id="myChart"></canvas>
         </div>
@@ -106,14 +108,14 @@
         <div class="chartContainer" data-graph="6" role="button" tabindex="0" aria-label="Graph 5">
             <canvas id="myChart6"></canvas>
         </div>
-            <div class="chartContainer" data-graph="7" role="button" tabindex="0" aria-label="Graph 5">
+        <div class="chartContainer" data-graph="7" role="button" tabindex="0" aria-label="Graph 5">
             <canvas id="myChart7"></canvas>
         </div>
         <div class="chartContainer" data-graph="8" role="button" tabindex="0" aria-label="Graph 5">
             <canvas id="myChart8"></canvas>
         </div>
     </div>
-    
+
 
     <div id="blackout"></div>
 
@@ -121,7 +123,116 @@
 
     <h1 id="show">0/3 Fauna Discovered</h1>
 
-    <h1 style="position: absolute; right: 0px; top: 0px; z-index: 150; color: white; background-color: black;" id="fps"></h1>
+    <h1 style="position: absolute; right: 0px; top: 0px; z-index: 150; color: white; background-color: black;" id="fps">
+    </h1>
+
+
+
+
+
+
+    <div id="inventory" class="inventorybackground">
+
+        <div class="inventory-header-strip">
+            <button id="close-inventory">X</button>
+            <div class="header-accent-strip">
+                <div class="inventoryheader">Inventory</div>
+            </div>
+        </div>
+
+        <div class="inventory-grid">
+
+
+            <div id="factfile-popup" class="popup">
+                <div class="popup-content">
+                    <span class="close-btn">&times;</span>
+
+                    <div class="popup-banner-top">
+                        <span>YOU HAVE FOUND:</span>
+                    </div>
+
+                    <div class="popup-body">
+                        <img id="popup-img" src="" alt="Factfile Detail Image">
+
+                        <div class="popup-info">
+                            <div class="popupheader" id="popup-title">Factfile Title</div>
+                            <div class="inventorytext" id="popup-desc">Factfile description</div>
+                        </div>
+                    </div>
+
+                    <div class="popup-banner-bottom">
+                        <div class="footer-left"></div>
+                        <div class="footer-right"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="inventory-card" data-title="Lophelia pertusa" data-img="Lophelia pertusa.jpg" data-desc="Family:
+  
+    Order:
+    Length:
+    Conservation status:
+     Lophelia pertusa is a cold-water reef-building coral found in deep ocean waters.">
+
+                <div class="image-wrapper">
+                    <img src="Lophelia pertusa.jpg" alt="Lophelia pertusa">
+                </div>
+                <div class="inventorytext">Lophelia pertusa</div>
+            </div>
+
+            <div class="inventory-card" data-title="Enallopsammia rostrata" data-img="Enallopsammia rostrata.jpg"
+                data-desc="Family:
+  
+    Order:
+    Length:
+    Conservation status:
+    Desctiption">
+
+                <div class="image-wrapper">
+                    <img src="Enallopsammia rostrata.jpg" alt="Enallopsammia rostrata">
+                </div>
+                <div class="inventorytext">Enallopsammia rostrata</div>
+            </div>
+
+            <div class="inventory-card-empty">
+                <div class="image-wrapper">
+                    <span class="placeholder-icon">?</span>
+                </div>
+                <div class="inventorytext">Unknown</div>
+            </div>
+
+            <div class="inventory-card" data-title="Coffinfish" data-img="coffinfish.jpg" data-desc="Family:
+  
+    Order:
+    Length:
+    Conservation status:
+    Desctiption">
+
+                <div class="image-wrapper">
+                    <img src="coffinfish.jpg" alt="Coffinfish">
+                </div>
+                <div class="inventorytext">Coffinfish</div>
+            </div>
+
+            <div class="inventory-card-empty">
+                <div class="image-wrapper">
+                    <span class="placeholder-icon">?</span>
+                </div>
+                <div class="inventorytext">Unknown</div>
+            </div>
+
+            <div class="inventory-card-empty">
+                <div class="image-wrapper">
+                    <span class="placeholder-icon">?</span>
+                </div>
+                <div class="inventorytext">Unknown</div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <script src="inventoryscript.js"></script>
 
 </body>
 

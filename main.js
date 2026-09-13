@@ -724,7 +724,7 @@ function update() {
             break;
         // Lowering CTD
         case 4:
-            count += delta * 2;
+            count += delta * 3;
             camera.lookAt((arm.position.x + ctd.position.x) * 10, (+ ctd.position.y + arm.position.y) * 10 - 7, (arm.position.z + ctd.position.x) * 10);
 
             const descent = 0.2 * Math.min(10, 0.1 - ctd.position.y) * 3;
@@ -764,7 +764,7 @@ function update() {
             break;
         // Raising CTD
         case 6:
-            count -= delta;
+            count -= delta * 4;
 
             camera.position.x = 20;
             camera.position.y = ctd.position.y + 2;

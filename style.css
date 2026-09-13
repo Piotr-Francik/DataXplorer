@@ -212,10 +212,9 @@ body {
 
 .inventory-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
   gap: 24px;
-
-  width: 90vw;
   /* min-height: 80vh;  */
   margin: 0 auto;
   padding: 32px;
@@ -322,8 +321,12 @@ body {
 }
 
 .inventorybackground {
-  min-height: 100vh;
-  width: 100vw;
+  display: none;
+  z-index: 150;
+  position: absolute;
+  width: min(90vw, 100vh);
+  aspect-ratio: 2;
+  border-radius: 20px;
   background: radial-gradient(ellipse at top, rgba(120, 220, 210, 0.5) 0%, rgba(20, 110, 130, 0.75) 45%, rgba(6, 46, 66, 0.85) 100%), rgb(20, 130, 140);
   padding: 0 0 20px 0;
   /* box-sizing: border-box; */
@@ -366,6 +369,22 @@ body {
 
 .inventory-card:not(.empty) {
   cursor: pointer;
+}
+
+#close-inventory {
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  height: 35px;
+  width: 35px;
+  font-size: large;
+  font-weight: 600;
+  text-align: center;
+  vertical-align: middle;
+  background-color: #358b89;
+  border-radius: 10px;
+  transition: all 0.2s;
+  color: #faf4e0;
 }
 
 

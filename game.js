@@ -43,7 +43,7 @@ var dialogue = [
 ];
 
 var site_dialogue = [
-    `Wow, a coffin fish! They belong to the family Chaunacidae, or sea toads. I don't see the relation though. Their biological name Chaunax
+    `Wow, a coffin fish! They belong to the family Chaunacidae, or sea toads; I don't see the relation. Their biological name "Chaunax"
     means "one who gapes"...`,
 
     `That site was completely baron. Good attempt though, the data was promising.`,
@@ -164,12 +164,12 @@ document.getElementById("start-dialogue").onclick = function () {
     blackout(() => setScene(2));
 };
 
-/*document.getElementById("inventory-preview").onclick = function () {
-    window.location.href = "inventory.html";
-};*/
-
 document.getElementById("inventory-btn").onclick = function () {
-    window.location.href = "inventory.html";
+    document.getElementById("inventory").style.display = "block";
+};
+
+document.getElementById("close-inventory").onclick = function () {
+    document.getElementById("inventory").style.display = "none";
 };
 
 // Runs on every scene change
@@ -177,12 +177,6 @@ onSceneChange((scene_index) => {
     scene = scene_index;
     document.getElementById("start-btn").style.display = scene == 9 ? "block" : "none";
 
-    const inventoryBtn = document.getElementById("inventory-btn");
-    if (inventoryBtn) {
-        inventoryBtn.onclick = function () {
-            window.location.href = "inventory.html";
-        };
-    }
     document.getElementById("dialogue").style.display = "none";
     document.getElementById("start-dialogue").style.display = "none";
     document.getElementById("typed_text").style.display = "none";
