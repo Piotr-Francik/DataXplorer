@@ -82,6 +82,41 @@ var fauna_list = [
 
 var fauna_discovered = [];
 
+var dialogueCharIndex = 0;
+var dialogueTimeout;
+
+function typeDialogueText(targetElementId, fullHtmlText, speed = 15, onComplete) {
+    const targetElement = document.getElementById(targetElementId);
+    
+    clearTimeout(dialogueTimeout);
+    
+    if (dialogueCharIndex === 0) {
+        targetElement.innerHTML = "";
+    }
+
+    if (dialogueCharIndex < fullHtmlText.length) {
+    
+        if (fullHtmlText.charAt(dialogueCharIndex) === '<') {
+            const closingIndex = fullHtmlText.indexOf('>', dialogueCharIndex);
+            if (closingIndex !== -1) {
+                dialogueCharIndex = closingIndex + 1;
+            } else {
+                dialogueCharIndex++;
+            }
+        } else {
+            dialogueCharIndex++;
+        }
+
+        targetElement.innerHTML = fullHtmlText.slice(0, dialogueCharIndex);
+        dialogueTimeout = setTimeout(() => {
+            typeDialogueText(targetElementId, fullHtmlText, speed, onComplete);
+        }, speed);
+    } else {
+        dialogueCharIndex = 0;
+        if (onComplete) onComplete();
+    }
+}
+
 function typeWriter() {
     if (i < txt.length) {
         if (txt.charAt(i) == '/') {
@@ -238,14 +273,16 @@ onSceneChange((scene_index) => {
 
             break;
         case 2:
-            document.getElementById("speech").innerHTML = dialogue[Math.floor(scene * 10 - 20)];
             document.getElementById("dialogue").style.display = "block";
+            dialogueCharIndex = 0; 
+            typeDialogueText("speech", dialogue[Math.floor(scene * 10 - 20)]);
             break;
         case 7:
             document.getElementById("dialogue").style.display = "block";
             document.getElementById("show").classList.remove("show");
             document.getElementById("show").classList.remove("game");
-            document.getElementById("speech").innerHTML = site_dialogue[Math.floor(scene * 10 - 71)];
+            dialogueCharIndex = 0;
+            typeDialogueText("speech", site_dialogue[Math.floor(scene * 10 - 71)]);
             break;
 
     }
