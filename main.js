@@ -316,32 +316,80 @@ underwater.add(seastar);
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 
+// window.addEventListener('click', (event) => {
+//     pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+//     pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+//     raycaster.setFromCamera(pointer, camera);
+
+//     const intersects = raycaster.intersectObject(coral, true);
+//     if (intersects.length > 0) fauna_listeners.forEach(fn => fn("Lophelia_Pertusa"));
+
+//     const intersects2 = raycaster.intersectObject(coffin, true);
+//     if (intersects2.length > 0) fauna_listeners.forEach(fn => fn("Coffin_Fish"));
+
+//     const intersects3 = raycaster.intersectObject(grenadier, true);
+//     if (intersects3.length > 0) fauna_listeners.forEach(fn => fn("Grenadier"));
+
+//     const intersects4 = raycaster.intersectObject(moray, true);
+//     if (intersects4.length > 0) fauna_listeners.forEach(fn => fn("Moray"));
+
+//     const intersects5 = raycaster.intersectObject(seastar, true);
+//     if (intersects5.length > 0) fauna_listeners.forEach(fn => fn("Sea_Star"));
+
+//     const intersects6 = raycaster.intersectObject(coral2, true);
+//     if (intersects6.length > 0) fauna_listeners.forEach(fn => fn("Enallopsammia_Rostrata"));
+
+// });
+
 window.addEventListener('click', (event) => {
     pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
     pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
     raycaster.setFromCamera(pointer, camera);
 
-    const intersects = raycaster.intersectObject(coral, true);
-    if (intersects.length > 0) fauna_listeners.forEach(fn => fn("Lophelia_Pertusa"));
+    const targets = [
+        { obj: coral, id: "Lophelia_Pertusa" },
+        { obj: coffin, id: "Coffin_Fish" },
+        { obj: grenadier, id: "Grenadier" },
+        { obj: moray, id: "Moray" },
+        { obj: seastar, id: "Sea_Star" },
+        { obj: coral2, id: "Enallopsammia_Rostrata" }
+    ];
 
-    const intersects2 = raycaster.intersectObject(coffin, true);
-    if (intersects2.length > 0) fauna_listeners.forEach(fn => fn("Coffin_Fish"));
+    let closestHit = null;
+    let closestDistance = Infinity;
 
-    const intersects3 = raycaster.intersectObject(grenadier, true);
-    if (intersects3.length > 0) fauna_listeners.forEach(fn => fn("Grenadier"));
+    targets.forEach(target => {
+        // Ensure object is currently present in the scene before raycasting
+        if (target.obj.parent === underwater) {
+            const intersects = raycaster.intersectObject(target.obj, true);
+            if (intersects.length > 0 && intersects[0].distance < closestDistance) {
+                closestDistance = intersects[0].distance;
+                closestHit = target.id;
+            }
+        }
+    });
 
-    const intersects4 = raycaster.intersectObject(moray, true);
-    if (intersects4.length > 0) fauna_listeners.forEach(fn => fn("Moray"));
-
-    const intersects5 = raycaster.intersectObject(seastar, true);
-    if (intersects5.length > 0) fauna_listeners.forEach(fn => fn("Sea_Star"));
-
-    const intersects6 = raycaster.intersectObject(coral, true);
-    if (intersects6.length > 0) fauna_listeners.forEach(fn => fn("Enallopsammia_Rostrata"));
-
+    if (closestHit) {
+        fauna_listeners.forEach(fn => fn(closestHit));
+    }
 });
 
+window.addEventListener('mousemove', (event) => {
+    pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+    pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+    raycaster.setFromCamera(pointer, camera);
+
+    const targets = [coral, coffin, grenadier, moray, seastar, coral2];
+
+    const isHovering = targets.some(obj => 
+        obj.parent === underwater && raycaster.intersectObject(obj, true).length > 0
+    );
+
+    document.body.style.cursor = isHovering ? 'pointer' : 'default';
+});
 
 const bot = (await model_loader.loadAsync('/resources/models/CTD_Bottle.glb')).scene;
 bot.scale.x = 0.03;

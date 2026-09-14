@@ -5,8 +5,9 @@ const popupImg = document.getElementById('popup-img');
 const closeBtn = document.querySelector('.close-btn');
 const popupContent = document.querySelector('.popup-content');
 
-document.querySelectorAll('.inventory-card').forEach(card => {
-  card.addEventListener('click', () => {
+function showFactfile(card) {
+    if (!card || card.classList.contains('inventory-card-empty')) return;
+
     const textElement = card.querySelector('.inventorytext');
     const cardImg = card.querySelector('.image-wrapper img');
     const titleText = textElement ? textElement.textContent : 'Item Details';
@@ -17,28 +18,55 @@ document.querySelectorAll('.inventory-card').forEach(card => {
     const imageSource = card.dataset.img || (cardImg ? cardImg.src : null);
     
     if (imageSource) {
-      popupImg.src = imageSource;
-      popupImg.alt = titleText;
-      popupImg.style.display = 'block';
+        popupImg.src = imageSource;
+        popupImg.alt = titleText;
+        popupImg.style.display = 'block';
     } else {
-      popupImg.style.display = 'none';
+        popupImg.style.display = 'none';
     }
 
-    
     popupContent.classList.remove('pop-animation');
     void popupContent.offsetWidth;
     popupContent.classList.add('pop-animation');
 
     popup.style.display = 'flex';
-  });
-});
+}
+
+function attachCardListeners() {
+    document.querySelectorAll('.inventory-card').forEach(card => {
+        card.onclick = () => showFactfile(card);
+    });
+}
+
+attachCardListeners();
 
 closeBtn.addEventListener('click', () => {
-  popup.style.display = 'none';
+    popup.style.display = 'none';
 });
 
 window.addEventListener('click', (e) => {
-  if (e.target === popup) {
-    popup.style.display = 'none';
-  }
+    if (e.target === popup) {
+        popup.style.display = 'none';
+    }
 });
+
+function unlockFauna(faunaId) {
+    const card = document.getElementById(`card-${faunaId}`);
+    if (!card) return;
+
+    card.classList.remove('inventory-card-empty');
+    card.classList.add('inventory-card');
+
+    const title = card.dataset.title || faunaId;
+    const imgSrc = card.dataset.img;
+
+    card.innerHTML = `
+        <div class="image-wrapper">
+            <img src="${imgSrc}" alt="${title}">
+        </div>
+        <div class="inventorytext">${title}</div>
+    `;
+
+    attachCardListeners();
+    showFactfile(card); 
+}

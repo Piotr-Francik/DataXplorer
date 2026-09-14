@@ -296,6 +296,10 @@ getDepth((depth) => {
 faunaFound((fauna) => {
     if (fauna_discovered.indexOf(fauna) == -1) {
         fauna_discovered.push(fauna);
+
+        if (typeof unlockFauna === 'function') {
+            unlockFauna(fauna);
+        }
     }
 
     var pass = 0;
