@@ -387,7 +387,7 @@ body {
   color: rgb(141, 255, 255);
 }
 
-#close-inventory:hover{
+#close-inventory:hover {
   border-color: rgb(141, 255, 255);
   transform: scale(1.02);
   cursor: pointer;
@@ -790,4 +790,56 @@ body {
   object-fit: cover;
   border-radius: 24px;
   box-shadow: 0 0 40px rgba(120, 240, 220, 0.25);
+}
+
+#idle {
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  background-color: #1b45888b;
+  z-index: 200;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  align-items: center;
+  vertical-align: middle;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  font-family: 'HP Simplified Light', 'Century Gothic', 'Avenir Next', Futura, 'Segoe UI', sans-serif;
+  font-weight: bold;
+
+  color: #eff2f4;
+  display: none;
+}
+
+#idle video {
+  opacity: 0.2;
+  position: absolute;
+  min-width: 100vw;
+  min-height: 100vh;
+  z-index: -10;
+  pointer-events: none;
+}
+
+#idle button {
+  flex: 0 0 auto;
+  font-size: xx-large;
+  background: none;
+  border: none;
+  transition: all 0.2s;
+  margin: 20px;
+  text-decoration: none;
+  color: #eff2f4;
+}
+
+#idle button:hover {
+  scale: 1.1;
+}
+
+#idle h1 {
+  flex: 0 0 auto;
+  text-align: center;
 }

@@ -31,7 +31,7 @@
     <div id="loading-screen">
 
         <div class="logo-bar">
-            <img src="/public/resources/brand/OceanX.avif">
+            <img src="/public/resources/brand/OceanX.png">
             <div class="logo-divider"></div>
             <img src="/public/resources/brand/UOB.webp">
         </div>
@@ -121,7 +121,7 @@
 
     <h1 id="show">0/3 Fauna Discovered</h1>
 
-    <h1 style="position: absolute; right: 0px; top: 0px; z-index: 150; color: white; background-color: black;" id="fps">
+    <h1 style="display: none; position: absolute; right: 0px; top: 0px; z-index: 150; color: white; background-color: black;" id="fps">
     </h1>
 
 
@@ -141,8 +141,8 @@
         <div class="inventory-grid">
 
             <div class="inventory-card-empty" id="card-Lophelia_Pertusa" 
-                data-title="Lophelia pertusa" 
-                data-img="Lophelia pertusa.jpg" 
+                data-title="Lophelia pertusa (Deep Water White Coral)" 
+                data-img="Lophelia pertusa2.jpg" 
                 data-desc="
                 A cold-water reef-building coral found in deep ocean waters.
                 
@@ -156,8 +156,8 @@
             </div>
 
             <div class="inventory-card-empty" id="card-Enallopsammia_Rostrata" 
-                data-title="Enallopsammia rostrata" 
-                data-img="Enallopsammia rostrata.jpg" 
+                data-title="Enallopsammia rostrata (Beaked Stony Coral)" 
+                data-img="Enallopsammia rostrata2.jpg" 
                 data-desc="
                 Forms massive tree-like colonies featuring bright yellow branches.
                 
@@ -255,6 +255,13 @@
             <div class="footer-right"></div>
         </div>
     </div>
+    </div>
+
+    <div id="idle">
+        <video autoplay muted loop playsinline disablepictureinpicture disableremoteplayback src="public/resources/videos/caustics.mp4"></video>
+        <h1>Are you still there?</h1>
+        <button onclick="location.reload();">Restart Experience</button>
+        <button onclick="document.getElementById('idle').style.display = 'none';">Continue</button>
     </div>
 
     <script src="inventoryscript.js"></script>

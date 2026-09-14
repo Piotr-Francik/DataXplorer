@@ -4,67 +4,68 @@ var scene = 0;
 var audio;
 
 var i = 0;
-var txt = 'Vessel:- OceanXplorer/Location:- Nola Seamound, Cabo Verde, 400 Miles West of African Coast/Mission:- Studying life and coral reefs in the area---';
+var txt = 'Vessel:- OceanXplorer/Location:- Nola Seamount, Cabo Verde, 400 Miles West of African Coast/Mission:- Studying life and coral reefs in the area---';
 
 
 var dialogue = [
-    `Welcome aboard the <font color="yellow">OceanXplorer</font> - OceanX's floating laboratory, and launchpad into the deep sea! 
-    I hope your journey has been pleasant. <br><br>
-    The past few weeks, we have been stationed at the <font color="yellow">Nola Seamound</font> in <font color="yellow">Cabo Verde</font>, 
-    looking for corals and studying local fauna.`,
-
-    `You've join us at the perfect time! We've just arrived at our latest site, and are about to drop our <font color="yellow">CTD Rosette</font>.
+    `Welcome aboard the <font color="yellow">OceanXplorer</font> - OceanX's floating lab and launchpad into the deep sea!
     <br><br>
-    This collects <font color="red">Conductivity</font>, <font color="red">Temperature</font> and <font color="red">Depth</font> data. 
-    we can use this to assess the likelyhood of fauna at the location.`,
+    For the past few weeks, we have been at the <font color="yellow">Nola Seamount</font> in <font color="yellow">Cabo Verde</font>. 
+    We are looking for corals and studying local sea life.`,
 
-    `If the presence of fauna seems probable, we will send down the <font color="yellow">Remote Operated Vehichle</font> to inspect it visually. 
-    This is where you come in.
+    `You have joined us at a great time! We just arrived at a new site. 
+    We are about to drop our <font color="yellow">CTD Rosette</font>.
     <br><br>
-    You will be presented with 8 possible sites, and using the data collected, you will decide where we deploy the ROV.`,
+    It collects <font color="red">Conductivity</font>, <font color="red">Temperature</font>, and <font color="red">Depth</font> data. 
+    This tells us if sea life is likely to be here.`,
 
-    `Our focus today is on 2 types of coral: <font color="yellow">Enallopsammia Rostrata</font> and <font color="yellow">
-    Lophelia Pertusa</font>. <br><br>
-    <font color="yellow">Enallopsammia Rostrata</font> is found at depths of <font color="red">400m-800m</font>, temperatures of 
-    <font color="red">2.6&#176;C-12&#176;C</font> and salinity of <font color="red">34-37</font>.
+    `If sea life seems likely, we send down the <font color="yellow">Remote Operated Vehicle</font> (ROV) to look. 
     <br><br>
-    <font color="yellow">Lophelia Pertusa</font> is found at depths of <font color="red">500m-1000m</font>, temperatures of 
-    <font color="red">4&#176;C-15&#176;C</font> and salinity of <font color="red">34-37</font>.`,
+    This is your job: you will see 8 possible sites. 
+    Use the data to choose where we send the ROV.`,
 
-    `We are also looking for 4 additional fauna - can you find them all?
+    `Today we are looking for 2 types of coral: <font color="yellow">Beaked Stony Coral</font> and 
+    <font color="yellow">Deep Water White Coral</font>.
     <br><br>
-    As you discover new species, they will appear in your inventory - open it up to find out more about each one!
+    <font color="yellow">Beaked Stony Coral</font> lives at <font color="red">400m-800m</font> depth, 
+    <font color="red">2.6&#176;C-12&#176;C</font>, and salinity <font color="red">34-37</font>.
     <br><br>
-    Also, if a site looked promising but nothing was there, don't feel disheartened - deep sea exploration is a stab in the dark.
-    If we knew what was down there, there'd be no reason to go!`,
+    <font color="yellow">Deep Water White Coral</font> lives at <font color="red">500m-1000m</font> depth, 
+    <font color="red">4&#176;C-15&#176;C</font>, and salinity <font color="red">34-37</font>.`,
 
-    `Ok, when you're ready, deploy the rosette!`
+    `We are also looking for 4 more fauna - can you find them all?
+    <br><br>
+    New fauna you find will appear in your inventory. Open it to learn more about each one!
+    <br><br>
+    If a site looks good but has nothing there, don't worry. Deep sea exploration is often a guess. 
+    If we already knew what was there, we wouldn't need to explore!`,
 
+    `Ok, when you are ready, deploy the rosette!`
 ];
 
 var site_dialogue = [
-    `Wow, a coffin fish! They belong to the family Chaunacidae, or sea toads; I don't see the relation. Their biological name "Chaunax"
-    means "one who gapes"...`,
+    `A coffin fish! They belong to the family Chaunacidae, also called "sea toads." 
+    Their name "Chaunax" means "one who gapes."`,
 
-    `That site was completely baron. Good attempt though, the data was promising.`,
+    `That site was empty. Good try though - the data looked promising.`,
 
-    `I didn't expect much from that one. Try going for the graphs that match the ranges for the corals we're trying to find.`,
+    `I didn't expect much there. Try picking sites that match the coral ranges.`,
 
-    `A moray eel, what a weird creature - I certainly wouldn't want to be a tiny fish on the recieving end of all thsoe teeth!`,
+    `A moray eel! I would not want to be a small fish near all those teeth!`,
 
-    `Attention! The Grenadier, a great find! One of the most populous deep sea fish, found all over the world!`,
+    `<font color="red">ATTENTION!!!</font><br><br> A Grenadier, great find! It is one of the most common deep sea fish in the world.`,
 
-    `Hmm, the graph for that site wasn't very promising. Have another look at the ranges in which we expect to find coral, and try again.`,
+    `That site's data wasn't very promising. Check the coral ranges again and try another site.`,
 
-    `Oh cool, a sea star! There's about 400 billion stars in our galaxy. I wonder how that compares to the number in our oceans...`,
+    `A sea star! There are about 400 billion stars in our galaxy. I wonder how many sea stars are in our oceans!`,
 
-    `Unlucky, but you can't find something every time. Lets go again.`,
+    `Bad luck, but you won't find something every time. Let's try again.`,
 
-    `Congratulations, you have found all 6 species of fauna we were searching for today! You should be very proud of yourself!
+    `Congratulations! You found all 6 fauna we were looking for today. Well done!
     <br><br>
-    That concludes your voyage for today. I hope you enjoyed your adventure.
+    That's the end of your trip for today. I hope you enjoyed it.
     <br><br>
-    I do have one more suprise for you - a great data explorer such as yourself deserves to disembark in style...`
+    I have one more surprise for you - a great explorer like you deserves a special way to leave...`
 ];
 
 var speed = 20;
@@ -85,17 +86,46 @@ var fauna_discovered = [];
 var dialogueCharIndex = 0;
 var dialogueTimeout;
 
+
+
+
+
+
+function logout() {
+    document.getElementById("idle").style.display = "flex";
+}
+
+function resetTimer() {
+    clearTimeout(time);
+    time = setTimeout(logout, 30000)
+}
+
+var time;
+window.onload = resetTimer;
+document.onmousemove = resetTimer;
+document.onkeydown = resetTimer;
+
+document.onload = resetTimer;
+document.onmousemove = resetTimer;
+document.onmousedown = resetTimer; // touchscreen presses
+document.ontouchstart = resetTimer;
+document.onclick = resetTimer;     // touchpad clicks
+document.onkeydown = resetTimer;   // onkeypress is deprectaed
+document.addEventListener('scroll', resetTimer, true); // improved; see comments
+
+
+
 function typeDialogueText(targetElementId, fullHtmlText, speed = 15, onComplete) {
     const targetElement = document.getElementById(targetElementId);
-    
+
     clearTimeout(dialogueTimeout);
-    
+
     if (dialogueCharIndex === 0) {
         targetElement.innerHTML = "";
     }
 
     if (dialogueCharIndex < fullHtmlText.length) {
-    
+
         if (fullHtmlText.charAt(dialogueCharIndex) === '<') {
             const closingIndex = fullHtmlText.indexOf('>', dialogueCharIndex);
             if (closingIndex !== -1) {
@@ -274,7 +304,7 @@ onSceneChange((scene_index) => {
             break;
         case 2:
             document.getElementById("dialogue").style.display = "block";
-            dialogueCharIndex = 0; 
+            dialogueCharIndex = 0;
             typeDialogueText("speech", dialogue[Math.floor(scene * 10 - 20)]);
             break;
         case 7:
