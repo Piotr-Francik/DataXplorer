@@ -460,12 +460,12 @@ body {
 
 .footer-left {
   width: 65%;
-  background: #0e3452;
+  background: #154c76;
 }
 
 .footer-right {
   width: 35%;
-  background: #1a5986;
+  background: #1d6497;
 }
 
 @keyframes popIn {
