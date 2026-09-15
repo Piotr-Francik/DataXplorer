@@ -728,7 +728,6 @@ export function setScene(scene_index) {
                     coral.position.z = 0.7;
                     coral.rotation.y = 0.5;
                     rock1.position.x = -0.3;
-                    rock1.position.y = -80;
                     rock1.position.z = 1.3;
                     rock1.rotation.y = 0.4
                     break;
@@ -740,6 +739,9 @@ export function setScene(scene_index) {
                     coral2.position.y = -80;
                     coral2.position.z = 0.6;
                     coral2.rotation.y = 0.5;
+                    rock1.position.x = -0.3;
+                    rock1.position.z = 0.4;
+                    rock1.rotation.y = 1;
                     break;
                 case 7:
                     underwater.add(coral2);
@@ -750,6 +752,9 @@ export function setScene(scene_index) {
                     coral2.position.y = -80;
                     coral2.position.z = 0.6;
                     coral2.rotation.y = 0;
+                    rock1.position.x = 0.3;
+                    rock1.position.z = 1;
+                    rock1.rotation.y = 0.5;
                     break;
                 case 2:
                     underwater.add(base3);
@@ -757,7 +762,7 @@ export function setScene(scene_index) {
                 case 3:
                     underwater.add(base1);
                     break;
-                case 5:
+                case 6:
                     underwater.add(base2);
                     break;
                 case 8:
@@ -1017,6 +1022,11 @@ function update() {
             moray.position.y = -79.7;
             moray.position.z = 0.4 + Math.sin(count) * 0.2;
             moray.rotation.y = Math.atan2(2 * Math.cos(count / 2), 2 * Math.cos(count)) + Math.PI / 2;
+
+            grenadier.position.x = Math.sin(count / 2) * 0.4;
+            moray.position.y = -79.7;
+            grenadier.position.z = 0.4 + Math.sin(count) * 0.2;
+            grenadier.rotation.y = Math.atan2(2 * Math.cos(count / 2), 2 * Math.cos(count)) + Math.PI / 2;
 
 
             break;
