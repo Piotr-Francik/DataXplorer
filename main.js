@@ -454,7 +454,7 @@ person.traverse((child) => {
 
 //Spot light
 const color = 0xFFFFFF;
-const intensity = 2;
+const intensity = 8;
 const spotLight = new THREE.SpotLight(color, intensity);
 underwater.add(spotLight);
 underwater.add(spotLight.target);
@@ -687,6 +687,7 @@ export function setScene(scene_index) {
                     break;
             }
 
+
             speed = 0;
             break;
         case 9:
@@ -910,7 +911,7 @@ function update() {
                 rov.position.y = -80;
             }
 
-            rov.position.y = -80 + 20 / (count * 10 + 1);
+            rov.position.y = -79.8 + 5 - (count >= Math.PI ? 5 : 5 * Math.sin(count / 2)) + 0.01 * Math.cos(count);
 
 
             depth_listeners.forEach(fn => fn(rov.position.y));
@@ -925,6 +926,20 @@ function update() {
 
             sub_sun.intensity = 1.3 * Math.exp(rov.position.y / 10);
             sub_light.intensity = 1 * Math.exp(rov.position.y / 10);
+
+
+
+            // Animations
+            coffin.position.x = Math.sin(count) * 0.2;
+            coffin.position.y = -79.7;
+            coffin.position.z = 0.4 + Math.sin(count * 2) * 0.1;
+            coffin.rotation.y = Math.atan2(2 * Math.cos(count), 2 * Math.cos(count * 2)) + Math.PI / 2;
+
+            moray.position.x = Math.sin(count / 2) * 0.4;
+            moray.position.y = -79.7;
+            moray.position.z = 0.4 + Math.sin(count) * 0.2;
+            moray.rotation.y = Math.atan2(2 * Math.cos(count / 2), 2 * Math.cos(count)) + Math.PI / 2;
+
 
             break;
         // Conclusion

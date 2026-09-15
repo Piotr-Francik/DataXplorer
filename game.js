@@ -115,7 +115,7 @@ document.addEventListener('scroll', resetTimer, true); // improved; see comments
 
 
 
-function typeDialogueText(targetElementId, fullHtmlText, speed = 15, onComplete) {
+function typeDialogueText(targetElementId, fullHtmlText, speed = 0, onComplete) {
     const targetElement = document.getElementById(targetElementId);
 
     clearTimeout(dialogueTimeout);

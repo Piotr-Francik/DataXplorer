@@ -848,3 +848,16 @@ body {
   flex: 0 0 auto;
   text-align: center;
 }
+
+#typed_text {
+  display: none;
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  color: white;
+  font-weight: 600;
+  z-index: 100;
+  font-size: xx-large;
+  font-family: 'Courier New', Courier, 'Lucida Console', Monaco, monospace;
+  width: 50%;
+}

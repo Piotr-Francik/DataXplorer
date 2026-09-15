@@ -79,9 +79,7 @@
         <button id="proceed" class="hide" disabled>Click to Proceed</button>
     </div>
 
-    <div id="typed_text" style="display: none; position: absolute; left: 10px; bottom: 10px; color: white; font-weight: 600; z-index: 100; font-size: xx-large;
-    font-family: 'Courier New', Courier, 'Lucida Console', Monaco, monospace; width: 50%;">
-    </div>
+    <div id="typed_text"> </div>
 
     <button id="start-dialogue" style="display: none; position: absolute; bottom: 10px; right: 10px;color: white; font-weight: 600; z-index: 100; font-size: xx-large;
     font-family: 'Courier New', Courier, 'Lucida Console', Monaco, monospace; background:none; border: none;">Click to
@@ -121,7 +119,8 @@
 
     <h1 id="show">0/3 Fauna Discovered</h1>
 
-    <h1 style="display: none; position: absolute; right: 0px; top: 0px; z-index: 150; color: white; background-color: black;" id="fps">
+    <h1 style="display: none; position: absolute; right: 0px; top: 0px; z-index: 150; color: white; background-color: black;"
+        id="fps">
     </h1>
 
 
@@ -140,9 +139,8 @@
 
         <div class="inventory-grid">
 
-            <div class="inventory-card-empty" id="card-Lophelia_Pertusa" 
-                data-title="Lophelia pertusa (Deep Water White Coral)" 
-                data-img="Lophelia pertusa2.jpg" 
+            <div class="inventory-card-empty" id="card-Lophelia_Pertusa"
+                data-title="Lophelia pertusa (Deep Water White Coral)" data-img="Lophelia pertusa2.jpg"
                 data-desc="
                 A cold-water reef-building coral found in deep ocean waters.
                 
@@ -155,9 +153,8 @@
                 <div class="inventorytext">Unknown</div>
             </div>
 
-            <div class="inventory-card-empty" id="card-Enallopsammia_Rostrata" 
-                data-title="Enallopsammia rostrata (Beaked Stony Coral)" 
-                data-img="Enallopsammia rostrata2.jpg" 
+            <div class="inventory-card-empty" id="card-Enallopsammia_Rostrata"
+                data-title="Enallopsammia rostrata (Beaked Stony Coral)" data-img="Enallopsammia rostrata2.jpg"
                 data-desc="
                 Forms massive tree-like colonies featuring bright yellow branches.
                 
@@ -170,9 +167,7 @@
                 <div class="inventorytext">Unknown</div>
             </div>
 
-            <div class="inventory-card-empty" id="card-Coffin_Fish" 
-                data-title="Coffinfish" 
-                data-img="coffinfish.jpg" 
+            <div class="inventory-card-empty" id="card-Coffin_Fish" data-title="Coffinfish" data-img="coffinfish.jpg"
                 data-desc="
                 A deep-sea anglerfish known for its globular body.
                 
@@ -185,9 +180,7 @@
                 <div class="inventorytext">Unknown</div>
             </div>
 
-            <div class="inventory-card-empty" id="card-Moray" 
-                data-title="Moray Eel" 
-                data-img="moray.jpg" 
+            <div class="inventory-card-empty" id="card-Moray" data-title="Moray Eel" data-img="moray.jpg"
                 data-desc="
                 A long, snake-like marine fish known for its elongated body, scaleless skin, and powerful jaws.
                 
@@ -200,9 +193,7 @@
                 <div class="inventorytext">Unknown</div>
             </div>
 
-            <div class="inventory-card-empty" id="card-Grenadier" 
-                data-title="Grenadier" 
-                data-img="grenadier.jpg" 
+            <div class="inventory-card-empty" id="card-Grenadier" data-title="Grenadier" data-img="grenadier.jpg"
                 data-desc="
                 An abundant deep-sea fish characterized by a disproportionately large head and big eyes adapted to detecting faint bioluminescent light in the dark ocean.
                 
@@ -215,9 +206,7 @@
                 <div class="inventorytext">Unknown</div>
             </div>
 
-            <div class="inventory-card-empty" id="card-Sea_Star" 
-                data-title="Sea Star" 
-                data-img="seastar.jpg" 
+            <div class="inventory-card-empty" id="card-Sea_Star" data-title="Sea Star" data-img="seastar.jpg"
                 data-desc="
                 A marine invertebrate with a central body disk and a star shape.
 
@@ -234,31 +223,32 @@
     </div>
 
     <div id="factfile-popup" class="popup">
-    <div class="popup-content">
-        <span class="close-btn">&times;</span>
+        <div class="popup-content">
+            <span class="close-btn">&times;</span>
 
-        <div class="popup-banner-top">
-            <span>YOU HAVE FOUND:</span>
-        </div>
+            <div class="popup-banner-top">
+                <span>YOU HAVE FOUND:</span>
+            </div>
 
-        <div class="popup-body">
-            <img id="popup-img" src="" alt="Factfile Detail Image">
+            <div class="popup-body">
+                <img id="popup-img" src="" alt="Factfile Detail Image">
 
-            <div class="popup-info">
-                <div class="popupheader" id="popup-title">Factfile Title</div>
-                <div class="inventorytext" id="popup-desc">Factfile description</div>
+                <div class="popup-info">
+                    <div class="popupheader" id="popup-title">Factfile Title</div>
+                    <div class="inventorytext" id="popup-desc">Factfile description</div>
+                </div>
+            </div>
+
+            <div class="popup-banner-bottom">
+                <div class="footer-left"></div>
+                <div class="footer-right"></div>
             </div>
         </div>
-
-        <div class="popup-banner-bottom">
-            <div class="footer-left"></div>
-            <div class="footer-right"></div>
-        </div>
-    </div>
     </div>
 
     <div id="idle">
-        <video autoplay muted loop playsinline disablepictureinpicture disableremoteplayback src="public/resources/videos/caustics.mp4"></video>
+        <video autoplay muted loop playsinline disablepictureinpicture disableremoteplayback
+            src="public/resources/videos/caustics.mp4"></video>
         <h1>Are you still there?</h1>
         <button onclick="location.reload();">Restart Experience</button>
         <button onclick="document.getElementById('idle').style.display = 'none';">Continue</button>
