@@ -563,6 +563,8 @@ body {
 
 #proceed {
   font-size: x-large;
+  font-family: 'HP Simplified Light';
+  font-weight: bold;
   font-weight: 600;
   color: white;
   align-items: end;
