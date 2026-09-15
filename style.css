@@ -572,6 +572,7 @@ body {
 
 
 .container .chartContainer {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -609,6 +610,42 @@ body {
   box-shadow: 0 0 0 2px #1dbb7540, 0 10px 24px #00000044;
   pointer-events: none;
 }
+
+.chartContainer.select {
+  /* background: #0d3d2c;
+  border-color: green;
+  box-shadow: 0 0 0 2px #1dbb7540, 0 10px 24px #00000044;
+  pointer-events: none;
+  z-index: 15;
+  width: 600px;
+  height: 500px; */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;          /* Makes it wider */
+  height: 500px;         /* Makes it taller */
+  font-size: 48px;      /* Increases text size */
+  background-color: #e74c3c;
+  z-index: 100;         /* Puts it on top of everything */
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+
+}
+.chartContainer:hover.select {
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;          /* Makes it wider */
+  height: 500px;         /* Makes it taller */
+  font-size: 48px;      /* Increases text size */
+  background-color: #e74c3c;
+  z-index: 100;         /* Puts it on top of everything */
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+
+}
+
 
 .chartContainer.is-incorrect {
   background: #4a2027;

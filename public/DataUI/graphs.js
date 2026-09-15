@@ -16,11 +16,11 @@ function setupGraphButtons() {
     document.querySelectorAll(".chartContainer").forEach(container => {
         const selectGraph = () => {
             console.log(container.dataset.graph);
-            blackout(() => setScene(8 + container.dataset.graph / 10));
+            //blackout(() => setScene(8 + container.dataset.graph / 10));
             const isCorrect = correctGraphs.has(container.dataset.graph)
-            container.classList.toggle("is-correct", isCorrect)
-            container.classList.toggle("is-incorrect", !isCorrect)
-            container.setAttribute("aria-pressed", "true")
+            container.classList.toggle("select", true)
+            //container.classList.toggle("is-correct", isCorrect)
+            //container.classList.toggle("is-incorrect", !isCorrect)
         }
 
         container.addEventListener("click", selectGraph)
