@@ -369,7 +369,7 @@ body {
 
 #close-inventory {
   position: absolute;
-  left: 15px;
+  right: 15px;
   top: 15px;
   height: 35px;
   width: 35px;
