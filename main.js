@@ -259,9 +259,9 @@ sub_xplorer.getObjectByName("CTD_Arm").add(sub_ctd);
 
 
 const coral = (await model_loader.loadAsync('/resources/models/LopheliaPertusa.glb')).scene;
-coral.scale.x = 2;
-coral.scale.y = 2;
-coral.scale.z = 2;
+coral.scale.x = 1.5;
+coral.scale.y = 1.5;
+coral.scale.z = 1.5;
 coral.position.x = 0;
 coral.position.y = -80;
 coral.position.z = 0.5;
@@ -275,6 +275,53 @@ coral2.position.x = 0;
 coral2.position.y = -80;
 coral2.position.z = 0.5;
 underwater.add(coral2);
+
+const rock1 = (await model_loader.loadAsync('/resources/models/Rock1.glb')).scene;
+rock1.scale.x = 0.2;
+rock1.scale.y = 0.2;
+rock1.scale.z = 0.2;
+rock1.position.x = 0;
+rock1.position.y = -80;
+rock1.position.z = 0.5;
+underwater.add(rock1);
+
+const rock2 = (await model_loader.loadAsync('/resources/models/Rock2.glb')).scene;
+rock2.scale.x = 0.3;
+rock2.scale.y = 0.3;
+rock2.scale.z = 0.3;
+rock2.position.x = -0.5;
+rock2.position.y = -80;
+rock2.position.z = 0.9;
+rock2.rotation.y = -1;
+underwater.add(rock2);
+
+const base1 = (await model_loader.loadAsync('/resources/models/Rock3.glb')).scene;
+base1.scale.x = 2;
+base1.scale.y = 2;
+base1.scale.z = 2;
+base1.position.x = 0;
+base1.position.y = -80;
+base1.position.z = 0.5;
+//underwater.add(base1);
+
+const base2 = (await model_loader.loadAsync('/resources/models/Rock4.glb')).scene;
+base2.scale.x = 2;
+base2.scale.y = 2;
+base2.scale.z = 2;
+base2.position.x = 0;
+base2.position.y = -80;
+base2.position.z = 0.5;
+//underwater.add(base2);
+
+const base3 = (await model_loader.loadAsync('/resources/models/Rock5.glb')).scene;
+base3.scale.x = 2;
+base3.scale.y = 2;
+base3.scale.z = 2;
+base3.position.x = 0;
+base3.position.y = -80;
+base3.position.z = 0.5;
+base3.rotation.y = Math.PI;
+underwater.add(base3);
 
 
 const coffin = (await model_loader.loadAsync('/resources/models/coffin.glb')).scene;
@@ -305,13 +352,17 @@ moray.position.z = 0.5;
 underwater.add(moray);
 
 const seastar = (await model_loader.loadAsync('/resources/models/Seastar.glb')).scene;
-seastar.scale.x = 0.01;
-seastar.scale.y = 0.01;
-seastar.scale.z = 0.01;
-seastar.position.x = -0.3;
+seastar.scale.x = 0.02;
+seastar.scale.y = 0.02;
+seastar.scale.z = 0.02;
+seastar.position.x = 0.3;
 seastar.position.y = -80;
-seastar.position.z = 0.5;
+seastar.position.z = 0.4;
+const seastar2 = seastar.clone();
+seastar2.position.x = 0.2;
+seastar2.position.z = 0.5
 underwater.add(seastar);
+underwater.add(seastar2);
 
 
 // Cable
@@ -367,6 +418,7 @@ window.addEventListener('click', (event) => {
         { obj: grenadier, id: "Grenadier" },
         { obj: moray, id: "Moray" },
         { obj: seastar, id: "Sea_Star" },
+        { obj: seastar2, id: "Sea_Star" },
         { obj: coral2, id: "Enallopsammia_Rostrata" }
     ];
 
@@ -395,7 +447,7 @@ window.addEventListener('mousemove', (event) => {
 
     raycaster.setFromCamera(pointer, camera);
 
-    const targets = [coral, coffin, grenadier, moray, seastar, coral2];
+    const targets = [coral, coffin, grenadier, moray, seastar, seastar2, coral2];
 
     const isHovering = targets.some(obj =>
         obj.parent === underwater && raycaster.intersectObject(obj, true).length > 0
@@ -403,14 +455,6 @@ window.addEventListener('mousemove', (event) => {
 
     document.body.style.cursor = isHovering ? 'pointer' : 'default';
 });
-
-const bot = (await model_loader.loadAsync('/resources/models/CTD_Bottle.glb')).scene;
-bot.scale.x = 0.03;
-bot.scale.y = 0.03;
-bot.scale.z = 0.03;
-const bot2 = bot.clone();
-overwater.add(bot);
-overwater.add(bot2);
 
 const helicopter = (await model_loader.loadAsync('/resources/models/Helicopter2.glb')).scene;
 helicopter.scale.x = 0.07;
@@ -460,17 +504,6 @@ underwater.add(spotLight);
 underwater.add(spotLight.target);
 spotLight.angle = Math.PI / 5;
 spotLight.penumbra = 0.4;
-
-
-
-/*const man = (await model_loader.loadAsync('/resources/models/Man.glb')).scene;
-man.scale.x = 1;
-man.scale.y = 1;
-man.scale.z = 1;
-man.position.x = 0;
-man.position.y = 0;
-man.position.z = 0;
-xplorer.add(man);*/
 
 // Camera
 camera.position.z = 25;
@@ -540,7 +573,7 @@ sand.wrapT = THREE.RepeatWrapping;
 sand.repeat.set(10000, 10000);
 const material = new THREE.MeshStandardMaterial({ color: 0xffffff, map: sand });
 const cube = new THREE.Mesh(waterGeometry, material);
-underwater.add(cube);
+//underwater.add(cube);
 cube.position.y = -80;
 cube.rotation.x = -Math.PI / 2;
 
@@ -598,7 +631,6 @@ export function setScene(scene_index) {
             break;
         case 1:
             count = 0;
-            console.log("Start")
             ambientSea.play();
             ambientUnder.play();
             break;
@@ -665,25 +697,71 @@ export function setScene(scene_index) {
             underwater.remove(coral2);
             underwater.remove(coffin);
             underwater.remove(seastar);
+            underwater.remove(seastar2);
             underwater.remove(grenadier);
             underwater.remove(moray);
+            underwater.remove(base1);
+            underwater.remove(base2);
+            underwater.remove(base3);
 
             switch (scene * 10 - 80) {
                 case 1:
                     underwater.add(coral);
                     underwater.add(coffin);
+                    underwater.add(base1);
+                    coral.position.x = 0;
+                    coral.position.y = -80;
+                    coral.position.z = 0.5;
+                    coral.rotation.y = 0;
+
+                    rock1.position.x = 0;
+                    rock1.position.y = -80;
+                    rock1.position.z = 1.2;
+                    rock1.rotation.y = 0.2
                     break;
                 case 4:
                     underwater.add(coral);
                     underwater.add(moray);
+                    underwater.add(base2);
+                    coral.position.x = 0.3;
+                    coral.position.y = -80;
+                    coral.position.z = 0.7;
+                    coral.rotation.y = 0.5;
+                    rock1.position.x = -0.3;
+                    rock1.position.y = -80;
+                    rock1.position.z = 1.3;
+                    rock1.rotation.y = 0.4
                     break;
                 case 5:
                     underwater.add(coral2);
                     underwater.add(grenadier);
+                    underwater.add(base3);
+                    coral2.position.x = 0.3;
+                    coral2.position.y = -80;
+                    coral2.position.z = 0.6;
+                    coral2.rotation.y = 0.5;
                     break;
                 case 7:
                     underwater.add(coral2);
                     underwater.add(seastar);
+                    underwater.add(seastar2);
+                    underwater.add(base2);
+                    coral2.position.x = -0.3;
+                    coral2.position.y = -80;
+                    coral2.position.z = 0.6;
+                    coral2.rotation.y = 0;
+                    break;
+                case 2:
+                    underwater.add(base3);
+                    break;
+                case 3:
+                    underwater.add(base1);
+                    break;
+                case 5:
+                    underwater.add(base2);
+                    break;
+                case 8:
+                    underwater.add(base1);
                     break;
             }
 
@@ -771,7 +849,7 @@ function update() {
             person.rotation.y = Math.PI;
             camera.rotation.x = 0.1;
             camera.rotation.y = 2.8;
-            camera.rotation.z = 0;
+            camera.rotation.z = -0.05;
             break;
         // Opening Door
         case 3:
@@ -878,7 +956,7 @@ function update() {
         // ROV
         case 8:
             count += delta * 0.5;
-            spotLight.intensity = 1;
+            spotLight.intensity = 2;
 
             rov.position.x = 0;
             rov.position.z = 0;
@@ -994,9 +1072,9 @@ function update() {
         //sound.setVolume(0);
         //sound2.setVolume(0.3);
     }
-    else if (scene == 8) {
+    else if (Math.floor(scene) == 8) {
         ambientSea.setVolume(0);
-        ambientUnder.setVolume(0);
+        ambientUnder.setVolume(1);
     }
     else {
         overMusic.setVolume(Math.min(1, Math.max(0, camera.position.y)) * 0.5);
@@ -1004,7 +1082,7 @@ function update() {
         {
             underMusic.setVolume(Math.min(1, Math.max(0, 1 - camera.position.y)) * 0.3);
         }
-        ambientUnder.setVolume(Math.min(1, Math.max(0, 1 - camera.position.y)) * 1);
+        ambientUnder.setVolume(Math.min(1, Math.max(0, 1 - camera.position.y)) * 2);
         ambientSea.setVolume(1 - Math.min(1, Math.max(0, 1 - camera.position.y)) * 1);
     }
     last = r;

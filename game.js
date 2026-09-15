@@ -299,7 +299,15 @@ onSceneChange((scene_index) => {
                 setTimeout(() => { document.getElementById("recover").style.display = "block"; }, 5000);
             }
             else {
-                document.getElementById("show").innerHTML = `Fauna Discovered: ${0} / ${fauna_list[Math.round((scene - 8) * 10 - 1)].length}`
+                var pass = 0;
+
+                fauna_list[Math.round(scene * 10 - 81)].forEach(element => {
+                    if (fauna_discovered.indexOf(element) != -1) {
+                        pass += 1;
+                    }
+                });
+
+                document.getElementById("show").innerHTML = `Fauna Discovered: ${pass} / ${fauna_list[Math.round((scene - 8) * 10 - 1)].length}`
                 setTimeout(() => { document.getElementById("show").classList.add("game") }, 5000);
             }
 
@@ -337,7 +345,6 @@ faunaFound((fauna) => {
     var pass = 0;
 
     fauna_list[Math.round(scene * 10 - 81)].forEach(element => {
-        console.log(element);
         if (fauna_discovered.indexOf(element) != -1) {
             pass += 1;
         }
@@ -345,10 +352,6 @@ faunaFound((fauna) => {
 
 
     document.getElementById("show").innerHTML = `Fauna Discovered: ${pass} / ${fauna_list[Math.round(scene * 10 - 81)].length}`
-
-    console.log(fauna_list[Math.round(scene * 10 - 81)]);
-    console.log(fauna_discovered);
-    console.log(pass);
 
     if (pass == fauna_list[Math.round((scene - 8) * 10 - 1)].length) {
         setTimeout(() => { document.getElementById("recover").style.display = "block"; }, 2000);
