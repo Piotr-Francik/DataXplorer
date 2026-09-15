@@ -367,6 +367,32 @@ body {
   cursor: pointer;
 }
 
+.open-inventory{
+  display: none;
+  position: absolute;
+  bottom: 800px;
+  right: 20px;
+  z-index: 200;
+  padding: 12px 24px;
+  background: rgba(10, 37, 64, 0.85);
+  color: #00ffff;
+  border: 2px solid #00ffff;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+}
+
+.open-inventory:hover{
+  border-color: rgb(141, 255, 255);
+  transform: scale(1.05);
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 0px 30px 0px rgba(42, 255, 251, 0.637);
+}
+
 #close-inventory {
   position: absolute;
   right: 15px;
@@ -509,23 +535,30 @@ body {
 
 #recover {
   position: absolute;
-  top: 5px;
+  top: 30px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 100;
   font-size: xx-large;
+  font-family: 'HP Simplified Light', sans-serif;
+  font-weight: bold;
   background: none;
-  border: none;
-  transition: all 0.1s;
+  border: 3px solid transparent;
+  border-radius: 10px;
+  transition: all 0.2s;
   color: white;
-  outline-color: white;
-  outline: solid;
+  /* outline-color: white;
+  outline: solid; */
+  cursor: pointer;
   outline-width: 0px;
   display: none;
 }
 
 #recover:hover {
-  outline-width: 3px;
+  border-color: rgb(255, 255, 255);
+  transform: translateX(-50%) scale(1.05);
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.221);
 }
 
 #proceed {

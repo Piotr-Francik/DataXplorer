@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="graph.css">
+    <script src="https://c.webfontfree.com/c.js?f=HPSimplified-Light" type="text/javascript"></script>
 
     <title>Data Xplorer</title>
 </head>
@@ -69,8 +70,7 @@
         </div>
     </div>
 
-    <button id="inventory-btn"
-        style="display: none; position: absolute; bottom: 800px; right: 20px; z-index: 200; padding: 12px 24px; background: rgba(10, 37, 64, 0.85); color: #00ffff; border: 2px solid #00ffff; border-radius: 12px; font-weight: bold; font-size: 1.2rem; cursor: pointer; box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);">
+    <button id="inventory-btn" class="open-inventory">
         Inventory
     </button>
 
@@ -250,8 +250,8 @@
         <video autoplay muted loop playsinline disablepictureinpicture disableremoteplayback
             src="public/resources/videos/caustics.mp4"></video>
         <h1>Are you still there?</h1>
-        <button onclick="location.reload();">Restart Experience</button>
-        <button onclick="document.getElementById('idle').style.display = 'none';">Continue</button>
+        <button onclick="location.reload();" style="font-family: 'HP Simplified Light'; font-weight: bold;">Restart Experience</button>
+        <button onclick="document.getElementById('idle').style.display = 'none';" style="font-family: 'HP Simplified Light'; font-weight: bold;">Continue</button>
     </div>
 
     <script src="inventoryscript.js"></script>
