@@ -313,6 +313,19 @@ seastar.position.y = -80;
 seastar.position.z = 0.5;
 underwater.add(seastar);
 
+
+// Cable
+const cable = new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshBasicMaterial({ color: new THREE.Color(0, 0, 0) }));
+cable.scale.x = 2;
+cable.scale.y = 2;
+cable.scale.z = 2;
+cable.position.x = 0;
+cable.position.y = 0;
+cable.position.z = 0;
+const sub_cable = cable.clone();
+ctd.add(cable);
+sub_ctd.add(sub_cable);
+
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 
@@ -384,7 +397,7 @@ window.addEventListener('mousemove', (event) => {
 
     const targets = [coral, coffin, grenadier, moray, seastar, coral2];
 
-    const isHovering = targets.some(obj => 
+    const isHovering = targets.some(obj =>
         obj.parent === underwater && raycaster.intersectObject(obj, true).length > 0
     );
 
@@ -535,28 +548,30 @@ cube.rotation.x = -Math.PI / 2;
 
 const listener = new THREE.AudioListener();
 camera.add(listener);
-// create a global audio source
-const sound = new THREE.Audio(listener);
-const sound2 = new THREE.Audio(listener);
-const submerged = new THREE.Audio(listener);
-const sea = new THREE.Audio(listener);
+
+const overMusic = new THREE.Audio(listener);
+const underMusic = new THREE.Audio(listener);
+const ambientUnder = new THREE.Audio(listener);
+const ambientSea = new THREE.Audio(listener);
 const rotors = new THREE.Audio(listener);
-// load a sound and set it as the Audio object's buffer
+const splash = new THREE.Audio(listener);
+
+
 const audioLoader = new THREE.AudioLoader();
 audioLoader.load('resources/sounds/menu.mp3', function (buffer) {
-    sound.setBuffer(buffer);
-    sound.setLoop(true);
-    sound.setVolume(0.5);
+    overMusic.setBuffer(buffer);
+    overMusic.setLoop(true);
+    overMusic.setVolume(0.5);
 });
 audioLoader.load('resources/sounds/menu_sub.mp3', function (buffer) {
-    sound2.setBuffer(buffer);
-    sound2.setLoop(true);
-    sound2.setVolume(0);
+    underMusic.setBuffer(buffer);
+    underMusic.setLoop(true);
+    underMusic.setVolume(0);
 });
 audioLoader.load('resources/sounds/water_ambient.mp3', function (buffer) {
-    submerged.setBuffer(buffer);
-    submerged.setLoop(true);
-    submerged.setVolume(0);
+    ambientUnder.setBuffer(buffer);
+    ambientUnder.setLoop(true);
+    ambientUnder.setVolume(0);
 });
 audioLoader.load('resources/sounds/helicopter.mp3', function (buffer) {
     rotors.setBuffer(buffer);
@@ -564,9 +579,9 @@ audioLoader.load('resources/sounds/helicopter.mp3', function (buffer) {
     rotors.setVolume(0);
 });
 audioLoader.load('resources/sounds/sea_sounds.mp3', function (buffer) {
-    sea.setBuffer(buffer);
-    sea.setLoop(true);
-    sea.setVolume(1);
+    ambientSea.setBuffer(buffer);
+    ambientSea.setLoop(true);
+    ambientSea.setVolume(1);
 });
 
 // Scene Control
@@ -584,8 +599,8 @@ export function setScene(scene_index) {
         case 1:
             count = 0;
             console.log("Start")
-            sea.play();
-            submerged.play();
+            ambientSea.play();
+            ambientUnder.play();
             break;
         case 7:
             document.querySelector(".container").style.display = "none";
@@ -631,9 +646,9 @@ export function setScene(scene_index) {
         case 8:
             document.querySelector(".container").style.display = "none";
             overwater.add(rov);
-            sound.setVolume(0);
-            sound2.setVolume(0.3);
-            submerged.play();
+            overMusic.setVolume(0);
+            underMusic.setVolume(0.3);
+            ambientUnder.play();
             count = 0
             camera.near = 0.1;
             camera.far = 1000;
@@ -653,7 +668,7 @@ export function setScene(scene_index) {
             underwater.remove(grenadier);
             underwater.remove(moray);
 
-            switch(scene * 10 - 80){
+            switch (scene * 10 - 80) {
                 case 1:
                     underwater.add(coral);
                     underwater.add(coffin);
@@ -717,6 +732,11 @@ function update() {
     mixer.update(delta);
 
     const arm = xplorer.getObjectByName("CTD_Arm");
+
+    cable.scale.y = Math.abs(ctd.position.y / 0.003);
+    cable.position.y = Math.abs(ctd.position.y / 0.006);
+    sub_cable.scale.y = Math.abs(ctd.position.y / 0.003);
+    sub_cable.position.y = Math.abs(ctd.position.y / 0.006);
 
     switch (Math.floor(scene)) {
         // Menu Cutscene
@@ -784,11 +804,10 @@ function update() {
 
             camera.lookAt((arm.position.x + ctd.position.x) * 10, (+ ctd.position.y + arm.position.y) * 10 - 7, (arm.position.z + ctd.position.x) * 10);
 
-            ctd.position.y -=  Math.min(delta * 0.3, delta * descent) * Math.min(1, count);
-            camera.position.y -=  Math.min(delta * 3 * 0.5, 5 * delta * descent);
+            ctd.position.y -= Math.min(delta * 0.3, delta * descent) * Math.min(1, count);
+            camera.position.y -= Math.min(delta * 3 * 0.5, 5 * delta * descent);
 
             if (ctd.position.y < -.4 && ctd.position.y + delta * descent > -.4) {
-                const splash = new THREE.Audio(listener);
                 audioLoader.load('resources/sounds/big_explosion.ogg', function (buffer) {
                     splash.setBuffer(buffer);
                     splash.setLoop(false);
@@ -806,7 +825,7 @@ function update() {
             count -= delta;
             camera.position.y = camera.position.y - delta * 50;
             camera.position.x = 1000;
-            sound2.setVolume(Math.max(0, sound2.getVolume() - delta / 10));
+            underMusic.setVolume(Math.max(0, underMusic.getVolume() - delta / 10));
             if (count < 0) {
                 setScene(6);
             }
@@ -835,7 +854,6 @@ function update() {
 
 
             if (camera.position.y >= -1.6 * 0 && camera.position.y - delta * 1.5 * 2 < -1.6 * 0) {
-                const splash = new THREE.Audio(listener);
                 audioLoader.load('resources/sounds/raise.mp3', function (buffer) {
                     splash.setBuffer(buffer);
                     splash.setLoop(false);
@@ -864,9 +882,9 @@ function update() {
             rov.position.x = 0;
             rov.position.z = 0;
 
-            sound2.setVolume(Math.max(0, sound2.getVolume() - delta / 10));
-            sound.setVolume(Math.max(0, sound.getVolume() - delta / 10));
-            submerged.setVolume(Math.min(1, submerged.getVolume() + delta / 3));
+            underMusic.setVolume(Math.max(0, underMusic.getVolume() - delta / 10));
+            overMusic.setVolume(Math.max(0, overMusic.getVolume() - delta / 10));
+            ambientUnder.setVolume(Math.min(1, ambientUnder.getVolume() + delta / 3));
 
             camera.position.x = 0;//rov.position.x;
             camera.position.y = 200;//rov.position.y + 1.2;
@@ -961,14 +979,18 @@ function update() {
         //sound.setVolume(0);
         //sound2.setVolume(0.3);
     }
+    else if (scene == 8) {
+        ambientSea.setVolume(0);
+        ambientUnder.setVolume(0);
+    }
     else {
-        sound.setVolume(Math.min(1, Math.max(0, camera.position.y)) * 0.5);
+        overMusic.setVolume(Math.min(1, Math.max(0, camera.position.y)) * 0.5);
         //if (scene != 3)
         {
-            sound2.setVolume(Math.min(1, Math.max(0, 1 - camera.position.y)) * 0.3);
+            underMusic.setVolume(Math.min(1, Math.max(0, 1 - camera.position.y)) * 0.3);
         }
-        submerged.setVolume(Math.min(1, Math.max(0, 1 - camera.position.y)) * 1);
-        sea.setVolume(1 - Math.min(1, Math.max(0, 1 - camera.position.y)) * 1);
+        ambientUnder.setVolume(Math.min(1, Math.max(0, 1 - camera.position.y)) * 1);
+        ambientSea.setVolume(1 - Math.min(1, Math.max(0, 1 - camera.position.y)) * 1);
     }
     last = r;
 
