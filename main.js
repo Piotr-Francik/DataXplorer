@@ -768,7 +768,7 @@ function update() {
             person.position.y = 1.418
             person.position.z = 2.1
             person.rotation.y = Math.PI;
-            camera.rotation.x = 0;
+            camera.rotation.x = 0.1;
             camera.rotation.y = 2.8;
             camera.rotation.z = 0;
             break;
