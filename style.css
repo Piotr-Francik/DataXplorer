@@ -571,12 +571,12 @@ body {
 }
 
 
-.container .chartContainer {
-  position: relative;
-  display: flex;
+.container div {
+  /* position: fixed; */
+  /* display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border: 2.5px solid transparent;
+  border: 2.5px solid transparent; */
   border-radius: 8px;
   padding: 16px;
   background: rgba(108, 255, 255, 0.312);
@@ -588,7 +588,7 @@ body {
 
 }
 
-.container .chartContainer:hover {
+.container.deselect div:hover {
   border-color: rgb(141, 255, 255);
   transform: scale(1.02);
   cursor: pointer;
@@ -597,28 +597,15 @@ body {
 
 }
 
-.chart2Container {
-  width: 250px;
-  height: 250px;
-  position: absolute;
 
-}
-
-.chartContainer.is-correct {
+.container div.is-correct {
   background: #0d3d2c;
   border-color: var(--correct);
   box-shadow: 0 0 0 2px #1dbb7540, 0 10px 24px #00000044;
   pointer-events: none;
 }
 
-.chartContainer.select {
-  /* background: #0d3d2c;
-  border-color: green;
-  box-shadow: 0 0 0 2px #1dbb7540, 0 10px 24px #00000044;
-  pointer-events: none;
-  z-index: 15;
-  width: 600px;
-  height: 500px; */
+.container div.select {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -626,32 +613,76 @@ body {
   width: 600px;          /* Makes it wider */
   height: 500px;         /* Makes it taller */
   font-size: 48px;      /* Increases text size */
-  background-color: #e74c3c;
+  /* background-color: #e74c3c; */
   z-index: 100;         /* Puts it on top of everything */
   box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  background: rgba(108, 255, 255, 1);
 
-}
-.chartContainer:hover.select {
-
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 600px;          /* Makes it wider */
-  height: 500px;         /* Makes it taller */
-  font-size: 48px;      /* Increases text size */
-  background-color: #e74c3c;
-  z-index: 100;         /* Puts it on top of everything */
-  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
 
 }
 
 
-.chartContainer.is-incorrect {
+.container div.is-incorrect {
   background: #4a2027;
   border-color: var(--incorrect);
   box-shadow: 0 0 0 2px #e0525240, 0 10px 24px #00000044;
   pointer-events: none;
+}
+
+.chart1{
+  grid-column-start: 1;
+  grid-column-end: 1;
+  grid-row-start: 1;
+  grid-row-end: 1;
+}
+
+.chart2{
+  grid-column-start: 2;
+  grid-column-end: 2;
+  grid-row-start: 1;
+  grid-row-end: 1;
+}
+
+.chart3{
+  grid-column-start: 3;
+  grid-column-end: 3;
+  grid-row-start: 1;
+  grid-row-end: 1;
+}
+
+.chart4{
+  grid-column-start: 4;
+  grid-column-end: 4;
+  grid-row-start: 1;
+  grid-row-end: 1;
+}
+
+.chart5{
+  grid-column-start: 1;
+  grid-column-end: 1;
+  grid-row-start: 2;
+  grid-row-end: 2;
+}
+
+.chart6{
+  grid-column-start: 2;
+  grid-column-end: 2;
+  grid-row-start: 2;
+  grid-row-end: 2;
+}
+
+.chart7{
+  grid-column-start: 3;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  grid-row-end: 2;
+}
+
+.chart8{
+  grid-column-start: 4;
+  grid-column-end: 4;
+  grid-row-start: 2;
+  grid-row-end: 2;
 }
 
 #blackout {
