@@ -143,6 +143,7 @@ function typeDialogueText(targetElementId, fullHtmlText, speed = 15, onComplete)
         }, speed);
     } else {
         dialogueCharIndex = 0;
+        document.getElementById("proceed").style.display = "block";
         if (onComplete) onComplete();
     }
 }
@@ -204,6 +205,7 @@ document.getElementById("scene-4-next-btn").onclick = function () {
 };
 
 document.getElementById("proceed").onclick = function () {
+    document.getElementById("proceed").style.display = "none";
     if (scene > 6) {
         if (Math.round(scene * 10) == 79) {
             setScene(9);

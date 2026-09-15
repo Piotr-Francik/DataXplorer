@@ -102,12 +102,10 @@ body {
   0%,
   100% {
     opacity: 1;
-    transform: scale(1);
   }
 
   50% {
-    opacity: 0.1;
-    transform: scale(0.98);
+    opacity: 0.5;
   }
 }
 
@@ -531,25 +529,26 @@ body {
 }
 
 #proceed {
-  position: absolute;
-  right: 15px;
-  bottom: 15px;
-  font-size: large;
-  border-radius: 15px;
+  font-size: x-large;
   font-weight: 600;
-  padding: 10px 40px 10px 40px;
   color: white;
-  border-style: solid;
-  border-width: 5px;
-  background-color: rgb(87, 215, 121);
-  border-color: green;
-  box-shadow: 0 0 12px rgba(6, 70, 3, 0.6);
+  align-items: end;
+  margin-left: auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+  float: right;
+  animation: partial_pulse 1.8s infinite;
+  margin-top: 10px;
+  display: none;
 
   transition: all 0.3s ease;
 }
 
 #proceed:hover {
   scale: 1.05;
+  animation: none;
+  opacity: 1 !important;
 }
 
 /* CTD graphs ------------------------------------------------------------------------------------------ */
@@ -660,8 +659,6 @@ body {
 #speech {
   text-align: left !important;
   font-family: 'HP Simplified Light', 'Century Gothic', 'Avenir Next', Futura, 'Segoe UI', sans-serif;
-  overflow-y: auto;
-  height: 100%;
 }
 
 
@@ -681,6 +678,7 @@ body {
   padding: 24px;
   font-family: 'HP Simplified Light', 'Century Gothic', 'Avenir Next', Futura, 'Segoe UI', sans-serif;
   border: 3px solid rgba(255, 255, 255, 0.15);
+  overflow-y: auto;
 }
 
 #loading-screen {
