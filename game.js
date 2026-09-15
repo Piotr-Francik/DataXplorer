@@ -1,7 +1,8 @@
 import { setScene, onSceneChange, getDepth, faunaFound } from './main.js';
 
 var scene = 0;
-var audio;
+var typing;
+var sonar;
 
 var i = 0;
 var txt = 'Vessel:- OceanXplorer/Location:- Nola Seamount, Cabo Verde, 400 Miles West of African Coast/Mission:- Studying life and coral reefs in the area---';
@@ -14,9 +15,9 @@ var dialogue = [
     We are looking for corals and studying local sea life.`,
 
     `You have joined us at a great time! We just arrived at a new site. 
-    We are about to drop our <font color="yellow">CTD Rosette</font>.
+    We are about to drop our <font color="yellow">Data Rosette</font>.
     <br><br>
-    It collects <font color="red">Conductivity</font>, <font color="red">Temperature</font>, and <font color="red">Depth</font> data. 
+    It collects <font color="red">Salinity</font>, <font color="red">Temperature</font>, and <font color="red">Depth</font> data. 
     This tells us if sea life is likely to be here.`,
 
     `If sea life seems likely, we send down the <font color="yellow">Remote Operated Vehicle</font> (ROV) to look. 
@@ -28,10 +29,10 @@ var dialogue = [
     <font color="yellow">Deep Water White Coral</font>.
     <br><br>
     <font color="yellow">Beaked Stony Coral</font> lives at <font color="red">400m-800m</font> depth, 
-    <font color="red">2.6&#176;C-12&#176;C</font>, and salinity <font color="red">34-37</font>.
+    <font color="red">2.6&#176;C-12&#176;C</font>, and salinity <font color="red">34-34.5</font>.
     <br><br>
     <font color="yellow">Deep Water White Coral</font> lives at <font color="red">500m-1000m</font> depth, 
-    <font color="red">4&#176;C-15&#176;C</font>, and salinity <font color="red">34-37</font>.`,
+    <font color="red">4&#176;C-15&#176;C</font>, and salinity <font color="red">34.5-35.5</font>.`,
 
     `We are also looking for 4 more fauna - can you find them all?
     <br><br>
@@ -115,7 +116,7 @@ document.addEventListener('scroll', resetTimer, true); // improved; see comments
 
 
 
-function typeDialogueText(targetElementId, fullHtmlText, speed = 0, onComplete) {
+function typeDialogueText(targetElementId, fullHtmlText, speed = 15, onComplete) {
     const targetElement = document.getElementById(targetElementId);
 
     clearTimeout(dialogueTimeout);
@@ -153,22 +154,22 @@ function typeWriter() {
         if (txt.charAt(i) == '/') {
             document.getElementById("typed_text").innerHTML += "<br>";
             setTimeout(typeWriter, speed * 5);
-            audio.pause();
+            typing.pause();
         }
         else if (txt.charAt(i) == '-') {
             setTimeout(typeWriter, speed * 5);
-            audio.pause();
+            typing.pause();
         }
         else {
             document.getElementById("typed_text").innerHTML += txt.charAt(i);
             setTimeout(typeWriter, speed);
-            audio.play();
+            typing.play();
         }
         i++;
     }
     else {
-        audio.loop = false;
-        audio.pause();
+        typing.loop = false;
+        typing.pause();
         document.getElementById("start-dialogue").style.display = "block";
     }
 }
@@ -208,7 +209,7 @@ document.getElementById("proceed").onclick = function () {
     document.getElementById("proceed").classList.add("hide");
     if (scene > 6) {
         if (Math.round(scene * 10) == 79) {
-            setScene(9);
+            blackout(() => setScene(9));
         }
         else {
             if (fauna_discovered.length > 5)
@@ -272,12 +273,13 @@ onSceneChange((scene_index) => {
                 document.getElementById("loading-screen").style.display = "none";
                 setScene(1);
             };
-            audio = new Audio('./resources/sounds/beep.wav');
+            typing = new Audio('./resources/sounds/beep.wav');
+            sonar = new Audio('./resources/sounds/sonar_ping.mp3');
             break;
         case 1:
             document.getElementById("typed_text").style.display = "block";
-            audio.loop = true;
-            audio.play();
+            typing.loop = true;
+            typing.play();
             break;
         case 5.5:
             if (canvasElement) canvasElement.style.display = "none";
@@ -336,6 +338,7 @@ getDepth((depth) => {
 faunaFound((fauna) => {
     if (fauna_discovered.indexOf(fauna) == -1) {
         fauna_discovered.push(fauna);
+        sonar.play();
 
         if (typeof unlockFauna === 'function') {
             unlockFauna(fauna);

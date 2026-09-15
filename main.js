@@ -763,6 +763,9 @@ export function setScene(scene_index) {
                     underwater.add(base1);
                     break;
                 case 6:
+                    rock1.position.x = -0.3;
+                    rock1.position.z = 1.3;
+                    rock1.rotation.y = 0.4
                     underwater.add(base2);
                     break;
                 case 8:

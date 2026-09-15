@@ -8,3 +8,6 @@ Grenedier: https://sketchfab.com/3d-models/cc0-amami-grenadier-c-marginatus-608c
 Moray: https://sketchfab.com/3d-models/cc0-brutal-moray-gymnothorax-kidako-f7b2e7e06e454392bf7d7ab739658d57#download
 Star Fish: https://sketchfab.com/3d-models/asteroid-starfish-or-seastar-32de6a92ad104e20aaa841c8e3eef93f
 Coral: https://sketchfab.com/3d-models/coral-skeleton-2-957999a01f5a409fa8810e6951bf5167#download
+
+Sonar Ping: https://opengameart.org/content/sonar-ping
+ROV Sound: https://opengameart.org/content/electronic-device-loop

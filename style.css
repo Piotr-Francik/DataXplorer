@@ -628,7 +628,7 @@ body {
   z-index: 1000;
   background-color: transparent;
   pointer-events: none;
-  transition: 0.5s;
+  transition: 0.25s;
 }
 
 #blackout.shade {
