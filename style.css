@@ -905,10 +905,10 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 10, 20, 0.114); /* Dark ocean overlay */
+  background-color: rgba(0, 10, 20, 0.114);
   z-index: 1000;
   overflow: hidden;
-  display: none; /* Hidden by default */
+  display: none;
   pointer-events: auto;
 }
 
@@ -952,7 +952,6 @@ body {
   margin: 6px 0;
 }
 
-/* Keyframes for smooth vertical scroll */
 @keyframes rollCredits {
   0% {
     top: 100%;
