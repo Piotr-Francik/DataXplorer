@@ -1,0 +1,6 @@
+Copyright © 2026 University of Bristol. All rights reserved.
+
+This repository is public for reference purposes only. All rights are 
+reserved by the University of Bristol. No license to use, copy, modify, 
+or distribute this code is granted, except to OceanX under the terms 
+of the Bristol–OceanX partnership.
