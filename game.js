@@ -243,6 +243,12 @@ document.getElementById("close-inventory").onclick = function () {
 // Runs on every scene change
 onSceneChange((scene_index) => {
     scene = scene_index;
+
+    const creditsScreen = document.getElementById("credits-screen");
+    if (creditsScreen) {
+        creditsScreen.style.display = Math.floor(scene) === 10 ? "block" : "none";
+    }
+
     document.getElementById("start-btn").style.display = scene == 9 ? "block" : "none";
 
     document.getElementById("dialogue").style.display = "none";

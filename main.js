@@ -1040,6 +1040,10 @@ function update() {
             camera.lookAt(helicopter.position.x * 10, helicopter.position.y * 10 - 4, helicopter.position.z * 10);
             helicopter.getObjectByName('HLC_BladesTop').rotation.y += delta * 30;
             helicopter.getObjectByName('HLC_BladesBack').rotation.y += delta * 30;
+            
+            if (count > 2) {
+                setScene(10);
+            }
             break;
         // Credits
         case 10:
