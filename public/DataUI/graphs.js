@@ -1,4 +1,4 @@
-import { setScene, onSceneChange, getDepth } from '../../main.js';
+import { setScene, onSceneChange, getDepth } from '../scripts/main.js';
 
 var activeGraph = 0;
 
@@ -40,7 +40,6 @@ function select() {
 
     document.querySelectorAll(".container div").forEach(container => {
         const selectedGraph = document.querySelector(".container .gridContainer div.select")
-        console.log("selected Graph: ", selectedGraph)
         if (selectedGraph && selectedGraph !== container) {
             return
         }
@@ -314,7 +313,6 @@ function draw(data) {
     const yValues = []
     const temperature = []
     const salinity = []
-    console.log(data)
     for (let i = 1; i < data.length; i++) {
         if (data[i].length < 3 || !data[i][0]) continue
         yValues.push(Number(data[i][0]))
