@@ -90,18 +90,33 @@ var dialogueTimeout;
 
 
 
-
+function countDown(t){
+    console.log("TEST");
+    document.getElementById("count").innerHTML = t;
+    time3 = setTimeout(() => countDown(t - 1), 1000);
+}
 
 function logout() {
     document.getElementById("idle").style.display = "flex";
+    document.getElementById("count").innerHTML = "30";
+    time3 = setTimeout(() => countDown(29), 1000);
+
 }
 
 function resetTimer() {
+    document.getElementById("idle").style.display = "none";
+
     clearTimeout(time);
+    clearTimeout(time2);
+    clearTimeout(time3);
     time = setTimeout(logout, 30000)
+    time2 = setTimeout(() => location.reload(), 60000)
 }
 
 var time;
+var time2;
+var time3;
+
 window.onload = resetTimer;
 document.onmousemove = resetTimer;
 document.onkeydown = resetTimer;
@@ -215,7 +230,7 @@ document.getElementById("proceed").onclick = function () {
             if (fauna_discovered.length > 5)
                 setScene(7.9);
             else {
-                document.querySelector(".gridContainer").style.display = "grid";
+                document.querySelector(".container").style.display = "grid";
                 document.getElementById("dialogue").style.display = "none";
             }
         }
@@ -249,7 +264,13 @@ onSceneChange((scene_index) => {
         creditsScreen.style.display = Math.floor(scene) === 10 ? "block" : "none";
     }
 
-    document.getElementById("start-btn").style.display = scene == 9 ? "block" : "none";
+    if(Math.floor(scene) == 10)
+    {
+        setTimeout(() => document.getElementById("blackout").classList.add("shade"), 25000);
+        setTimeout(() => location.reload(), 30000);
+    }
+
+    document.getElementById("start-btn").style.display = "none";
 
     document.getElementById("dialogue").style.display = "none";
     document.getElementById("start-dialogue").style.display = "none";

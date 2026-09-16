@@ -1,3 +1,5 @@
+<!-- Piotr Was Here :D -->
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -73,7 +75,13 @@
     </div>
 
     <button id="inventory-btn" class="open-inventory">
-        Inventory
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-backpack"
+            viewBox="0 0 16 16">
+            <path
+                d="M4.04 7.43a4 4 0 0 1 7.92 0 .5.5 0 1 1-.99.14 3 3 0 0 0-5.94 0 .5.5 0 1 1-.99-.14M4 9.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm1 .5v3h6v-3h-1v.5a.5.5 0 0 1-1 0V10z" />
+            <path
+                d="M6 2.341V2a2 2 0 1 1 4 0v.341c2.33.824 4 3.047 4 5.659v5.5a2.5 2.5 0 0 1-2.5 2.5h-7A2.5 2.5 0 0 1 2 13.5V8a6 6 0 0 1 4-5.659M7 2v.083a6 6 0 0 1 2 0V2a1 1 0 0 0-2 0m1 1a5 5 0 0 0-5 5v5.5A1.5 1.5 0 0 0 4.5 15h7a1.5 1.5 0 0 0 1.5-1.5V8a5 5 0 0 0-5-5" />
+        </svg>
     </button>
 
     <div id="dialogue">
@@ -87,9 +95,11 @@
     font-family: 'Courier New', Courier, 'Lucida Console', Monaco, monospace; background:none; border: none;">Click to
         Proceed</button>
 
-    <div class ="container" style = "display: none">
+    <div class="container" style="display: none">
         <div class="ui-layer">
-            <p>Enallopsammia rostrata: depth range 480-788m, temperature range 3-12°C, Salinity range 34-34.5 <br>Lophelia pertusa: Depth range 500-1000m, Temperature range 8-12°C, Salinity range 34.5-35.5</p>
+            <p>Enallopsammia rostrata: depth range 480-788m, temperature range 3-12°C, Salinity range 34-34.5
+                <br>Lophelia pertusa: Depth range 500-1000m, Temperature range 8-12°C, Salinity range 34.5-35.5
+            </p>
 
         </div>
 
@@ -119,7 +129,7 @@
                 <canvas id="myChart8"></canvas>
             </div>
         </div>
-        <button class="tempProceed" onclick="select()">Proceed</button>
+        <button class="tempProceed" onclick="select(); ">Deploy ROV</button>
 
     </div>
 
@@ -147,7 +157,8 @@
         <div class="inventory-grid">
 
             <div class="inventory-card-empty" id="card-Lophelia_Pertusa"
-                data-title="Lophelia pertusa (Deep Water White Coral)" data-img="public/resources/images/Lophelia pertusa2.jpg"
+                data-title="Lophelia pertusa (Deep Water White Coral)"
+                data-img="public/resources/images/Lophelia pertusa2.jpg"
                 data-desc="
                 A cold-water reef-building coral found in deep ocean waters.
                 
@@ -161,7 +172,8 @@
             </div>
 
             <div class="inventory-card-empty" id="card-Enallopsammia_Rostrata"
-                data-title="Enallopsammia rostrata (Beaked Stony Coral)" data-img="public/resources/images/Enallopsammia rostrata2.jpg"
+                data-title="Enallopsammia rostrata (Beaked Stony Coral)"
+                data-img="public/resources/images/Enallopsammia rostrata2.jpg"
                 data-desc="
                 Forms massive tree-like colonies featuring bright yellow branches.
                 
@@ -174,7 +186,8 @@
                 <div class="inventorytext">Unknown</div>
             </div>
 
-            <div class="inventory-card-empty" id="card-Coffin_Fish" data-title="Coffinfish" data-img="public/resources/images/coffinfish.jpg"
+            <div class="inventory-card-empty" id="card-Coffin_Fish" data-title="Coffinfish"
+                data-img="public/resources/images/coffinfish.jpg"
                 data-desc="
                 A deep-sea anglerfish known for its globular body.
                 
@@ -187,7 +200,8 @@
                 <div class="inventorytext">Unknown</div>
             </div>
 
-            <div class="inventory-card-empty" id="card-Moray" data-title="Moray Eel" data-img="public/resources/images/moray.jpg"
+            <div class="inventory-card-empty" id="card-Moray" data-title="Moray Eel"
+                data-img="public/resources/images/moray.jpg"
                 data-desc="
                 A long, snake-like marine fish known for its elongated body, scaleless skin, and powerful jaws.
                 
@@ -200,7 +214,8 @@
                 <div class="inventorytext">Unknown</div>
             </div>
 
-            <div class="inventory-card-empty" id="card-Grenadier" data-title="Grenadier" data-img="public/resources/images/grenadier.jpg"
+            <div class="inventory-card-empty" id="card-Grenadier" data-title="Grenadier"
+                data-img="public/resources/images/grenadier.jpg"
                 data-desc="
                 An abundant deep-sea fish characterized by a disproportionately large head and big eyes adapted to detecting faint bioluminescent light in the dark ocean.
                 
@@ -213,7 +228,8 @@
                 <div class="inventorytext">Unknown</div>
             </div>
 
-            <div class="inventory-card-empty" id="card-Sea_Star" data-title="Sea Star" data-img="public/resources/images/seastar.jpg"
+            <div class="inventory-card-empty" id="card-Sea_Star" data-title="Sea Star"
+                data-img="public/resources/images/seastar.jpg"
                 data-desc="
                 A marine invertebrate with a central body disk and a star shape.
 
@@ -256,68 +272,69 @@
     <div id="idle">
         <video autoplay muted loop playsinline disablepictureinpicture disableremoteplayback
             src="public/resources/videos/caustics.mp4"></video>
-        <h1 style="font-size: 45px;">Are you still there?</h1>
-        <button onclick="location.reload();" style="font-family: 'HP Simplified Light'; font-weight: bold; cursor: pointer;">Restart Experience</button>
-        <button onclick="document.getElementById('idle').style.display = 'none';" style="font-family: 'HP Simplified Light'; font-weight: bold; cursor: pointer;">Continue</button>
+        <h1 style="font-size: 45px;">Are you still there?<br>Resetting Experience in: <div id="count">s</div><br>Move the mouse to continue</h1>
     </div>
 
     <script src="inventoryscript.js"></script>
 
     <div id="credits-screen" class="credits-container">
-    <div class="credits-content">
-    <p class="subtitle">You have been playing:</p>
-    <h1>DATAXPLORER</h1>
+        <div class="credits-content">
+            <p class="subtitle">You have been playing:</p>
+            <h1>DATAXPLORER</h1>
 
-    <div class="credit-section">
-      <h2>Development & Design</h2>
-      <p>Piotr Francik</p>
-      <p>Anni Liu</p>
-      <p>Jacob Connor</p>
-      <p>Alexander Bentley</p>
+            <div class="credit-section">
+                <h2>Development & Design</h2>
+                <p>Piotr Francik</p>
+                <p>Anni Liu</p>
+                <p>Jacob Connor</p>
+                <p>Alexander Bentley</p>
+                <p>Kieran Raynolds</p>
 
-      <h2>Game design & Storyboarding</h2>
-      <p>Alexander Bentley</p>
+                <h2>Game design & Storyboarding</h2>
+                <p>Alexander Bentley</p>
+                <p>Kieran Raynolds</p>
 
-      <h2>3D Set Design</h2>
-      <p>Piotr Francik</p>
+                <h2>3D Set Design</h2>
+                <p>Piotr Francik</p>
 
-      <h2>CTD Graphs Interface</h2>
-      <p>Jacob Connor</p>
+                <h2>CTD Graphs Interface</h2>
+                <p>Jacob Connor</p>
 
-      <h2>User Interface</h2>
-      <p>Anni Liu</p>
+                <h2>User Interface</h2>
+                <p>Anni Liu</p>
 
-      <h2>Project manager</h2>
-      <p>Piotr Francik</p>
+                <h2>Project manager</h2>
+                <p>Piotr Francik</p>
+            </div>
+
+            <div class="credit-section">
+                <h2>3D Models & Assets</h2>
+                <p>Open Game Art</p>
+                <p>Sketch Fab</p>
+                <p>EarthRef</p>
+                <p>MrDoob on Github</p>
+                <p>OceanX</p>
+            </div>
+
+            <div class="credit-section">
+                <h2>Music & Sound effects</h2>
+                <p>Open Game Art</p>
+                <p>PixaBay</p>
+            </div>
+
+            <div class="credit-section">
+                <h2>Special Thanks</h2>
+                <p>University of Bristol</p>
+                <p>OceanX</p>
+                <p>You!</p>
+            </div>
+
+            <div class="credit-section">
+                <h2>Thank you for exploring!</h2>
+            </div>
+
+        </div>
     </div>
-
-    <div class="credit-section">
-      <h2>3D Models & Assets</h2>
-      <p>Open Game Art</p>
-      <p>Sketch Fab</p>
-      <p>EarthRef</p>
-      <p>MrDoob on Github</p>
-    </div>
-
-    <div class="credit-section">
-      <h2>Music & Sound effects</h2>
-      <p>Open Game Art</p>
-      <p>PixaBay</p>
-    </div>
-
-    <div class="credit-section">
-      <h2>Special Thanks</h2>
-      <p>University of Bristol</p>
-      <p>OceanX</p>
-      <p>You!</p>
-    </div>
-
-    <div class="credit-section">
-        <h2>Thank you for exploring!</h2>
-    </div>
-
-  </div>
-</div>
 
 </body>
 

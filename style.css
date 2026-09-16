@@ -367,7 +367,7 @@ body {
   cursor: pointer;
 }
 
-.open-inventory{
+.open-inventory {
   display: none;
   position: absolute;
   bottom: 800px;
@@ -385,12 +385,13 @@ body {
   box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
 }
 
-.open-inventory:hover{
+.open-inventory:hover {
   border-color: rgb(141, 255, 255);
   transform: scale(1.05);
   cursor: pointer;
   z-index: 10;
   box-shadow: 0 0px 30px 0px rgba(42, 255, 251, 0.637);
+  background: rgba(15, 57, 99, 0.85);
 }
 
 #close-inventory {
@@ -596,23 +597,34 @@ body {
 .container.deselect .tempProceed {
   display: none;
 }
+
 .container .tempProceed {
-  display: block;
   position: absolute;
   right: 15px;
   bottom: 15px;
-  font-size: large;
-  border-radius: 15px;
-  font-weight: 600;
-  padding: 10px 40px 10px 40px;
+  transform: translateX(-50%);
+  z-index: 100;
+  font-size: xx-large;
+  font-family: 'HP Simplified Light', sans-serif;
+  font-weight: bold;
+  background: none;
+  border: 3px solid transparent;
+  border-radius: 10px;
+  transition: all 0.2s;
   color: white;
-  border-style: solid;
-  border-width: 5px;
-  background-color: rgb(87, 215, 121);
-  border-color: green;
-  box-shadow: 0 0 12px rgba(6, 70, 3, 0.6);
-  transition: all 0.3s ease;
-  z-index: 20;
+  /* outline-color: white;
+  outline: solid; */
+  cursor: pointer;
+  outline-width: 0px;
+  display: block;
+  border-color: rgb(172, 172, 172);
+}
+
+.tempProceed:hover {
+  border-color: rgb(255, 255, 255);
+  transform: translateX(-50%) scale(1.05);
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.221);
 }
 
 .container .ui-layer p {
@@ -623,10 +635,7 @@ body {
   font-family: 'HP Simplified Light';
   font-weight: bold;
   font-size: 1.8rem;
-}
-
-.tempProceed:hover {
-  scale: 1.05;
+  width: 100%;
 }
 
 .gridContainer {
@@ -645,22 +654,25 @@ body {
   overflow: auto;
 }
 
-
 .gridContainer div {
-  /* position: fixed; */
-  /* display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  border: 2.5px solid transparent; */
   border-radius: 8px;
   padding: 16px;
-  background: rgba(108, 255, 255, 0.312);
-  transition: border-color 0.2s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  background: rgba(21, 51, 51, 0.755);
+  backdrop-filter: blur(4px);
   aspect-ratio: 1 / 1;
   z-index: 10;
   width: 200px;
   height: 180px;
+  position: relative; /* anchors the close button */
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease, background 0.35s;
+}
 
+.gridContainer div canvas {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .container.deselect .gridContainer div:hover {
@@ -677,23 +689,52 @@ body {
   background: #0d3d2c;
   border-color: var(--correct);
   box-shadow: 0 0 0 2px #1dbb7540, 0 10px 24px #00000044;
-  pointer-events: none;
+  /*pointer-events: none;*/
 }
 
 .container .gridContainer div.select {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  width: 600px;          /* Makes it wider */
-  height: 500px;         /* Makes it taller */
-  font-size: 48px;      /* Increases text size */
-  /* background-color: #e74c3c; */
-  z-index: 100;         /* Puts it on top of everything */
-  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-  background: rgba(108, 255, 255, 1);
+  width: 640px;
+  height: 520px;
+  font-size: 48px;
+  z-index: 100;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  background: rgb(43, 70, 70);
+  transform: translate(-50%, -50%) scale(1);
+}
 
+.chart-close-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  font-size: 18px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 110;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, background 0.2s ease;
+}
 
+.gridContainer div.select .chart-close-btn {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.chart-close-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: #fff;
 }
 
 
@@ -704,56 +745,56 @@ body {
   pointer-events: none;
 }
 
-.chart1{
+.chart1 {
   grid-column-start: 1;
   grid-column-end: 1;
   grid-row-start: 1;
   grid-row-end: 1;
 }
 
-.chart2{
+.chart2 {
   grid-column-start: 2;
   grid-column-end: 2;
   grid-row-start: 1;
   grid-row-end: 1;
 }
 
-.chart3{
+.chart3 {
   grid-column-start: 3;
   grid-column-end: 3;
   grid-row-start: 1;
   grid-row-end: 1;
 }
 
-.chart4{
+.chart4 {
   grid-column-start: 4;
   grid-column-end: 4;
   grid-row-start: 1;
   grid-row-end: 1;
 }
 
-.chart5{
+.chart5 {
   grid-column-start: 1;
   grid-column-end: 1;
   grid-row-start: 2;
   grid-row-end: 2;
 }
 
-.chart6{
+.chart6 {
   grid-column-start: 2;
   grid-column-end: 2;
   grid-row-start: 2;
   grid-row-end: 2;
 }
 
-.chart7{
+.chart7 {
   grid-column-start: 3;
   grid-column-end: 3;
   grid-row-start: 2;
   grid-row-end: 2;
 }
 
-.chart8{
+.chart8 {
   grid-column-start: 4;
   grid-column-end: 4;
   grid-row-start: 2;
@@ -1009,7 +1050,6 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 10, 20, 0.114);
   z-index: 1000;
   overflow: hidden;
   display: none;
@@ -1017,43 +1057,96 @@ body {
 }
 
 .credits-content {
+  top: 0%;
+  transform: translateY(-100%);
   position: absolute;
   width: 100%;
   text-align: center;
-  color: #ffffff;
+  color: #eafffe;
   font-family: 'HP Simplified Light', sans-serif;
-  animation: rollCredits 25s linear infinite;
+  animation: rollCredits 25s linear;
+  animation-iteration-count: 1;
 }
 
-.credits-content h1 {
-  font-size: 3.5rem;
-  letter-spacing: 4px;
-  margin-bottom: 5px;
-  color: #ffffff;
+/* Shared shadow stack: two tight, near-opaque layers give text a defined edge
+   even against bright/saturated footage; the third, wider layer just softens
+   the transition. Kept as one rule so every text element gets the same base. */
+.credits-content .subtitle,
+.credits-content h1,
+.credit-section h2,
+.credit-section p {
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.95),
+    0 2px 4px rgba(0, 0, 0, 0.9),
+    0 4px 10px rgba(0, 0, 0, 0.75);
+}
+
+/* Headings additionally carry the cyan accent glow on top of the base stack */
+.credit-section h2 {
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.95),
+    0 2px 4px rgba(0, 0, 0, 0.9),
+    0 4px 10px rgba(0, 0, 0, 0.75),
+    0 0 14px rgba(120, 240, 220, 0.55);
 }
 
 .credits-content .subtitle {
   font-size: 1.5rem;
-  margin-bottom: 40px;
-  opacity: 0.8;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+  opacity: 0.9;
+  text-transform: uppercase;
+}
+
+.credits-content h1 {
+  font-size: 5rem;
+  letter-spacing: 8px;
+  margin: 0 0 70px 0;
+  color: #ffffff;
 }
 
 .credit-section {
-  margin-bottom: 40px;
+  margin-bottom: 56px;
+  padding-bottom: 20px;
 }
 
 .credit-section h2 {
   font-size: 2rem;
-  color: #ffffff;
-  /* border-bottom: 1px solid rgba(255, 255, 255, 0.3); */
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: rgb(141, 255, 255);
   display: inline-block;
-  padding-bottom: 5px;
-  margin-bottom: 15px;
+  padding-bottom: 10px;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.credit-section h2::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 48px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgb(141, 255, 255), transparent);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
 }
 
 .credit-section p {
-  font-size: 1.5rem;
-  margin: 6px 0;
+  font-size: 1.6rem;
+  font-weight: 300;
+  margin: 8px 0;
+  color: #ffffff;
+}
+
+.credit-section:last-of-type h2 {
+  font-size: 2.6rem;
+  color: #ffffff;
+}
+
+.credit-section:last-of-type h2::after {
+  display: none;
 }
 
 @keyframes rollCredits {
@@ -1061,6 +1154,7 @@ body {
     top: 100%;
     transform: translateY(0%);
   }
+
   100% {
     top: 0%;
     transform: translateY(-100%);
