@@ -215,7 +215,7 @@ document.getElementById("proceed").onclick = function () {
             if (fauna_discovered.length > 5)
                 setScene(7.9);
             else {
-                document.querySelector(".container").style.display = "grid";
+                document.querySelector(".gridContainer").style.display = "grid";
                 document.getElementById("dialogue").style.display = "none";
             }
         }
