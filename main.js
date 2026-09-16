@@ -622,14 +622,17 @@ export function setScene(scene_index) {
             sub_ctd.scale.y = 0.03;
             sub_ctd.scale.z = 0.03;
             count = 20
-            document.querySelector(".container").style.display = "grid";
+            document.querySelector(".gridContainer").style.display = "grid";
+            document.querySelector(".container").style.display = "block";
+
             graphs.main()
 
-            break;
         case 7:
             break;
         case 8:
             document.querySelector(".container").style.display = "none";
+            document.querySelector(".container").style.display = "none";
+
             overwater.add(rov);
             sound.setVolume(0);
             sound2.setVolume(0.3);

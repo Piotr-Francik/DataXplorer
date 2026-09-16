@@ -12,6 +12,24 @@ function unblack() {
 
 const correctGraphs = new Set(["1", "4", "5", "7"])
 
+function select(){
+    document.querySelectorAll(".container div").forEach(container => {
+        blackout(() => setScene(8 + container.dataset.graph / 10));
+
+        const selectedGraph = document.querySelector(".container .gridContainer div.select")
+        console.log("selected Graph: ",selectedGraph)
+        if (selectedGraph && selectedGraph !== container) {
+                return
+        }
+        const isCorrect = correctGraphs.has(container.dataset.graph)
+
+        container.classList.toggle("is-correct", isCorrect)
+        container.classList.toggle("is-incorrect", !isCorrect)
+    })
+}
+
+window.select = select
+
 function setupGraphButtons() {
     // Find every graph card and prepare it to receive mouse or keyboard input.
 
@@ -19,7 +37,7 @@ function setupGraphButtons() {
     var deselect = true
     outCont.classList.toggle("deselect",true)
 
-    document.querySelectorAll(".container div").forEach(container => {
+    document.querySelectorAll(".gridContainer > div").forEach(container => {
         // Before the user clicks, each graph is unselected.
         var select = false
         container.classList.toggle("select", false)
@@ -31,26 +49,24 @@ function setupGraphButtons() {
             console.log(container.dataset.graph);
             //blackout(() => setScene(8 + container.dataset.graph / 10));
             const isCorrect = correctGraphs.has(container.dataset.graph)
-            const selectedGraph = document.querySelector(".container div.select")
+            const selectedGraph = document.querySelector(".container .gridContainer div.select")
             console.log("selected Graph: ",selectedGraph)
             if (selectedGraph && selectedGraph !== container) {
                 return
             }
 
             // Mark this graph as selected and remove its deselected state.
-            container.classList.toggle("select")
-            outCont.classList.toggle("deselect")
+            const isSelected = container.classList.toggle("select")
+            outCont.classList.toggle("deselect", !isSelected)
             deselect = !deselect
             select = !select
+            console.log("deselect:", deselect)
+            console.log("select:", select)
             
-            //container.classList.toggle("is-correct", isCorrect)
-            //container.classList.toggle("is-incorrect", !isCorrect)
-        }
 
+        }
         // Select the graph when the card is clicked.
-     
         container.addEventListener("click", selectGraph)
- 
         // Support Enter and Space for keyboard users.
         container.addEventListener("keydown", event => {
             if (event.key === " ") {

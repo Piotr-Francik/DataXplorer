@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="graph.css">
 
     <title>Data Xplorer</title>
 </head>
@@ -19,12 +18,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script type="module" src="game.js"></script>
     <script type="module" src="main.js"></script>
+    <script type="module" src="./public/DataUI/graphs.js"></script>
+
+
     <!--<button style="position: absolute;" id="debug_button">Next Scene</button>-->
 
 
     <div class="ui-layer">
         <button class="start-btn" id="start-btn">Click here to Proceed</button>
-
     </div>
 
 
@@ -87,32 +88,40 @@
     font-family: 'Courier New', Courier, 'Lucida Console', Monaco, monospace; background:none; border: none;">Click to
         Proceed</button>
 
+    <div class ="container" style = "display: none">
+        <div class="ui-layer">
+            <p>Enallopsammia rostrata: depth range 480-788m, temperature range 3-12°C, Salinity range 34-34.5 <br>Lophelia pertusa: Depth range 500-1000m, Temperature range 8-12°C, Salinity range 34.5-35.5</p>
 
-    <div class="container" aria-label="Choose the correct graphs" style="display: none">
-        <div class="chart1" data-graph="1" role="button" tabindex="0" aria-label="Graph 1">
-            <canvas id="myChart"></canvas>
         </div>
-        <div class="chart2" data-graph="2" role="button" tabindex="0" aria-label="Graph 2">
-            <canvas id="myChart2"></canvas>
+
+        <div class="gridContainer" aria-label="Choose the correct graphs" style="display: none">
+            <div class="chart1" data-graph="1" role="button" tabindex="0" aria-label="Graph 1">
+                <canvas id="myChart"></canvas>
+            </div>
+            <div class="chart2" data-graph="2" role="button" tabindex="0" aria-label="Graph 2">
+                <canvas id="myChart2"></canvas>
+            </div>
+            <div class="chart3" data-graph="3" role="button" tabindex="0" aria-label="Graph 3">
+                <canvas id="myChart3"></canvas>
+            </div>
+            <div class="chart4" data-graph="4" role="button" tabindex="0" aria-label="Graph 4">
+                <canvas id="myChart4"></canvas>
+            </div>
+            <div class="chart5" data-graph="5" role="button" tabindex="0" aria-label="Graph 5">
+                <canvas id="myChart5"></canvas>
+            </div>
+            <div class="chart6" data-graph="6" role="button" tabindex="0" aria-label="Graph 5">
+                <canvas id="myChart6"></canvas>
+            </div>
+            <div class="chart7" data-graph="7" role="button" tabindex="0" aria-label="Graph 5">
+                <canvas id="myChart7"></canvas>
+            </div>
+            <div class="chart8" data-graph="8" role="button" tabindex="0" aria-label="Graph 5">
+                <canvas id="myChart8"></canvas>
+            </div>
         </div>
-        <div class="chart3" data-graph="3" role="button" tabindex="0" aria-label="Graph 3">
-            <canvas id="myChart3"></canvas>
-        </div>
-        <div class="chart4" data-graph="4" role="button" tabindex="0" aria-label="Graph 4">
-            <canvas id="myChart4"></canvas>
-        </div>
-        <div class="chart5" data-graph="5" role="button" tabindex="0" aria-label="Graph 5">
-            <canvas id="myChart5"></canvas>
-        </div>
-        <div class="chart6" data-graph="6" role="button" tabindex="0" aria-label="Graph 5">
-            <canvas id="myChart6"></canvas>
-        </div>
-        <div class="chart7" data-graph="7" role="button" tabindex="0" aria-label="Graph 5">
-            <canvas id="myChart7"></canvas>
-        </div>
-        <div class="chart8" data-graph="8" role="button" tabindex="0" aria-label="Graph 5">
-            <canvas id="myChart8"></canvas>
-        </div>
+        <button class="tempProceed" onclick="select()">Proceed</button>
+
     </div>
 
     <div id="blackout"></div>
@@ -123,9 +132,6 @@
 
     <h1 style="display: none; position: absolute; right: 0px; top: 0px; z-index: 150; color: white; background-color: black;" id="fps">
     </h1>
-
-
-
 
 
 
